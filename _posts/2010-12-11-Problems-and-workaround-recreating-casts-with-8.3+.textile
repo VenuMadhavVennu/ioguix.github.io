@@ -43,8 +43,7 @@ bc.. casts=# SELECT id, 'value = ' || id::text FROM test WHERE id = '5'::text;
 
 p. But then, we are back to the application fix where it might worth spending more time fixing things in the good way.
 
-p. There is another solution: creating missing operators instead of implicit casts. Here is a sql file with a lot of those operators:
-"8.3 operator workaround.sql":https://gist.github.com/ioguix/4dd187986c4a1b7e1160 and a sample for text to integer comparison:
+p. There is another solution: creating missing operators instead of implicit casts. You will find a sql file with a lot of those operators under the following link: "8.3 operator workaround.sql":https://gist.github.com/ioguix/4dd187986c4a1b7e1160. Here is a sample for text to integer comparison:
 
 {% highlight sql %}
 CREATE FUNCTION pg_catalog.texteqint(text, integer) RETURNS BOOLEAN STRICT IMMUTABLE LANGUAGE SQL AS $$SELECT textin(int4out($2)) = $1;$$;
