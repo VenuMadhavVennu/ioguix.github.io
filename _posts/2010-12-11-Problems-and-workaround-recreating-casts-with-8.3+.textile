@@ -6,6 +6,8 @@ date: 2010-12-11 16:00 +0100
 ---
 p. There's a very popular issue when upgrading to version 8.3 and bellow: the removal of some implicit casts from text types to time or numerical ones in 8.3.  The only clean solution here is to fix the application itself, period.  However, for those that cannot afford quickly such a hard work, the popular workaround is to recreate these implicit casts, but it suffer from a side effect. About a year ago, I found another quick-n-dirty fix for a customer.
 
+{{ post.excerpt }}
+
 p. Here is the problem:
 
 bc.. casts=# CREATE TABLE test AS SELECT generate_series(1,10) as id;
