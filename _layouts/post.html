@@ -1,0 +1,12 @@
+---
+layout: default
+---
+
+<div id="content_infos">By <em>{{ page.author }}</em> - published on {{ page.date | date_to_rfc822 }}</div>
+<div id="content">
+  <h1>{{ page.title }}</h1>
+
+{{ content }}
+
+</div>
+
