@@ -6,7 +6,7 @@ body {
   font-family: sans-serif;
 }
 
-a:link, a:visited { color: #77A; text-decoration: none; }
+a:link, a:visited { color: #aae; text-decoration: none; }
 a:hover, a:focus, a:active { background: #999; color: #337; }
 
 div.header a.title {
