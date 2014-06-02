@@ -1,4 +1,4 @@
 ioguix.github.io
 ================
 
-ioguix' README
+"ioguix' README" blog content.
