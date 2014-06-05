@@ -25,8 +25,8 @@ pre { margin: 0 }
   color: #333;
   margin: auto auto;
   padding-bottom: 40px;
-  border-top: 2px solid grey;
-  border-bottom: 2px solid grey;
+  border-top: 1px solid grey;
+  border-bottom: 1px solid grey;
 }
 
 #content p, #content h1, #content h2 {
