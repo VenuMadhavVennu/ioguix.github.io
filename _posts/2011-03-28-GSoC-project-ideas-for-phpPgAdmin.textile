@@ -3,6 +3,7 @@ layout: post
 author: ioguix
 title: GSoC project ideas for phpPgAdmin
 date: 2011-03-28 21:25 +0200
+category: postgresql
 ---
 p. GSoC season started !
 

@@ -3,6 +3,7 @@ layout: post
 author: ioguix
 title: Let's play with PostgreSQL network dumps!
 date: 2011-03-29 11:30 +0200
+category: postgresql
 ---
 p. A bit more than a year ago, I start messing with tshark "pdml output":http://www.nbee.org/doku.php?id=netpdl:pdml_specification to be able to extract queries from a network dump.  As I was writing a PoC, I did it in PHP, before moving it quickly to a more appropriate language: Perl.
 

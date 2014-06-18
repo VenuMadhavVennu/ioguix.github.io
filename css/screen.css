@@ -1,11 +1,15 @@
 /* Global */
 
 body {
-  font-family: sans-serif;
+  font: 14px sans-serif;
 }
 
 div.header a.title {
-  font-size: 2em;
+  font-size: 26px;
+}
+
+.contact {
+  list-style: none;
 }
 
 /* Posts */

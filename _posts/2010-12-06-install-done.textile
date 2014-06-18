@@ -3,6 +3,7 @@ layout: post
 author: ioguix
 title: « Install done. »
 date: 2010-12-06 18:33 +0100
+category: postgresql
 ---
 
 {% highlight bash %}
