@@ -4,6 +4,7 @@ author: ioguix
 title: 2nd chance for my PGCon 2011 Lightning Talk
 date: 2011-05-20 01:15:00 +0200
 category: postgresql
+comments: 2
 ---
 p. I'm proud to announce I'm the only one that couldn't finish his Lightning talk on time this year.
 

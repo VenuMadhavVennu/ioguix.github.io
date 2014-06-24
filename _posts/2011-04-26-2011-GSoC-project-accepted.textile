@@ -4,6 +4,7 @@ author: ioguix
 title: GSoC project "New phpPgAdmin Plugin Architecture" accepted
 date: 2011-04-26 21:28 +0200
 category: postgresql
+comments: 4
 ---
 p. Leonardo's project has been accepted for the GSoC 2011 today!
 

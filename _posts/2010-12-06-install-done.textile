@@ -11,3 +11,5 @@ category: postgresql
 make
 sudo make install
 {% endhighlight %}
+
+Well...I actually simply use "github":http://github.com/ioguix/ioguix.github.io :)

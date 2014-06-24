@@ -1,0 +1,20 @@
+---
+title: Playing with indexes and better bloat estimate
+comment_id: 22
+indent: 2
+author: ioguix
+date: 2014-04-03 15:43:33 +0200
+---
+p. Josh,
+
+p. About @index_tuple_hdr@, I just realize I used it as a field name AND a psql variable, my bad. See the code bellow this comment in the query:
+
+<code>/* per tuple header: add index_attribute_bm if some cols are null-able */ </code>
+
+p. So if you are referring to @index_tuple_hdr@ at lines 11, 13 and 14, those are referring to the computed field, so no <code>:</code>, it would produce bad stats with indexes on NULLable cols.
+
+p. I fixed to query to remove this confusion.
+
+p. Good catch about the @\SET@! It appears there was some magic in my old blog system transforming it in uppercase. I'll not investigate further as I moved to jekyll...
+
+p. Thanks!
