@@ -101,18 +101,15 @@ li > code {
   padding-top: 20px;
 }
 
-#comments ul {
-  list-style: none;
-  padding: 0;
+#comments > a.comments {
+  font-size: 21px;
+  font-weight: 700;
 }
 
-#comments ul > li {
+#comments > div.comment {
   border: 1px dotted grey;
   padding-left: 10px;
   margin-bottom: 2px;
 }
 
-#comments a.comments {
-  font-size: 21px;
-  font-weight: 700;
-}
+

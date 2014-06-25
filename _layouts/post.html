@@ -26,23 +26,21 @@ layout: default
   <div id="comments">
     <a class="comments" name="comments">Comments</a>&nbsp;<a href="mailto:ioguix+blog@gmail.com?subject=Post:%20{{page.title | uri_escape}}">Leave a comment!</a>
     <p>Note: I only publish your name/pseudo, mail subject and content. I will NOT publish your email address.</p>
-    {% if page.comments > 0 %}
-    <ul>
-      {% assign cmts = site.pages | sort:'name' %}
-      {% for cmt in cmts %}
-        {% if cmt.title == page.title %}
-        <li style="margin-left: {{ cmt.indent | times: 20 }}px">
-          <strong>{{ cmt.author }}</strong>&nbsp;<a href="mailto:ioguix+reply-{{cmt.comment_id}}@gmail.com?subject=Post:%20{{cmt.title | uri_escape}}">reply</a>
-          {% if cmt.subject %}
-          <br /><strong>{{cmt.subject}}</strong>
-          {% endif %}
-          <div class="meta_infos">{{cmt.date | date_to_rfc822 }}</div>
-          <div>{{ cmt.content | textilize }}</div>
-        </li>
-        {% endif %}
-      {% endfor %}
-    </ul>
-    {% else %}
+{% if page.comments > 0 %}
+  {% assign cmts = site.pages | sort:'name' %}
+  {% for cmt in cmts %}
+    {% if cmt.title == page.title %}
+    <div class="comment" style="margin-left: {{ cmt.indent | times: 20 }}px">
+      <strong>{{ cmt.author }}</strong>&nbsp;<a href="mailto:ioguix+reply-{{cmt.comment_id}}@gmail.com?subject=Post:%20{{cmt.title | uri_escape}}">reply</a>
+      {% if cmt.subject %}
+      <br /><strong>{{cmt.subject}}</strong>
+      {% endif %}
+      <div class="meta_infos">{{cmt.date | date_to_rfc822 }}</div>
+      {{ cmt.content | textilize }}
+    </div>
+    {% endif %}
+  {% endfor %}
+{% else %}
     <p>No comments.</p>
     {% endif %}
   </div>
