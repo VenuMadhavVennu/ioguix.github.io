@@ -4,7 +4,7 @@ author: ioguix
 title: More work and thoughts on index bloat estimation query
 date: 2014-06-24 23:21:47 +0200
 category: postgresql
-comments: 1
+comments: 2
 ---
 p. A few weeks ago, I "published":{%post_url 2014-03-28-Playing-with-indexes-and-better-bloat-estimate%} a query to estimate index bloat.  Since then, I went back on this query a few times to fix some drawbacks:
 
