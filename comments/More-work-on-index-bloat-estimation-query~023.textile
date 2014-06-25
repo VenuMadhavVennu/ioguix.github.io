@@ -1,6 +1,5 @@
 ---
 title: More work and thoughts on index bloat estimation query
-comment_id: 23
 author: Clemens Schwaighofer
 date: 2014-06-25 11:52:08 +0900
 ---

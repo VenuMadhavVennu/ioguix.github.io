@@ -1,6 +1,5 @@
 ---
 title: GSoC project "New phpPgAdmin Plugin Architecture" accepted
-comment_id: 11
 author: ads' corner
 date: 2011-08-04 00:34:51 +0200
 ---

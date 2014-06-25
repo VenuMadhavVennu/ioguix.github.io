@@ -1,6 +1,5 @@
 ---
 title: Let's play with PostgreSQL network dumps!
-comment_id: 1
 author: bma
 date: 2011-03-31 05:47:36 +0200
 ---

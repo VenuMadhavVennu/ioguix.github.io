@@ -1,6 +1,5 @@
 ---
 title: More work and thoughts on index bloat estimation query
-comment_id: 24
 author: Joe Abbate
 date: 2014-06-25 08:04:55 -0400
 ---

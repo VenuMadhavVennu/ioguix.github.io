@@ -1,6 +1,5 @@
 ---
 title: Using pgBagder and logsaw for scheduled reports
-comment_id: 18
 author: gilles
 date: 2012-08-31 23:51:19 +0200
 ---

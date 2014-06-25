@@ -1,7 +1,5 @@
 ---
 title: Normalizing queries for pg_stat_statements < 9.2
-comment_id: 15
-indent: 2
 author: ioguix
 date: 2012-08-06 23:38:40 +0200
 ---

@@ -1,7 +1,5 @@
 ---
 title: Let's play with PostgreSQL network dumps!
-comment_id: 2
-indent: 2
 author: Jehan-Guillaume (ioguix) de Rorthais
 date: 2011-03-31 15:39:21 +0200
 ---

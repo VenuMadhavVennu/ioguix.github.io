@@ -1,7 +1,12 @@
 ---
 layout: default
 ---
-
+{% assign nb_cmts = 0 %}
+{% for cmt in site.pages %}
+  {% if cmt.title == page.title %}
+    {% assign nb_cmts = nb_cmts | plus: 1 %}
+  {% endif %}
+{% endfor %}
 <div id="content">
   <h1>{{ page.title }}</h1>
   <div id="content_infos">
@@ -11,10 +16,10 @@ layout: default
       <a href="http://blog.ioguix.net/{{ cat }}/feed.xml">{{ cat }}</a>
     {% endfor %}
     <br />
-    {% if page.comments == 1 %}
+    {% if nb_cmts == 1 %}
       <a href="#comments">1 comment</a>
-    {% elsif page.comments > 0 %}
-      <a href="#comments">{{ page.comments }} comments</a>
+    {% elsif nb_cmts > 0 %}
+      <a href="#comments">{{ nb_cmts }} comments</a>
     {% else %}
       <a href="#comments">comment</a>
     {% endif %}
@@ -24,18 +29,20 @@ layout: default
   {{ content }}
 
   <div id="comments">
-    <a class="comments" name="comments">Comments</a>&nbsp;<a href="mailto:ioguix+blog@gmail.com?subject=Post:%20{{page.title | uri_escape}}">Leave a comment!</a>
+    <a class="comments" name="comments">Comments</a>&nbsp;<a href="mailto:ioguix+blog@gmail.com?subject=Post:%20{{ page.title | uri_escape }}">Leave a comment!</a>
     <p>Note: I only publish your name/pseudo, mail subject and content. I will NOT publish your email address.</p>
-{% if page.comments > 0 %}
+{% if nb_cmts > 0 %}
   {% assign cmts = site.pages | sort:'name' %}
   {% for cmt in cmts %}
     {% if cmt.title == page.title %}
-    <div class="comment" style="margin-left: {{ cmt.indent | times: 20 }}px">
-      <strong>{{ cmt.author }}</strong>&nbsp;<a href="mailto:ioguix+reply-{{cmt.comment_id}}@gmail.com?subject=Post:%20{{cmt.title | uri_escape}}">reply</a>
+    {% assign cmt_id = cmt.path | remove_first: '.textile' | remove_first: '.md' | split: '~' | last %}
+    {% assign indent = cmt.path | remove_first: '.textile' | remove_first: '.md' | split: '~' | size | minus: 2 %}
+    <div class="comment" style="margin-left: {{ indent | times: 20 }}px">
+      <strong>{{ cmt.author }}</strong>&nbsp;<a href="mailto:ioguix+reply-{{ cmt_id }}@gmail.com?subject=Post:%20{{ cmt.title | uri_escape }}">reply</a>
       {% if cmt.subject %}
-      <br /><strong>{{cmt.subject}}</strong>
+      <br /><strong>{{ cmt.subject }}</strong>
       {% endif %}
-      <div class="meta_infos">{{cmt.date | date_to_rfc822 }}</div>
+      <div class="meta_infos">{{ cmt.date | date_to_rfc822 }}</div>
       {{ cmt.content | textilize }}
     </div>
     {% endif %}

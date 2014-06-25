@@ -4,7 +4,6 @@ author: ioguix
 title: Using pgBagder and logsaw for scheduled reports
 date: 2012-08-06 15:37 +0200
 category: postgresql
-comments: 1
 ---
 p. Hey,
 

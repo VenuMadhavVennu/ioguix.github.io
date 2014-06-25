@@ -1,7 +1,5 @@
 ---
 title: Playing with indexes and better bloat estimate
-comment_id: 22
-indent: 2
 author: ioguix
 date: 2014-04-03 15:43:33 +0200
 ---
