@@ -40,8 +40,14 @@ div.header a.title:link,
   margin: 0;
 }
 
+ul.posts {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
 ul.posts > li > span {
-  font-family: monospace
+  font-family: monospace;
 }
 
 /* Posts */
