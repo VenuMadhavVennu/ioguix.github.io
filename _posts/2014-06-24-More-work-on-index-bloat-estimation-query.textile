@@ -21,6 +21,7 @@ p. Here is the gist of the new version of this query if you want to comment/patc
 p. And the code itself:
 
 {% highlight sql %}
+-- WARNING: executed with a non-superuser role, the query inspect only index on tables you are granted to read.
 SELECT current_database(), nspname AS schemaname, c.relname AS tablename, indexname, bs*(sub.relpages)::bigint AS real_size,
   bs*otta::bigint as estimated_size,
   bs*(sub.relpages-otta)::bigint                                     AS bloat_size,
@@ -47,7 +48,7 @@ FROM (
       -- , index_tuple_hdr_bm, nulldatawidth, datawidth -- (DEBUG INFO)
     FROM (
       SELECT
-        i.nspname, i.relname, i.reltuples, i.relpages, i.relam, s.starelid, a.attrelid AS table_oid,
+        i.nspname, i.relname, i.reltuples, i.relpages, i.relam, a.attrelid AS table_oid,
         CASE cluster_version.v > 7
             WHEN true THEN current_setting('block_size')::numeric
             ELSE 8192::numeric
@@ -62,15 +63,15 @@ FROM (
           ELSE 20
         END AS pagehdr,
         /* per tuple header: add IndexAttributeBitMapData if some cols are null-able */
-        CASE WHEN max(coalesce(s.stanullfrac,0)) = 0
+        CASE WHEN max(coalesce(s.null_frac,0)) = 0
           THEN 2 -- IndexTupleData size
           ELSE  2 + (( 32 + 8 - 1 ) / 8) -- IndexTupleData size + IndexAttributeBitMapData size ( max num filed per index + 8 - 1 /8)
         END AS index_tuple_hdr_bm,
         /* data len: we remove null values save space using it fractionnal part from stats */
-        sum( (1-coalesce(s.stanullfrac, 0)) * coalesce(s.stawidth, 1024) ) AS nulldatawidth
+        sum( (1-coalesce(s.null_frac, 0)) * coalesce(s.avg_width, 1024) ) AS nulldatawidth
         -- , sum( s.stawidth ) AS datawidth -- (DEBUG INFO)
       FROM pg_attribute AS a
-        JOIN pg_statistic AS s ON s.starelid=a.attrelid AND s.staattnum = a.attnum
+        JOIN pg_stats AS s ON (quote_ident(s.schemaname) || '.' || quote_ident(s.tablename))::regclass=a.attrelid AND s.attname = a.attname
         JOIN (
           SELECT nspname, relname, reltuples, relpages, indrelid, relam,
             string_to_array(pg_catalog.textin(pg_catalog.int2vectorout(indkey)), ' ')::smallint[] AS attnum
@@ -91,6 +92,8 @@ ORDER BY 2,3,4;
 {% endhighlight %}
 
 p. I left commented some debug code to help diagnosing bad estimations.
+
+p. __**Update**__ Following the "comment of Michael Banck":#comment-027, I updated the query and added a warning on top of the query. The query does not require to be superuser anymore, but you have to make sure the role you are using is able to access all your precious tables and indexes!
 
 h2. Known bug
 
