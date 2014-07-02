@@ -1,0 +1,41 @@
+---
+layout: default
+---
+
+{% assign total_cmts = 0 %}
+<div id="content">
+  <h1>Comments</h1>
+  <ul>
+    {% for post in site.posts %}
+      {% assign nb_cmts = 0 %}
+      {% for cmt in site.pages %}
+        {% if cmt.title == post.title %}
+          {% assign nb_cmts = nb_cmts | plus: 1 %}
+          {% assign total_cmts = total_cmts | plus: 1 %}
+        {% endif %}
+      {% endfor %}
+    <li>
+    <a href="{{ post.url }}">{{ post.title }}</a>
+      {% if nb_cmts > 0 %}
+      <ul>
+        {% assign cmts = site.pages | sort:'name' %}
+        {% for cmt in cmts %}
+          {% if cmt.title == post.title %}
+            {% assign cmt_id = cmt.path | remove_first: '.textile' | remove_first: '.md' | split: '~' | last %}
+            <li>
+              <a style="font-family: monospace" href="{{ post.url }}#comment-{{ cmt_id }}">{{ cmt_id }}</a>
+              {{ cmt.author }}
+            </li>
+          {% endif %}
+        {% endfor %}
+      </ul>
+      {% endif %}
+    </li>
+    {% endfor %}
+  </ul>
+
+<div>Total number of comments: {{ total_cmts }}</div>
+
+</div>
+
+
