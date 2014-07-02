@@ -35,16 +35,16 @@ layout: default
   {% assign cmts = site.pages | sort:'name' %}
   {% for cmt in cmts %}
     {% if cmt.title == page.title %}
-    {% assign cmt_id = cmt.path | remove_first: '.textile' | remove_first: '.md' | split: '~' | last %}
-    {% assign indent = cmt.path | remove_first: '.textile' | remove_first: '.md' | split: '~' | size | minus: 2 %}
-    <div class="comment" style="margin-left: {{ indent | times: 20 }}px">
-      <a name="comment-{{ cmt_id }}"><strong>{{ cmt.author }}</strong></a>&nbsp;<a href="mailto:ioguix+reply-{{ cmt_id }}@gmail.com?subject=Post:%20{{ cmt.title | uri_escape }}">reply</a>
-      {% if cmt.subject %}
-      <br /><strong>{{ cmt.subject }}</strong>
-      {% endif %}
-      <div class="meta_infos">{{ cmt.date | date_to_rfc822 }}</div>
-      {{ cmt.content | textilize }}
-    </div>
+      {% assign cmt_id = cmt.path | remove_first: '.textile' | remove_first: '.md' | split: '~' | last %}
+      {% assign indent = cmt.path | remove_first: '.textile' | remove_first: '.md' | split: '~' | size | minus: 2 %}
+      <div class="comment" style="margin-left: {{ indent | times: 20 }}px">
+        <a name="comment-{{ cmt_id }}"><strong>{{ cmt.author }}</strong></a>&nbsp;<a href="mailto:ioguix+reply-{{ cmt_id }}@gmail.com?subject=Post:%20{{ cmt.title | uri_escape }}">reply</a>
+        {% if cmt.subject %}
+        <br /><strong>{{ cmt.subject }}</strong>
+        {% endif %}
+        <div class="meta_infos">{{ cmt.date | date_to_rfc822 }}</div>
+        {{ cmt.content | textilize }}
+      </div>
     {% endif %}
   {% endfor %}
 {% else %}
