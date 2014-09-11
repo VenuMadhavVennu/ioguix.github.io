@@ -2,11 +2,7 @@
 layout: default
 ---
 {% assign nb_cmts = 0 %}
-{% for cmt in site.pages %}
-  {% if cmt.title == page.title %}
-    {% assign nb_cmts = nb_cmts | plus: 1 %}
-  {% endif %}
-{% endfor %}
+{% for cmt in site.pages %}{% if cmt.title == page.title %}{% assign nb_cmts = nb_cmts | plus: 1 %}{% endif %}{% endfor %}
 <div id="content">
   <h1>{{ page.title }}</h1>
   <div id="content_infos">
