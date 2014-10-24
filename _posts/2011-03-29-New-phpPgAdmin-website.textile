@@ -3,6 +3,7 @@ layout: post
 author: ioguix
 title: New phpPgAdmin Website
 date: 2011-03-29 00:02 +0200
+tags: [phppgadmin, postgresql]
 category: postgresql
 ---
 p. Some days or week ago now, I released a new website for phpPgAdmin.

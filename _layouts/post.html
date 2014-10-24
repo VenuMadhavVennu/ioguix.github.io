@@ -4,14 +4,23 @@ layout: default
 {% assign nb_cmts = 0 %}
 {% for cmt in site.pages %}{% if cmt.title == page.title %}{% assign nb_cmts = nb_cmts | plus: 1 %}{% endif %}{% endfor %}
 <div id="content">
-  <h1>{{ page.title }}</h1>
+  
   <div id="content_infos">
     {{ page.date | date_to_rfc822 }}
-    <br />RSS: 
+    {% if page.categories.size > 0 %}
+    <ul class="inline-list">
     {% for cat in page.categories %}
-      <a href="http://blog.ioguix.net/{{ cat }}/feed.xml">{{ cat }}</a>
+      <i class="fa fa-rss"></i> <a href="http://blog.ioguix.net/{{ cat }}/feed.xml">{{ cat }}</a>
     {% endfor %}
-    <br />
+    </ul>
+    {% endif %}
+    {% if page.tags.size > 0 %}
+    <ul class="inline-list">
+    {% for tag in page.tags %}
+      <li><i class="fa fa-tag"></i> <a href="/tag/{{ tag }}/">{{ tag }}</a></li>
+    {% endfor %}
+    </ul>
+    {% endif %}
     {% if nb_cmts == 1 %}
       <a href="#comments">1 comment</a>
     {% elsif nb_cmts > 0 %}
@@ -20,7 +29,10 @@ layout: default
       <a href="#comments">comment</a>
     {% endif %}
   </div>
-  <br />
+
+  <h1>{{ page.title }}</h1>
+
+  <br style="clear: both" />
 
   {{ content }}
 

@@ -3,6 +3,7 @@ layout: post
 author: ioguix
 title: Bloat estimation for tables
 date: 2014-09-10 18:30:00 +0200
+tags: [bloat, postgresql]
 category: postgresql
 ---
 

@@ -3,6 +3,7 @@ layout: post
 author: ioguix
 title: Normalizing queries for pg_stat_statements < 9.2
 date: 2012-08-06 19:53:00 +0200
+tags: [postgresql]
 category: postgresql
 ---
 p. Hey,

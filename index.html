@@ -5,8 +5,6 @@ title: ioguix' README
 
 <div id="content">
   <h1>Blog Posts</h1>
-  <div id="content_infos">Updated on {{ site.posts.first.date | date_to_rfc822 }}</div>
-  <br />
   <ul class="posts">
     {% for post in site.posts %}
       {% assign nb_cmts = 0 %}
@@ -19,7 +17,6 @@ title: ioguix' README
     </li>
     {% endfor %}
   </ul>
-  
 </div>
 
 
