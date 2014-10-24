@@ -12,7 +12,7 @@ title: ioguix' README
     <li>
       <span>{{ post.date | date_to_string }}</span>: <a href="{{ post.url }}">{{ post.title }}</a>
       {% if nb_cmts > 0 %}
-      <a href="{{ post.url }}#comments" class="meta_infos">{{ nb_cmts }} {% if nb_cmts == 1 %}comment{% else %}comments{% endif %}</a>
+      <a href="{{ post.url }}#comments" class="meta_infos">{{ nb_cmts }}&nbsp;{% if nb_cmts == 1 %}comment{% else %}comments{% endif %}</a>
       {% endif %}
     </li>
     {% endfor %}
