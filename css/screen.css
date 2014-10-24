@@ -16,16 +16,22 @@ div.header,
 div.footer {
   max-width: 1100px;
   margin: auto auto;
+  padding: 0 30px;
 }
 
 div.header {
   text-align: right;
-  font-size: 1.5em
+  font-size: 1.5em;
+  padding-top: 10px;
 }
 
 div.header a.title {
   float: left;
   text-decoration: none;
+}
+
+div.footer {
+  padding-bottom: 10px;
 }
 
 ul.inline-list {
@@ -70,7 +76,7 @@ pre { margin: 0 }
   max-width: 1100px;
   color: #333;
   margin: auto auto;
-  padding: 0 20px;
+  padding: 0 30px;
 }
 
 #content > .highlight,
