@@ -10,15 +10,18 @@ layout: default
     {% if page.categories.size > 0 %}
     <ul class="inline-list">
     {% for cat in page.categories %}
-      <i class="fa fa-rss"></i> <a href="http://blog.ioguix.net/{{ cat }}/feed.xml">{{ cat }}</a>
+      <li><a href="http://blog.ioguix.net/{{ cat }}/feed.xml">{{ cat }}</a> <i class="fa fa-rss"></i></li>
     {% endfor %}
     </ul>
     {% endif %}
     {% if page.tags.size > 0 %}
     <ul class="inline-list">
     {% for tag in page.tags %}
-      <li><i class="fa fa-tag"></i> <a href="/tag/{{ tag }}/">{{ tag }}</a></li>
+      <li>
+        <a href="/tag/{{ tag }}/">{{ tag }}</a>{% if page.tags.last != tag %}, {% endif %}
+      </li>
     {% endfor %}
+      <li><i class="fa fa-tags"></i></li>
     </ul>
     {% endif %}
     {% if nb_cmts == 1 %}
@@ -27,7 +30,7 @@ layout: default
       <a href="#comments">{{ nb_cmts }} comments</a>
     {% else %}
       <a href="#comments">comment</a>
-    {% endif %}
+    {% endif %} <i class="fa fa-comment"></i>
   </div>
 
   <h1>{{ page.title }}</h1>

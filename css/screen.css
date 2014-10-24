@@ -57,17 +57,20 @@ pre { margin: 0 }
 .meta_infos {
   max-width: 1100px;
   color: grey;
-  font-size: 0.7em;
+  font-size: 0.9em;
   font-style: italic;
 }
 
-#content_infos { float: right }
+#content_infos {
+  float: right;
+  text-align: right;
+}
 
 #content {
   max-width: 1100px;
   color: #333;
   margin: auto auto;
-  /*padding-bottom: 40px;*/
+  padding: 0 20px;
 }
 
 #content > .highlight,
