@@ -54,8 +54,10 @@ layout: default
         {% if cmt.subject %}
         <br /><strong>{{ cmt.subject }}</strong>
         {% endif %}
-        <div class="meta_infos">{{ cmt.date | date_to_rfc822 }}</div>
-        {{ cmt.content | textilize }}
+	<div class="meta_infos">{{ cmt.date | date_to_rfc822 }}</div>
+
+	{% if cmt.path contains '.textile' %} {{ cmt.content | textilize }}
+	{% else %} {{ cmt.content | markdownify }} {% endif %}
       </div>
     {% endif %}
   {% endfor %}
