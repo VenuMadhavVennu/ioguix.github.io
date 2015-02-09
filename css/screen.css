@@ -63,6 +63,8 @@ ul.posts > li > span {
 
 pre { margin: 0 }
 
+p { line-height: 1.6em }
+
 #content_infos,
 .meta_infos {
   max-width: 1100px;
@@ -87,9 +89,8 @@ pre { margin: 0 }
 #content > pre,
 cite {
   max-width: 1150px;
-  background: #222;
-  color: #f8f8f2;
-  border-left: 2px solid black;
+  background: #ebe9e6;
+  border-left: 2px solid gray;
   overflow: auto;
   margin: 20px auto 20px 0;
   padding: 10px;
@@ -97,7 +98,6 @@ cite {
 
 cite {
   display: block;
-  background: lightgrey;
   border-left: 2px solid grey;
   color: inherit;
   margin-left: 10px;
@@ -105,11 +105,15 @@ cite {
 
 p > code,
 li > code {
-  background: lightgrey;
-  border: 1px solid grey;
+  background: #ebe9e6;
   padding-left: 4px;
   padding-right: 4px;
+  font-family: monospace
 }
+
+#content > .highlight,
+#content > pre
+{ font-family: monospace }
 
 /* Comments */
 
