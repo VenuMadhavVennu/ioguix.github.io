@@ -7,7 +7,7 @@ title: ioguix' README
   <h1>Blog Posts</h1>
   <ul class="posts">
     {% for post in site.posts %}
-      {% assign nb_cmts = 0 %}
+      {% assign nb_cmts = post.nbdisqus %}
       {% for cmt in site.pages %}{% if cmt.title == post.title %}{% assign nb_cmts = nb_cmts | plus: 1 %}{% endif %}{% endfor %}
     <li>
       <span>{{ post.date | date_to_string }}</span>: <a href="{{ post.url }}">{{ post.title }}</a>
