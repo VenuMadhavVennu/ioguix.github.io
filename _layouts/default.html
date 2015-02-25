@@ -13,21 +13,18 @@
 
   <div class="header">
     <a class="title" href="/">ioguix' README</a>
+  </div>
+
+
+  {{ content }}
+
+
+  <div class="footer">
+    © 2010 - 2015: Jehan-Guillaume (ioguix) de Rorthais
     <a href="mailto:ioguix+blog@gmail.com"><i class="fa fa-envelope"></i></a>
     <a href="http://github.com/ioguix/"><i class="fa fa-github"></i></a>
     <a href="http://blog.ioguix.net/feed.xml"><i class="fa fa-rss"></i></a>
   </div>
-
-  <hr />
-
-  {{ content }}
-
-  <hr />
-
-  <div class="footer"><div>
-    Copyright © 2010 - 2014 Jehan-Guillaume (ioguix) de Rorthais
-    <div class="meta_infos">Updated on {{ site.posts.first.date | date_to_rfc822 }}</div>
-  </div></div>
 
 {% include google_analytics.html %}
 

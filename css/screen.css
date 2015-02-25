@@ -12,9 +12,7 @@ hr {
   clear: both;
 }
 
-h2 {
-  margin-top: 1.5em;
-}
+h2 { margin-top: 1.5em }
 
 div.header,
 div.footer {
@@ -24,18 +22,17 @@ div.footer {
 }
 
 div.header {
-  text-align: right;
   font-size: 1.5em;
   padding-top: 10px;
 }
 
 div.header a.title {
-  float: left;
   text-decoration: none;
 }
 
 div.footer {
   padding-bottom: 10px;
+  text-align: center;
 }
 
 ul.inline-list {
@@ -44,9 +41,7 @@ ul.inline-list {
   list-style: none;
 }
 
-ul.inline-list > li {
-  display: inline
-}
+ul.inline-list > li { display: inline }
 
 ul.posts {
   margin: 0;
@@ -55,9 +50,7 @@ ul.posts {
   list-style: none;
 }
 
-ul.posts > li > span {
-  font-family: monospace;
-}
+ul.posts > li > span { font-family: monospace }
 
 /* Posts */
 
@@ -89,8 +82,8 @@ p { line-height: 1.6em }
 #content > pre,
 cite {
   max-width: 1150px;
-  background: #ebe9e6;
-  border-left: 2px solid gray;
+  background: #f5f4f2;
+  border-left: 1px solid gray;
   overflow: auto;
   margin: 20px auto 20px 0;
   padding: 10px;

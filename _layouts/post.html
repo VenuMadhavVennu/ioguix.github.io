@@ -4,9 +4,11 @@ layout: default
 {% assign nb_cmts = page.nbdisqus %}
 {% for cmt in site.pages %}{% if cmt.title == page.title %}{% assign nb_cmts = nb_cmts | plus: 1 %}{% endif %}{% endfor %}
 <div id="content">
+
+  <hr />
   
   <div id="content_infos">
-    {{ page.date | date_to_rfc822 }}
+    {{ page.date | date_to_long_string }}
     {% if page.categories.size > 0 %}
     <ul class="inline-list">
     {% for cat in page.categories %}
