@@ -18,7 +18,7 @@ effect. About a year ago, I found another quick-n-dirty fix for a customer.
 
 Here is the problem:
 
-```psql
+{% highlight psql %}
 casts=# CREATE TABLE test AS SELECT generate_series(1,10) as id;
 SELECT
 casts=# SELECT id, 'value = ' || id FROM test WHERE id = '5'::text;
@@ -26,7 +26,7 @@ ERROR:  operator does not exist: integer = text
 LINE 1 : SELECT id, 'value = ' || id FROM test WHERE id = '5'::text;
                                                          ^
 TIPS : No operator matches the given name and argument type(s). You might need to add explicit type casts.
-```
+{% endhighlight %}
 
 The very well known solution is to recreate some of these implicit casts that
 were removed in 8.3. Peter Eisentraut blogged about that, you'll find his SQL
