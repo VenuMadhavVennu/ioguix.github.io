@@ -5,7 +5,7 @@ title: « Install done. »
 date: 2010-12-06 18:33 +0100
 ---
 
-```bash
+```shell
 ./configure --prefix=blog.ioguix.net
 make
 sudo make install
