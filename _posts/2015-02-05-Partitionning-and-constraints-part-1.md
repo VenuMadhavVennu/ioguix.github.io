@@ -204,13 +204,13 @@ session 2=# SELECT tableoid::regclass, * FROM master WHERE id=6;
 ----------+----+----------+---------+------------------------
  child0   |  6 | 28510860 | test 6  | 2010-01-08 17:36:39+01
  child1   |  6 |  2188136 | test 7  | 2011-07-15 07:13:59+02
-{% endhighlight %}
+```
 
 The second issue is that real constraints can be deferred, which means constraints are disabled during a transaction and enforced on user request and at the end of the transaction by default. In other words, using deferred constraints allows you to violate them temporarilly during a transaction as far as everything is respected at the end. For more information about this mechanism, see the "SET CONSTAINTS":http://www.postgresql.org/docs/9.4/static/sql-set-constraints.html, "CREATE TABLE":http://www.postgresql.org/docs/9.4/static/sql-createtable.html and... the "CREATE TRIGGER":http://www.postgresql.org/docs/9.4/static/sql-createtrigger.html pages.
 
 Yes, documentation says triggers can be deferred when defined as @CONSTRAINT TRIGGER@. So we can solve this issue by recreating our triggers:
 
-{% highlight sql %}
+```
 DROP TRIGGER IF EXISTS children_id_pkey ON master;
 DROP TRIGGER IF EXISTS children_id_pkey ON child0;
 DROP TRIGGER IF EXISTS children_id_pkey ON child1;
