@@ -43,10 +43,10 @@ Indexes:
     "test_pkey" PRIMARY KEY, btree (rental_id)
     "test_rental_date_inventory_id_customer_id_idx" UNIQUE, btree (rental_date, inventory_id, customer_id)
     "test_inventory_id_idx" btree (inventory_id)
-{% endhighlight %}
+```
 
 I copy pasted the bloat query in file <code>~/tmp/bloat_original.sql</code>, here is its output for this table:
-{% highlight psql %}
+```
 postgres@pagila=# \i ~/tmp/bloat_original.sql
  current_database | schemaname |    tablename     | tbloat | wastedbytes |                        iname                        | ibloat | wastedibytes 
 ------------------+------------+------------------+--------+-------------+-----------------------------------------------------+--------+--------------
