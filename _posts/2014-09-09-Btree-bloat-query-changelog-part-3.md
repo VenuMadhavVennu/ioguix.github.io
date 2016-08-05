@@ -14,16 +14,15 @@ Here are some fresh news about my previous work (see
 and [part 2]({%post_url 2014-06-24-More-work-on-index-bloat-estimation-query%}))
 on a better Btree bloat query:
 
-* add field @is_na@ to filter out indexes we can not estimate the bloat with
-  "accuracy" (currently only indexes referencing a fields using the "name" type).
-* better estimation for variable length types (varchar, text, bytea, ...). The
-  query now try to consider their header part
+* add field `is_na` to filter out indexes we can not estimate the bloat with
+  "accuracy" (currently only indexes referencing a fields using the `name` type).
+* better estimation for variable length types (`varchar`, `text`, `bytea`, ...).
+  Thequery now try to consider their header part
 * Three different queries depending on the PostgreSQL version:
-  * from 7.4 to 8.1: [https://gist.github.com/ioguix/5f60e24a77828078ff5f]
-  * for 8.2: [https://gist.github.com/ioguix/0675875e2780b362ef28]
-  * for 8.3 and more: [https://gist.github.com/ioguix/c29d5790b8b93bf81c27]
+  * from 7.4 to 8.1: [https://gist.github.com/ioguix/5f60e24a77828078ff5f]()
+  * for 8.2: [https://gist.github.com/ioguix/0675875e2780b362ef28]()
+  * for 8.3 and more: [https://gist.github.com/ioguix/c29d5790b8b93bf81c27]()
 * ignore non-valid indexes for 8.2 and more
-
 
 ##Known issue
 

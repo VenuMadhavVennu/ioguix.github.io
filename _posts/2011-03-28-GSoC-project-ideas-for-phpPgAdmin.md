@@ -6,11 +6,11 @@ date: 2011-03-28 21:25 +0200
 tags: [phppgadmin, gsoc, postgresql]
 category: postgresql
 ---
-GSoC season started !
+GSoC season started!
 
 PostgreSQL has been accepted this year again as project organization.  Big
 thanks to Selena and others to handle this for the community!  You can find the
-PostgreSQL GSoC 2011 page "here":http://wiki.postgresql.org/wiki/GSoC_2011.  As
+PostgreSQL GSoC 2011 page [here](http://wiki.postgresql.org/wiki/GSoC_2011).  As
 far as I know, student projects submissions starts today.
 
 {{ post.excerpt }}
@@ -36,7 +36,7 @@ So, here are some more ideas for PPA:
 * support PostgreSQL 9.1
 * switch PPA to UTF-8 only
 * graphical explain: kind of a merge between pgAdmin one and the excellent
-  [explain.depesz.com](http://explain.depesz.com/).  But to be honest, as I
+  [explain.depesz.com]().  But to be honest, as I
   told to Leonardo, I would like to keep it for me
 * add support for multi-edit/delete/add data from tables
 * drop adodb keeping the compatibility.  A lots of advantages here: remove
@@ -51,4 +51,4 @@ So, here are some more ideas for PPA:
 Plus, check our TODO file for a bunch of pending
 [TODOs](https://github.com/phppgadmin/phppgadmin/raw/master/TODO) or our
 [feature request](https://sourceforge.net/tracker/?group_id=37132&atid=418983)
- list on sf.net for more ideas!
+list on sf.net for more ideas!

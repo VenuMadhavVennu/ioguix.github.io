@@ -19,6 +19,6 @@ Too bad I hadn't time to explain how I wanted to kill pgfouine and how a
 `Replay` script on top of pgShark might be awesome for benchmarking and testing
 purpose...
 
-Hopefully I'll be able to make a longer talk at [pgconf.eu](http://2011.pgconf.eu/) !
+Hopefully I'll be able to make a longer talk at [pgconf.eu](http://2011.pgconf.eu/)!
 
 Gleu: I know, you warned me :-)

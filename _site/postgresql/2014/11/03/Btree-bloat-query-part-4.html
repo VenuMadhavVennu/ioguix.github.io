@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <title>Btree bloat query - part 4</title>
+  <meta name="author" content="Jehan-Guillaume (ioguix) de Rorthais" />
+  <link href="http://blog.ioguix.net/feed.xml" rel="alternate" title="Jehan-Guillaume (ioguix) de Rorthais" type="application/atom+xml" >
+  <link rel="stylesheet" href="/css/screen.css" type="text/css" media="screen, projection" />
+  <link rel="stylesheet" href="/css/syntax.css" type="text/css" />
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+</head>
+<body>
+
+  <div class="header">
+    <a class="title" href="/">ioguix' README</a>
+  </div>
+
+
+  
+
+<div id="content">
+
+  <hr />
+  
+  <div id="content_infos">
+    03 November 2014
+    
+    <ul class="inline-list">
+    
+      <li><a href="http://blog.ioguix.net/postgresql/feed.xml">postgresql</a> <i class="fa fa-rss"></i></li>
+    
+    </ul>
+    
+    
+    <ul class="inline-list">
+    
+      <li>
+        <a href="/tag/bloat/">bloat</a>, 
+      </li>
+    
+      <li>
+        <a href="/tag/postgresql/">postgresql</a>
+      </li>
+    
+      <li><i class="fa fa-tags"></i></li>
+    </ul>
+    
+    
+      <a href="#comments">1 comment</a>
+     <i class="fa fa-comment"></i>
+  </div>
+
+  <h1>Btree bloat query - part 4</h1>
+
+  <br style="clear: both" />
+
+  <p>Thanks to the various PostgreSQL environments we have under monitoring at
+Dalibo, these Btree bloat estimation queries keeps challenging me occasionally
+because of statistics deviation…or bugs.</p>
+
+<p>For people who visit this blog for the first time, don’t miss the three
+previous parts, stuffed with some interesting infos about these queries <strong>and</strong>
+BTree indexes:
+<a href="/postgresql/2014/03/28/Playing-with-indexes-and-better-bloat-estimate.html">part 1</a>,
+<a href="/postgresql/2014/06/24/More-work-on-index-bloat-estimation-query.html">part 2</a> and
+<a href="/postgresql/2014/09/09/Btree-bloat-query-changelog-part-3.html">part 3</a>.</p>
+
+<p>For people in a hurry, here are the links to the queries:</p>
+
+<ul>
+  <li>for 7.4: <a href="">https://gist.github.com/ioguix/dfa41eb0ef73e1cbd943</a></li>
+  <li>for 8.0 and 8.1: <a href="">https://gist.github.com/ioguix/5f60e24a77828078ff5f</a></li>
+  <li>for 8.2 and more: <a href="">https://gist.github.com/ioguix/c29d5790b8b93bf81c27</a></li>
+</ul>
+
+<h2 id="columns-has-been-ignored">Columns has been ignored</h2>
+
+<p>In two different situations, some index fields were just ignored by the query:</p>
+
+<ul>
+  <li>after renaming the field in the table</li>
+  <li>if the index field was an expression</li>
+</ul>
+
+<p>I cheated a bit for the first fix, looking at psql’s answer to this question
+(thank you <code>-E</code>).</p>
+
+<p>The second one was an easy fix, but sadly only for version 8.0 and more. It
+seems to me there’s no solution for 7.4.</p>
+
+<p>These bugs have the same results: very bad estimation. An index field is
+ignored in both cases, s the bloat sounds much bigger with the old version of
+the query. Here is a demo with an index on expression:</p>
+
+<div class="highlight"><pre><code class="language-psql" data-lang="psql"><span class="gp">postgres@pagila=#</span> <span class="k">create</span> <span class="k">index</span> <span class="n">test_expression</span> <span class="k">on</span> <span class="n">test</span> <span class="p">(</span><span class="n">rental_id</span><span class="p">,</span> <span class="n">md5</span><span class="p">(</span><span class="n">rental_id</span><span class="o">::</span><span class="nb">text</span><span class="p">));</span>
+<span class="go">CREATE INDEX</span>
+
+<span class="gp">postgres@pagila=#</span> <span class="k">analyze</span> <span class="p">;</span>
+<span class="go">ANALYZE</span>
+
+<span class="gp">postgres@pagila=#</span> <span class="kp">\i</span> <span class="ss">old/btree_bloat.sql-20141022</span>
+<span class="go"> current_database | schemaname | tblname |     idxname     | real_size | estimated_size | bloat_size |        bloat_ratio         | is_na </span>
+<span class="go">------------------+------------+---------+-----------------+-----------+----------------+------------+----------------------------+-------</span>
+<span class="go"> pagila           | public     | test    | test_expression |    974848 |         335872 |     638976 |        65.5462184873949580 | f</span></code></pre></div>
+
+<p>Most of this 65% bloat estimation are actually the data of the missing field.
+The result is much more coherent with the latest version of the query for a
+freshly created index, supposed to have around 10% of bloat as showed in the
+2nd query:</p>
+
+<div class="highlight"><pre><code class="language-psql" data-lang="psql"><span class="gp">postgres@pagila=#</span> <span class="kp">\i</span> <span class="ss">sql/btree_bloat.sql</span>
+<span class="go"> current_database | schemaname | tblname |     idxname     | real_size | estimated_size | bloat_size |   bloat_ratio    | is_na </span>
+<span class="go">------------------+------------+---------+-----------------+-----------+----------------+------------+------------------+-------</span>
+<span class="go"> pagila           | public     | test    | test_expression |    974848 |         851968 |     122880 | 12.6050420168067 | f</span>
+
+<span class="gp">postgres@pagila=#</span> <span class="k">SELECT</span> <span class="n">relname</span><span class="p">,</span> <span class="mf">100</span><span class="o">-</span><span class="p">(</span><span class="n">stattuple</span><span class="mf">.</span><span class="n">pgstatindex</span><span class="p">(</span><span class="n">relname</span><span class="p">))</span><span class="mf">.</span><span class="n">avg_leaf_density</span> <span class="k">AS</span> <span class="n">bloat_ratio</span>
+<span class="k">FROM</span> <span class="n">pg_class</span> <span class="k">WHERE</span> <span class="n">relname</span> <span class="o">=</span> <span class="s1">&#39;test_expression&#39;</span><span class="p">;</span>
+<span class="go">     relname     | bloat_ratio </span>
+<span class="go">-----------------+-------------</span>
+<span class="go"> test_expression |       10.33</span></code></pre></div>
+
+<h2 id="wrong-estimation-for-varlena-types">Wrong estimation for varlena types</h2>
+
+<p>After fixing the query for indexes on expression, I noticed some negative bloat
+estimation for the biggest ones: the real index was smaller than the estimated
+one!</p>
+
+<div class="highlight"><pre><code class="language-psql" data-lang="psql"><span class="gp">postgres@pagila=#</span> <span class="k">create</span> <span class="k">table</span> <span class="n">test3</span> <span class="k">as</span> <span class="k">select</span> <span class="n">i</span> <span class="k">from</span> <span class="n">generate_series</span><span class="p">(</span><span class="mf">1</span><span class="p">,</span><span class="mf">10000000</span><span class="p">)</span> <span class="n">i</span><span class="p">;</span>
+<span class="go">SELECT 10000000</span>
+
+<span class="gp">postgres@pagila=#</span> <span class="k">create</span> <span class="k">index</span> <span class="k">on</span> <span class="n">test3</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">md5</span><span class="p">(</span><span class="n">i</span><span class="o">::</span><span class="nb">text</span><span class="p">));</span>
+<span class="go">CREATE INDEX</span>
+
+<span class="gp">postgres@pagila=#</span> <span class="kp">\i</span> <span class="ss">~/sql/old/btree_bloat.sql-20141027</span>
+<span class="go"> current_database | schemaname | tblname |     idxname     | real_size | estimated_size | bloat_size |     bloat_ratio     | is_na </span>
+<span class="go">------------------+------------+---------+-----------------+-----------+----------------+------------+---------------------+-------</span>
+<span class="go"> pagila           | public     | test3   | test3_i_md5_idx | 590536704 |      601776128 |  -11239424 | -1.9032557881448805 | f</span></code></pre></div>
+
+<p>In this version of the query, I am computing and adding the headers length of
+varlena types (text, bytea, etc) to the statistics(see
+<a href="/postgresql/2014/09/09/Btree-bloat-query-changelog-part-3.html">part 3</a>). I was
+wrong.</p>
+
+<p>Taking the “text” type as example, PostgreSQL adds a one byte header to the
+value if it is not longer than 127, and a 4 bytes one for bigger ones. Looking
+closer to the statistic values because of this negative bloat, I realized that
+the headers was already added to them. As a demo, take a <code>md5</code> string of 32
+bytes long. In the following results, we can see the average length from
+<code>pg_stats</code> is <code>32+1</code> for one md5, and <code>4*32+4</code> for a string of 4 concatenated
+md5, supposed to be 128 byte long:</p>
+
+<div class="highlight"><pre><code class="language-psql" data-lang="psql"><span class="gp">postgres@pagila=#</span> <span class="k">create</span> <span class="k">table</span> <span class="n">test2</span> <span class="k">as</span> <span class="k">select</span> <span class="n">i</span><span class="p">,</span> <span class="n">md5</span><span class="p">(</span><span class="n">i</span><span class="o">::</span><span class="nb">text</span><span class="p">),</span> <span class="n">repeat</span><span class="p">(</span><span class="n">md5</span><span class="p">(</span><span class="n">i</span><span class="o">::</span><span class="nb">text</span><span class="p">),</span> <span class="mf">4</span><span class="p">)</span> <span class="k">from</span> <span class="n">generate_series</span><span class="p">(</span><span class="mf">1</span><span class="p">,</span><span class="mf">5</span><span class="p">)</span> <span class="n">i</span><span class="p">;</span>
+<span class="go">SELECT 5</span>
+
+<span class="gp">postgres@pagila=#</span> <span class="k">analyze</span> <span class="n">test2</span><span class="p">;</span>
+<span class="go">ANALYZE</span>
+
+<span class="gp">postgres@pagila=#</span> <span class="k">select</span> <span class="n">tablename</span><span class="p">,</span> <span class="n">attname</span><span class="p">,</span> <span class="n">avg_width</span> <span class="k">from</span> <span class="n">pg_stats</span> <span class="k">where</span> <span class="n">tablename</span><span class="o">=</span><span class="s1">&#39;test2&#39;</span><span class="p">;</span>
+<span class="go"> tablename | attname | avg_width </span>
+<span class="go">-----------+---------+-----------</span>
+<span class="go"> test2     | i       |         4</span>
+<span class="go"> test2     | md5     |        33</span>
+<span class="go"> test2     | repeat  |       132</span></code></pre></div>
+
+<p>After removing this part of the query, stats for <code>test3_i_md5_idx</code> are much better:</p>
+
+<div class="highlight"><pre><code class="language-psql" data-lang="psql"><span class="gp">postgres@pagila=#</span> <span class="k">SELECT</span> <span class="n">relname</span><span class="p">,</span>
+  <span class="mf">100</span><span class="o">-</span><span class="p">(</span><span class="n">stattuple</span><span class="mf">.</span><span class="n">pgstatindex</span><span class="p">(</span><span class="n">relname</span><span class="p">))</span><span class="mf">.</span><span class="n">avg_leaf_density</span> <span class="k">AS</span> <span class="n">bloat_ratio</span>
+<span class="k">FROM</span> <span class="n">pg_class</span> <span class="k">WHERE</span> <span class="n">relname</span> <span class="o">=</span> <span class="s1">&#39;test3_i_md5_idx&#39;</span><span class="p">;</span>
+<span class="go">     relname     | bloat_ratio </span>
+<span class="go">-----------------+-------------</span>
+<span class="go"> test3_i_md5_idx |       10.01</span>
+
+<span class="gp">postgres@pagila=#</span> <span class="kp">\i</span> <span class="ss">~/sql/old/btree_bloat.sql-20141028</span>
+<span class="go"> current_database | schemaname | tblname |     idxname     | real_size | estimated_size | bloat_size |     bloat_ratio     | is_na </span>
+<span class="go">------------------+------------+---------+-----------------+-----------+----------------+------------+---------------------+-------</span>
+<span class="go"> pagila           | public     | test3   | test3_i_md5_idx | 590536704 |      521535488 |   69001216 | 11.6844923495221052 | f</span></code></pre></div>
+
+<p>This is a nice bug fix AND one complexity out of the query. Code simplification is always a good news :)</p>
+
+<h2 id="adding-a-bit-of-opaque-data">Adding a bit of Opaque Data</h2>
+
+<p>When studying the Btree layout, I forgot about one small non-data area in index
+pages: the “Special space”, aka. “Opaque Data” in code sources. The previous
+bug took me back on <a href="http://www.postgresql.org/docs/current/static/storage-page-layout.html">this doc page</a>
+where I remembered I should probably pay attention to this space.</p>
+
+<p>This is is a small space on each pages reserved to the access method so it can
+store whatever it needs for its own purpose. As instance, in the case of a
+Btree index, this “special space” is 16 bytes long and used (among other
+things) to reference both siblings of the page in the tree. Ordinary tables
+have no opaque data, so no special space (good, I ‘ll not have to fix this bug
+in my <a href="/postgresql/2014/09/10/Bloat-estimation-for-tables.html">Table bloat estimation query</a>).</p>
+
+<p>This small bug is not as bad for stats than previous ones, but fixing it
+definitely help the bloat estimation accuracy. Using the previous demo on
+<code>test3_i_md5_idx</code>, here is the comparison of real bloat, estimation without
+considering the special space and estimation considering it:</p>
+
+<div class="highlight"><pre><code class="language-psql" data-lang="psql"><span class="gp">postgres@pagila=#</span> <span class="k">SELECT</span> <span class="n">relname</span><span class="p">,</span>
+  <span class="mf">100</span><span class="o">-</span><span class="p">(</span><span class="n">stattuple</span><span class="mf">.</span><span class="n">pgstatindex</span><span class="p">(</span><span class="n">relname</span><span class="p">))</span><span class="mf">.</span><span class="n">avg_leaf_density</span> <span class="k">AS</span> <span class="n">bloat_ratio</span>
+<span class="k">FROM</span> <span class="n">pg_class</span> <span class="k">WHERE</span> <span class="n">relname</span> <span class="o">=</span> <span class="s1">&#39;test3_i_md5_idx&#39;</span><span class="p">;</span>
+<span class="go">     relname     | bloat_ratio </span>
+<span class="go">-----------------+-------------</span>
+<span class="go"> test3_i_md5_idx |       10.01</span>
+
+<span class="gp">postgres@pagila=#</span> <span class="kp">\i</span> <span class="ss">~/sql/old/btree_bloat.sql-20141028</span>
+<span class="go"> current_database | schemaname | tblname |     idxname     | real_size | estimated_size | bloat_size |     bloat_ratio     | is_na </span>
+<span class="go">------------------+------------+---------+-----------------+-----------+----------------+------------+---------------------+-------</span>
+<span class="go"> pagila           | public     | test3   | test3_i_md5_idx | 590536704 |      521535488 |   69001216 | 11.6844923495221052 | f</span>
+
+<span class="gp">postgres@pagila=#</span> <span class="kp">\i</span> <span class="ss">~/sql/btree_bloat.sql</span>
+<span class="go"> current_database | schemaname | tblname |     idxname     | real_size | estimated_size | bloat_size |   bloat_ratio    | is_na </span>
+<span class="go">------------------+------------+---------+-----------------+-----------+----------------+------------+------------------+-------</span>
+<span class="go"> pagila           | public     | test3   | test3_i_md5_idx | 590536704 |      525139968 |   65396736 | 11.0741187731491 | f</span></code></pre></div>
+
+<p>This is only an approximative 5% difference for the estimated size of this particular index.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>I never mentioned it before, but these queries are used in
+<a href="https://github.com/OPMDG/check_pgactivity">check_pgactivity</a> (a nagios plugin
+for PostgreSQL), under the checks “table_bloat” and “btree_bloat”.
+<a href="https://github.com/OPMDG/check_pgactivity/releases">The latest version</a> of
+this tool already include these fixes. I might write an article about
+“check_pgactivity” at some point.</p>
+
+<p>As it is not really convenient for most of you to follow the updates on my
+gists, I keep writing here about my work on these queries. I should probably
+add some version-ing on theses queries now and find a better way to communicate
+about them at some point.</p>
+
+<p>As a first step, after a discussion with (one of?) the author of
+<a href="http://zalando.github.io/PGObserver/">pgObserver</a> during the latest
+<a href="http://2014.pgconf.eu">pgconf.eu</a>, I added these links to the following
+PostgreSQL wiki pages:</p>
+
+<ul>
+  <li><a href="https://wiki.postgresql.org/wiki/Index_Maintenance#New_query">https://wiki.postgresql.org/wiki/Index_Maintenance#New_query</a></li>
+  <li><a href="https://wiki.postgresql.org/wiki/Show_database_bloat">https://wiki.postgresql.org/wiki/Show_database_bloat</a></li>
+</ul>
+
+<p>Cheers, happy monitoring, happy REINDEX-ing!</p>
+
+
+  
+<div id="comments">
+  <hr />
+  <a class="comments" name="comments">Comments</a>&nbsp;Leave a comment <a href="mailto:ioguix+blog@gmail.com?subject=Post:%20Btree%20bloat%20query%20-%20part%204">by email</a> or <a href="#disqus_thread">Disqus</a>
+  <p>Note: I only publish your name/pseudo, mail subject and content. I will NOT publish your email address.</p>
+
+  
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+      
+      
+      <div class="comment" style="margin-left: 0px">
+        <a name="comment-029"><strong>Kaarel Moppel</strong></a>&nbsp;<a href="mailto:ioguix+reply-029@gmail.com?subject=Post:%20Btree%20bloat%20query%20-%20part%204">reply</a>
+        
+        <div class="meta_infos">Fri, 07 Nov 2014 16:34:08 +0100</div>
+
+         <p>Thanks a lot!</p>
+
+<p>I’ve just updated PgObserver also to use the latest from “check_pgactivity” (<a href="https://github.com/zalando/PGObserver/commit/ac3de84e71d6593f8e64f68a4b5eaad9ceb85803">https://github.com/zalando/PGObserver/commit/ac3de84e71d6593f8e64f68a4b5eaad9ceb85803</a>).</p>
+
+<p>Cheers,<br />
+Kaarel</p>
+ 
+      </div>
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+
+</div>
+
+
+  <div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname  = 'ioguix';
+    var disqus_identifier = "2014-11-03-Btree-bloat-query-part-4";
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+</div>
+
+
+
+
+  <div class="footer">
+    © 2010 - 2015: Jehan-Guillaume (ioguix) de Rorthais
+    <a href="mailto:ioguix+blog@gmail.com"><i class="fa fa-envelope"></i></a>
+    <a href="http://github.com/ioguix/"><i class="fa fa-github"></i></a>
+    <a href="http://blog.ioguix.net/feed.xml"><i class="fa fa-rss"></i></a>
+  </div>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-52084735-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+</body>
+</html>

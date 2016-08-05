@@ -11,7 +11,7 @@ After my [Btree bloat estimation query]({%post_url 2014-09-10-Bloat-estimation-f
 I found some time to work on a new query for tables. The goal here is still to
 have a better bloat estimation using dedicated queries for each kind of objects.
 
-Compare to "the well known":http://wiki.postgresql.org/wiki/Show_database_bloat
+Compare to [the well known](http://wiki.postgresql.org/wiki/Show_database_bloat)
 bloat query, this query pay attention to:
 
 * TOAST
@@ -20,28 +20,28 @@ bloat query, this query pay attention to:
 
 You'll find the queries here:
 
-* from PostgreSQL 7.4 to 8.1: [https://gist.github.com/ioguix/f849b1bd31be55da2d7f]
-* from PostgreSQL 8.2 to 8.4: [https://gist.github.com/ioguix/74769c8fe5edc582a61b]
-* for PostgreSQL 9.0 and after: [https://gist.github.com/ioguix/4f95917f90c9e26df1b2]
+* from PostgreSQL 7.4 to 8.1: [https://gist.github.com/ioguix/f849b1bd31be55da2d7f]()
+* from PostgreSQL 8.2 to 8.4: [https://gist.github.com/ioguix/74769c8fe5edc582a61b]()
+* for PostgreSQL 9.0 and after: [https://gist.github.com/ioguix/4f95917f90c9e26df1b2]()
 
 ##Tests
 
-I created the file @sql/bloat_tables.sql@ with the 9.0 and more query version.
+I created the file `sql/bloat_tables.sql` with the 9.0 and more query version.
 I edited the query to add the bloat reported by `pgstattuple` (free_percent +
 dead_tuple_percent) to compare both results and added the following filter:
 
-```sql
+{% highlight sql %}
 -- remove Non Applicable tables
 NOT is_na
 -- remove tables with real bloat < 1 block
 AND tblpages*((pst).free_percent + (pst).dead_tuple_percent)::float4/100 >= 1
 -- filter on table name using the parameter :tblname
 AND tblname LIKE :'tblname'
-```
+{% endhighlight %}
 
 Here is the result on a fresh pagila database:
 
-```
+{% highlight psql %}
 postgres@pagila=# \set tblname %
 postgres@pagila=# \i sql/bloat_tables.sql 
  current_database | schemaname |    tblname     | real_size | bloat_size | tblpages | is_na |   bloat_ratio    | real_frag 
@@ -52,12 +52,12 @@ postgres@pagila=# \i sql/bloat_tables.sql
  pagila           | public     | film           |    450560 |       8192 |       55 | f     | 1.81818181818182 |      3.26
  pagila           | public     | rental         |   1228800 |     131072 |      150 | f     | 10.6666666666667 |      0.67
 (5 rows)
-```
+{% endhighlight %}
 
 Well, not too bad. Let's consider the largest table, clone it and create some
 bloat:
 
-```
+{% highlight psql %}
 postgres@pagila=# create table film2 as select * from film;
 SELECT 1000
 postgres@pagila=# analyze film2;
@@ -81,13 +81,13 @@ postgres@pagila=# \i sql/bloat_tables.sql
 ------------------+------------+---------+-----------+------------+----------+-------+------------------+-----------
  pagila           | public     | film2   |    450560 |     122880 |       55 | f     | 27.2727272727273 |     27.29
 (1 row)
-```
+{% endhighlight %}
 
 Again, the bloat reported here is pretty close to the reality!
 
 Some more tests:
 
-```
+{% highlight psql %}
 postgres@pagila=# delete from film2 where film_id < 333;
 DELETE 83
 postgres@pagila=# analyze film2;
@@ -107,7 +107,7 @@ postgres@pagila=# \i sql/bloat_tables.sql
 ------------------+------------+---------+-----------+------------+----------+-------+------------------+-----------
  pagila           | public     | film2   |    450560 |     303104 |       55 | f     | 67.2727272727273 |     66.43
 (1 row)
-```
+{% endhighlight %}
 
 Good, good, good. What next?
 
@@ -115,16 +115,16 @@ Good, good, good. What next?
 ##The alignment deviation
 
 You might have noticed I did not mentioned this table with a large deviation
-between the statistical bloat and the real one, called "rental":
+between the statistical bloat and the real one, called `rental`:
 
-```
+{% highlight psql %}
 postgres@pagila=# \set tblname rental
 postgres@pagila=# \i sql/bloat_tables.sql
  current_database | schemaname | tblname | real_size | bloat_size | tblpages | is_na |   bloat_ratio    | real_frag 
 ------------------+------------+---------+-----------+------------+----------+-------+------------------+-----------
  pagila           | public     | rental  |   1228800 |     131072 |      150 | f     | 10.6666666666667 |      0.67
 (1 row)
-```
+{% endhighlight %}
 
 This particular situation is exactly why I loved writing these bloat queries
 (including the btree one), confronting the statistics and the reality and
@@ -143,7 +143,7 @@ page from PostgreSQL document, see field `typalign`.
 So let's demonstrate how it influence the bloat here. Back to the rental table,
 here is its definition: 
 
-```
+{% highlight psql %}
 postgres@pagila=# \d rental
                                           Table "public.rental"
     Column    |            Type             |                         Modifiers                          
@@ -155,7 +155,7 @@ postgres@pagila=# \d rental
  return_date  | timestamp without time zone | 
  staff_id     | smallint                    | not null
  last_update  | timestamp without time zone | not null default now()
-```
+{% endhighlight %}
 
 All the fields here are fixed-size types, so it is quite easy to compute the
 row size:
@@ -171,7 +171,7 @@ The minimum row size would be `2*4 + 2*2 + 3*8`, 36 bytes. Considering the
 alignment optimization and the order of the fields, we now have (ascii art is
 easier to explain):
 
-```
+{% highlight text %}
 |0     1     2     3     4     5     6     7     8     |
 |       rental_id       |***********PADDING************|
 |                     rental_date                      |
@@ -179,12 +179,12 @@ easier to explain):
 |                     return_date                      |
 | staff_id  |*****************PADDING******************|
 |                     last_update                      |
-```
+{% endhighlight %}
 
 That makes 12 bytes of padding and a total row size of 48 bytes instead of 36.
 Here are the 10%! Let's double check this by the experience: 
 
-```
+{% highlight psql %}
 postgres@pagila=# create table rental2 as select rental_date, return_date,
 last_update, rental_id, inventory_id, customer_id, staff_id from public.rental; 
 SELECT 16044
@@ -214,12 +214,12 @@ postgres@pagila=# select 100*(1200-1072)::float4/1200;
 ------------------
  10.6666666666667
 (1 row)
-```
+{% endhighlight %}
 
 Removing the "remove tables with real bloat < 1 block" filter from my demo
 query, we have now:
 
-```
+{% highlight psql %}
 postgres@pagila=# \set tblname rental%
 postgres@pagila=# \i sql/bloat_tables.sql
  current_database | schemaname | tblname | real_size | bloat_size | tblpages | is_na |   bloat_ratio    | real_frag 
@@ -227,7 +227,7 @@ postgres@pagila=# \i sql/bloat_tables.sql
  pagila           | public     | rental  |   1228800 |     131072 |      150 | f     | 10.6666666666667 |      0.67
  pagila           | public     | rental2 |   1097728 |          0 |      134 | f     |                0 |      0.41
 (2 rows)
-```
+{% endhighlight %}
 
 Great!
 

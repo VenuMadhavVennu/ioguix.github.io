@@ -25,7 +25,7 @@ Here is the gist of the new version of this query if you want to comment/patch:
 
 And the code itself:
 
-```sql
+{% highlight sql %}
 -- WARNING: executed with a non-superuser role, the query inspect only index on tables you are granted to read.
 SELECT current_database(), nspname AS schemaname, c.relname AS tablename, indexname, bs*(sub.relpages)::bigint AS real_size,
   bs*otta::bigint as estimated_size,
@@ -94,7 +94,7 @@ FROM (
 JOIN pg_class c ON c.oid=sub.table_oid
 WHERE sub.relpages > 2
 ORDER BY 2,3,4;
-```
+{% endhighlight %}
 
 I left commented some debug code to help diagnosing bad estimations.
 
@@ -108,7 +108,7 @@ using is able to access all your precious tables and indexes!
 While testing the query, I found a weird bug where negative bloats show up on
 some system indexes.  As instance:
 
-```
+{% highlight psql %}
 postgres@pagila=# \i btree_bloat.sql
 ...
 -[ RECORD 4 ]----+----------------------------------------------------
@@ -121,14 +121,14 @@ estimated_size   | 262144
 bloat_size       | -139264
 bloat_ratio      | -113.3333333333333333
 ...
-```
+{% endhighlight %}
 
 After hunting for some time on this, I found that this was related to the
 `name` type.  This type has a fixed size of 64 bytes in stats, but
 they become a simple cstring in index with a variable length depending on real
 string values!
 
-```
+{% highlight psql %}
 postgres@pagila=# \d pg_attribute_relid_attnam_index
 Index "pg_catalog.pg_attribute_relid_attnam_index"
   Column  |  Type   | Definition 
@@ -153,7 +153,7 @@ postgres@pagila=# SELECT pg_column_size(attname), avg(length(attname)) FROM pg_c
  pg_column_size |        avg         
 ----------------+--------------------
              64 | 9.5131713992473486
-```
+{% endhighlight %}
 
 As the query rely on theses stats to compute the estimated size of the index
 depending on indexed fields and number of lines in the table, this difference

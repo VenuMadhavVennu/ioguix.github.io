@@ -10,6 +10,7 @@ Hey,
 
 While waiting for next version of pgBadger, here is a tip to create scheduled
 pgBadger report.  For this demo, I'll suppose:
+
 * we have PostgreSQL's log files in `/var/log/pgsql`
 * we want to produce a weekly report using pgBadger with the "postgres" system
   user... 
@@ -30,11 +31,11 @@ where the last one finished!
 
 We need to create a simple configuration file for logsaw:
 
-```bash
-cat <<EOF > ~postgres/.logsaw
+{% highlight console %}
+$ cat <<EOF > ~postgres/.logsaw
 LOGDIR=/var/log/pgsql/
 EOF
-```
+{% endhighlight %}
 
 There's three more optional parameters in this configuration file you might
 want to know:
@@ -59,9 +60,9 @@ configuration file.
 
 Now, the command line to create the report using pgbadger:
 
-```
-logsaw | pgbadger -g -o /path/to/report-$(date +%Y%m%d).html -
-```
+{% highlight console %}
+$ logsaw | pgbadger -g -o /path/to/report-$(date +%Y%m%d).html -
+{% endhighlight %}
 
 You might want to add the <code>-f</code> option to pgbadger if it doesn't
 guess the log format itself (stderr or syslog or csv).
@@ -69,9 +70,9 @@ guess the log format itself (stderr or syslog or csv).
 About creating reports on a weekly basis, let's say every sunday at 2:10am,
 using crontab:
 
-```bash
+{% highlight bash %}
 10 2 1-7 * 7  logsaw | pgbadger -g -o /path/to/report-$(date +\%Y\%m\%d).html -
-```
+{% endhighlight %}
 
 Here you go, enjoy :)
 

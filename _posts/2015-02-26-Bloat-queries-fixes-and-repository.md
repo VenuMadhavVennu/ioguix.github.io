@@ -29,7 +29,8 @@ This can lead to bug fixes or the creation of a FAQ.
 
 ##Changelog
 
-Here is a quick changelog since my [last post about bloat]({%post_url 2014-11-03-Btree-bloat-query-part-4%}):
+Here is a quick changelog since my
+[last post about bloat]( {% post_url 2014-11-03-Btree-bloat-query-part-4 %}):
 
 * support for fillfactor!  Previous versions of the queries were considering
   any extra space as bloat, even the fillfactor.  Now, the bloat is reported

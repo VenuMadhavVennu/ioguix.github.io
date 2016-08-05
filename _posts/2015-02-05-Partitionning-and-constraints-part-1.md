@@ -46,14 +46,14 @@ Range partitioning on the PK has no challenge: each value of the PK could only
 live in strictly one child, each of them enforcing the PK internally. So the
 uniqueness of this PK across the partitions is already enforced by constraints
 CHECK and UNIQUE of each partition. That's why my study case partition range
-using a @timestampstz@ column. As the CHECKs do not apply on the primary key
+using a `timestampstz` column. As the CHECKs do not apply on the primary key
 values, each of its values can be in any partition, which can lead to duplicate
 values residing in different partitions. Exactly what we really want to avoid.
 
-So here is the dummy schema with table "master" partitioned across 5 childs
+So here is the dummy schema with table `master` partitioned across 5 childs
 using a date range key partitioning `ts`.
 
-```
+{% highlight sql %}
 BEGIN;
 
 DROP TABLE IF EXISTS master,
@@ -109,7 +109,7 @@ ALTER TABLE child4 ALTER ts SET
   DEFAULT TIMESTAMPTZ '2014-01-01 00:00:00' + (random()*31449600)::int * INTERVAL '1s';
 
 COMMIT;
-```
+{% endhighlight %}
 
 The `SET DEFAULT` are only there to keep other commands simple to read. Note
 that I do not create the trigger on INSERT and UPDATE on the master table. This
@@ -123,7 +123,7 @@ uniqueness of a PK value across all partitions after any INSERT or UPDATE on
 any of them, for each rows. Let's dive in and get wet with a first naive
 version of such a trigger:
 
-```
+{% highlight sql %}
 CREATE OR REPLACE FUNCTION master_id_pkey() 
   RETURNS trigger 
   LANGUAGE plpgsql 
@@ -151,14 +151,14 @@ CREATE TRIGGER children_id_pkey AFTER INSERT OR UPDATE ON child3
      FOR EACH ROW EXECUTE PROCEDURE public.master_id_pkey();
 CREATE TRIGGER children_id_pkey AFTER INSERT OR UPDATE ON child4
      FOR EACH ROW EXECUTE PROCEDURE public.master_id_pkey();
-```
+{% endhighlight %}
 
 Obviously, each partition need the trigger to check that the PK value it is
 about to write does not already exist in one of its siblings. The trigger
 function itself is quite easy to understand: if we find a row with the same
 value as the PK, raise an exception. Tests sounds promising:
 
-```
+{% highlight psql %}
 =# INSERT INTO child0 (comment) VALUES ('test 1');
 =# INSERT INTO child1 (comment) VALUES ('test 2');
 =# INSERT INTO child2 (comment) VALUES ('test 3');
@@ -179,13 +179,13 @@ value as the PK, raise an exception. Tests sounds promising:
 =# INSERT INTO child0 (id, comment) VALUES (5, 'test 6');
 ERROR:  duplicate key value violates unique constraint "children_id_pkey" ON "child0"
 DETAIL:  Key (id)=(5) already exists.
-```
+{% endhighlight %}
 
 OK, it works like expected. But there is two big issues with this situation.
 The first one is that a race condition involving two transactions or more is
 able to break our home made unique constraint:
 
-```
+{% highlight psql %}
 session 1=# BEGIN;
 BEGIN
 
@@ -204,13 +204,24 @@ session 2=# SELECT tableoid::regclass, * FROM master WHERE id=6;
 ----------+----+----------+---------+------------------------
  child0   |  6 | 28510860 | test 6  | 2010-01-08 17:36:39+01
  child1   |  6 |  2188136 | test 7  | 2011-07-15 07:13:59+02
-```
+{% endhighlight %}
 
-The second issue is that real constraints can be deferred, which means constraints are disabled during a transaction and enforced on user request and at the end of the transaction by default. In other words, using deferred constraints allows you to violate them temporarilly during a transaction as far as everything is respected at the end. For more information about this mechanism, see the "SET CONSTAINTS":http://www.postgresql.org/docs/9.4/static/sql-set-constraints.html, "CREATE TABLE":http://www.postgresql.org/docs/9.4/static/sql-createtable.html and... the "CREATE TRIGGER":http://www.postgresql.org/docs/9.4/static/sql-createtrigger.html pages.
+The second issue is that real constraints can be deferred, which means
+constraints are disabled during a transaction and enforced on user request and
+at the end of the transaction by default. In other words, using deferred
+constraints allows you to violate them temporarilly during a transaction as far
+as everything is respected at the end. For more information about this
+mechanism, see the
+[SET CONSTAINTS](http://www.postgresql.org/docs/9.4/static/sql-set-constraints.html),
+[CREATE TABLE](http://www.postgresql.org/docs/9.4/static/sql-createtable.html)
+and... the
+[CREATE TRIGGER](http://www.postgresql.org/docs/9.4/static/sql-createtrigger.html)
+pages.
 
-Yes, documentation says triggers can be deferred when defined as @CONSTRAINT TRIGGER@. So we can solve this issue by recreating our triggers:
+Yes, documentation says triggers can be deferred when defined as
+`CONSTRAINT TRIGGER`. So we can solve this issue by recreating our triggers:
 
-```
+{% highlight sql %}
 DROP TRIGGER IF EXISTS children_id_pkey ON master;
 DROP TRIGGER IF EXISTS children_id_pkey ON child0;
 DROP TRIGGER IF EXISTS children_id_pkey ON child1;
@@ -229,7 +240,7 @@ CREATE CONSTRAINT TRIGGER children_id_pkey AFTER INSERT OR UPDATE ON child3
      DEFERRABLE INITIALLY IMMEDIATE FOR EACH ROW EXECUTE PROCEDURE public.master_id_pkey();
 CREATE CONSTRAINT TRIGGER children_id_pkey AFTER INSERT OR UPDATE ON child4
      DEFERRABLE INITIALLY IMMEDIATE FOR EACH ROW EXECUTE PROCEDURE public.master_id_pkey();
-```
+{% endhighlight %}
 
 The `INITIALLY IMMEDIATE` means the trigger constraint will be executed right
 after the related statement. The opposite `DEFERRED` behavior fire the trigger
@@ -259,7 +270,7 @@ close enough to break things. It is pretty easy to prove with the following
 bash loop hammering each partitions with 100 INSERTs with colliding values as
 PK. Note that the triggers has been altered to `INITIALLY DEFERRED`:
 
-```
+{% highlight console %}
 $ psql -c '\d child*' part | grep children_id_pkey
     children_id_pkey AFTER INSERT OR UPDATE ON child0 DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE PROCEDURE master_id_pkey()
     children_id_pkey AFTER INSERT OR UPDATE ON child1 DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE PROCEDURE master_id_pkey()
@@ -291,7 +302,7 @@ $ cat <<EOQ | psql part
     23 |       2 |   209
      3 |       3 |   209
      1 |       5 |   209
-```
+{% endhighlight %}
 
 Well, that's pretty bad, we have a bunch of duplicated key. 23 of them appear
 in two different partitions, three others in three different partitions and
@@ -305,9 +316,9 @@ not caught.
 Well, last chance. If this many transactions were committed in the exact same
 time, maybe we can force them to serialize with isolation level `SERIALIZABLE`?
 
-```sql
+{% highlight sql %}
 ALTER DATABASE part SET default_transaction_isolation TO SERIALIZABLE
-```
+{% endhighlight %}
 
 After applying the preceding query, I re-ran the same scenario as the previous
 test: only 76 rows survived out of the 500 INSERTs, all of them unique. At
@@ -318,12 +329,12 @@ transactions are virtually serialized or rollback'ed. Log file confirms a lot
 of serialization conflicts were raised, grep'ing the log file shows 415
 serialization exceptions and only 9 from our trigger:
 
-```
+{% highlight text %}
 ERROR:  could not serialize access due to read/write dependencies among transactions
 DETAIL:  Reason code: Canceled on identification as a pivot, during conflict in checking.
 HINT:  The transaction might succeed if retried.
 STATEMENT:  INSERT INTO child3 (id, comment) SELECT count(*)+1, 'duplicated ?' FROM master
-```
+{% endhighlight %}
 
 This solution work, but having to stay in SERIALIZABLE mode to achieve our goal
 is a heavy constraint to carry. Moreover, we have the same problem than with
@@ -351,7 +362,7 @@ the documentation says: «It is up to the application to use them correctly».
 The idea now is simply to acquire an advisory lock on the same value as NEW.id
 in the trigger function. It should do the trick, cleanly, safely:
 
-```
+{% highlight sql %}
 CREATE OR REPLACE FUNCTION public.master_id_pkey()
  RETURNS trigger
  LANGUAGE plpgsql
@@ -368,23 +379,23 @@ BEGIN
   RETURN NULL;
 END
 $function$;
-```
+{% endhighlight %}
 
 And with this version of `master_id_pkey()`, in "read committed" isolation
 level, here is result of the same scenario as in the previous chapter,
 executing 500 INSERTs concurrently with conflicting keys:
 
-```
+{% highlight console %}
 $ psql -f /tmp/count_duplicated_id.sql part
  count | appears | total 
 -------+---------+-------
     85 |       1 |    85 
 (1 row)
-```
+{% endhighlight %}
 
 Sounds good. What about a small pgbench scenario?
 
-```
+{% highlight console %}
 $ cat /tmp/scenario_id.sql 
 \setrandom part 0 4
 DO $func$ BEGIN EXECUTE format('INSERT INTO child%s (id, comment) SELECT count(*)+1, $1 FROM master', :part) USING 'duplicated ?'; EXCEPTION WHEN OTHERS THEN RAISE LOG 'Duplicate exception caught!'; END $func$;
@@ -410,7 +421,7 @@ $ psql -f /tmp/count_duplicated_id.sql part
 
 $ grep -c "LOG:  Duplicate" $LOGFILE
 82557
-```
+{% endhighlight %}
 
 After this 5 minute run with 5 workers inserting as fast as they can highly
 conflicting data, we have 48,351 rows in the partitions, 82,557 conflicting
@@ -433,10 +444,10 @@ integers. OK, bonus.
 
 Supporting unique constraint on integers was straightforward using advisory
 locks. But how can this applies to other types? Like text for instance ? Easy:
-hash it[1]! For the purpose of this last chapter, lets add a unique constraint
-on @comment@:
+hash it[^1]! For the purpose of this last chapter, lets add a unique constraint
+on `comment`:
 
-```
+{% highlight sql %}
 CREATE OR REPLACE FUNCTION public.master_comment_unq()
  RETURNS trigger
  LANGUAGE plpgsql
@@ -459,11 +470,11 @@ CREATE CONSTRAINT TRIGGER children_comment_unq AFTER INSERT OR UPDATE ON master
 -- [...]
 CREATE CONSTRAINT TRIGGER children_comment_unq AFTER INSERT OR UPDATE ON child4
   DEFERRABLE INITIALLY IMMEDIATE FOR EACH ROW EXECUTE PROCEDURE public.master_comment_unq();
-```
+{% endhighlight %}
 
 If you followed this far, no need to play the "find the error game" to identify
 what's the most important change here. The lock is taken on the result of the
-simple text to integer hash function @hashtext@, already provided in
+simple text to integer hash function `hashtext`, already provided in
 PostgreSQL's core.
 
 Ok, I can hear optimization freaks crying. Theoretically, two *different*
@@ -482,7 +493,7 @@ memory, write in an unlogged table (erk), whatever you want.
 
 Time to test now.
 
-```
+{% highlight console %}
 $ cat /tmp/scenario_comment.sql 
 \setrandom part 0 4
 DO $func$ BEGIN EXECUTE format('INSERT INTO child%s (comment) SELECT ''duplicated ''||count(1) from master', :part); EXCEPTION WHEN OTHERS THEN RAISE LOG 'Duplicate exception caught!'; END $func$;
@@ -512,7 +523,7 @@ $ cat <<EOQ | psql part
  count | appears | total 
 -------+---------+-------
  29785 |       1 | 29785
-```
+{% endhighlight %}
 
 Wow (again), only 29,785 rows out of 93,902 transactions escaped of that
 intense-colliding scenario. And we only find unique values across all
@@ -541,4 +552,4 @@ part! Stay tuned!
 
 <hr style="width: 100px; text-align: left" />
 
-fn1. No data has been harmed during this test.
+[^1]: No data has been harmed during this test.

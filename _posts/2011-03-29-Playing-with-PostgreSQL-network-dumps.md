@@ -57,7 +57,7 @@ on network dumps means you can snif anywhere in between the frontend and the
 backend, having 0% performance penalty on your PostgreSQL box.
 
 Check the existing plugin from the pgshark repository:
-[github.com/dalibo/pgshark/tree/master/bin](http://github.com/dalibo/pgshark/tree/master/bin)
+[github.com/dalibo/pgshark/tree/master/bin]()
 
 The plugins are all in alpha development stage and need some more work for
 accuracy or bug fix, but they already spit some useful datas!

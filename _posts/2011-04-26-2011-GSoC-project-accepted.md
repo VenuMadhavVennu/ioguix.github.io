@@ -20,7 +20,7 @@ and turning them into real new contributors.
 
 ...but this year, he will have two mentors to convince! Both [Andreas Scherbaum](http://andreas.scherbaum.la/blog/)
 and me will tutor on this project, helping him and discussing the code on
-ppa-dev and [irc://irc.freenode.net/#phppgadmin].
+ppa-dev and [irc://irc.freenode.net/#phppgadmin]().
 
 It will be the first contributions of Andreas Scherbaum to PPA and I'm really
 looking forward having some fresh eyes and manpower on the project!

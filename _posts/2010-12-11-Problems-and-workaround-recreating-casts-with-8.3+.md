@@ -18,7 +18,7 @@ effect. About a year ago, I found another quick-n-dirty fix for a customer.
 
 Here is the problem:
 
-```sql
+{% highlight psql %}
 casts=# CREATE TABLE test AS SELECT generate_series(1,10) as id;
 SELECT
 casts=# SELECT id, 'value = ' || id FROM test WHERE id = '5'::text;
@@ -26,7 +26,7 @@ ERROR:  operator does not exist: integer = text
 LINE 1 : SELECT id, 'value = ' || id FROM test WHERE id = '5'::text;
                                                          ^
 TIPS : No operator matches the given name and argument type(s). You might need to add explicit type casts.
-```
+{% endhighlight %}
 
 The very well known solution is to recreate some of these implicit casts that
 were removed in 8.3. Peter Eisentraut blogged about that, you'll find his SQL
@@ -36,7 +36,7 @@ script
 However, as some users noticed in the comments, there is a side effect bug with
 this solution: it breaks the concatenation operator.
 
-```sql
+{% highlight psql %}
 casts=# BEGIN ;
 BEGIN
 casts=# \i /tmp/implicit_casts.sql
@@ -52,14 +52,14 @@ LINE 1 : SELECT id, 'value = ' || id FROM test WHERE id = '5'::text;
 TIPS : Could not choose a best candidate operator. You might need to add explicit type casts.
 casts=# ROLLBACK ;
 ROLLBACK
-```
+{% endhighlight %}
 
 From here, the solution could be to cast one of the operand:
 
-```sql
+{% highlight psql %}
 casts=# SELECT id, 'value = ' || id::text FROM test WHERE id = '5'::text;
   5 | value = 5
-```
+{% endhighlight %}
 
 But then, we are back to the application fix where it might worth spending more
 time fixing things in the good way.
@@ -69,16 +69,16 @@ casts. You will find a sql file with a lot of those operators under the
 following link: [8.3 operator workaround.sql](https://gist.github.com/ioguix/4dd187986c4a1b7e1160).
 Here is a sample for text to integer comparison:
 
-```sql
+{% highlight sql %}
 CREATE FUNCTION pg_catalog.texteqint(text, integer) RETURNS BOOLEAN STRICT IMMUTABLE LANGUAGE SQL AS $$SELECT textin(int4out($2)) = $1;$$;
 CREATE FUNCTION pg_catalog.inteqtext(integer, text) RETURNS BOOLEAN STRICT IMMUTABLE LANGUAGE SQL AS $$SELECT textin(int4out($1)) = $2;$$;
 CREATE OPERATOR pg_catalog.= ( PROCEDURE = pg_catalog.texteqint, LEFTARG=text, RIGHTARG=integer, COMMUTATOR=OPERATOR(pg_catalog.=));
 CREATE OPERATOR pg_catalog.= ( PROCEDURE = pg_catalog.inteqtext, LEFTARG=integer, RIGHTARG=text, COMMUTATOR=OPERATOR(pg_catalog.=));
-```
+{% endhighlight %}
 
 Using this operator instead of implicit cast, the previous test shows:
 
-```sql
+{% highlight psql %}
 casts=# BEGIN ;
 BEGIN
 casts=# \i '/tmp/8.3 operator workaround.sql'
@@ -99,7 +99,7 @@ ERROR:  operator does not exist: integer = text
 LINE 1 : SELECT id, 'value = ' || id FROM test WHERE id = '5'::text;
                                                          ^
 TIPS : No operator matches the given name and argument type(s). You might need to add explicit type casts.
-```
+{% endhighlight %}
 
 Same advice from Peter here: if possible, only create the operators you need to
 fix your application!
