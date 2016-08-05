@@ -6,15 +6,25 @@ date: 2014-03-28 07:05:00 +0100
 tags: [bloat, postgresql]
 category: postgresql
 ---
-p. Most of the PostgreSQL DBAs might know about "this large bloat estimate query":http://wiki.postgresql.org/wiki/Show_database_bloat integrated in "check_postgres":http://bucardo.org/wiki/Check_postgres.  It is supposed to compute a rough estimate of the bloat for tables and indexes in a database.  As the PostgreSQL wiki page says:
-??This query is for informational purposes only.  It provides a loose estimate of table growth activity only, and should not be construed as a 100% accurate portrayal of space consumed by database objects??
+Most of the PostgreSQL DBAs might know about [this large bloat estimate query][http://wiki.postgresql.org/wiki/Show_database_bloat]
+integrated in [check_postgres](http://bucardo.org/wiki/Check_postgres).  It is
+supposed to compute a rough estimate of the bloat for tables and indexes in a
+database.  As the PostgreSQL wiki page says:
+> This query is for informational purposes only.  It provides a loose estimate
+> of table growth activity only, and should not be construed as a 100% accurate
+> portrayal of space consumed by database objects
 
-p. Lately, a customer asked me about existing tools to help deciding when he is supposed to REINDEX.  While writing a detailed answer with examples, I had quite a surprise seeing an estimated index size ratio of 0.7 for a simple table!  I realized I never payed much attention to this part of the result...
+Lately, a customer asked me about existing tools to help deciding when he is
+supposed to `REINDEX`.  While writing a detailed answer with examples, I had
+quite a surprise seeing an estimated index size ratio of 0.7 for a simple
+table!  I realized I never payed much attention to this part of the result...
 
-h2. The problem
+##The problem
 
-p. Here is a test table, a copy table <code>rental</code> from "pagila":http://pgfoundry.org/frs/download.php/1719/pagila-0.10.1.zip project:
-{% highlight psql %}
+Here is a test table, a copy table <code>rental</code> from
+[pagila](http://pgfoundry.org/frs/download.php/1719/pagila-0.10.1.zip) project:
+
+```
 pagila=# CREATE TABLE test (LIKE rental INCLUDING DEFAULTS INCLUDING CONSTRAINTS INCLUDING INDEXES );
 pagila=# INSERT INTO test SELECT * FROM rental;
 pagila=# ANALYZE;
@@ -45,23 +55,29 @@ postgres@pagila=# \i ~/tmp/bloat_original.sql
  pagila           | public     | test             |    1.2 |      188416 | test_rental_date_inventory_id_customer_id_idx       |    0.8 |            0
  pagila           | public     | test             |    1.2 |      188416 | test_inventory_id_idx                               |    0.7 |            0
 ...
-{% endhighlight %}
+```
 
-p. A B-tree index is filled at 90% per default, see storage parameter "FILL FACTOR":http://www.postgresql.org/docs/9.3/static/sql-createindex.html#SQL-CREATEINDEX-STORAGE-PARAMETERS.  So, a freshly created B-tree index with no bloat is supposed to be 1.1x larger than it should be with a <code>FILL FACTOR</code> of 100.  As I had some time to dive in this, I couldn't resist to investigate these insane estimated size factors for my test table indexes: 0.5, 0.8 and 0.7.  How an index could be smaller than it is supposed to be ? 
+A B-tree index is filled at 90% per default, see storage parameter [FILL FACTOR](http://www.postgresql.org/docs/9.3/static/sql-createindex.html#SQL-CREATEINDEX-STORAGE-PARAMETERS).
+So, a freshly created B-tree index with no bloat is supposed to be 1.1x larger
+than it should be with a `FILL FACTOR` of 100.  As I had some time
+to dive in this, I couldn't resist to investigate these insane estimated size
+factors for my test table indexes: 0.5, 0.8 and 0.7.  How an index could be
+smaller than it is supposed to be ?
 
-p. I hadn't to dive deap in the query, after a closer look at the query code and comments, we find:
+I hadn't to dive deap in the query, after a closer look at the query code and
+comments, we find:
 
-{% highlight postgresql %}
-   COALESCE(CEIL((c2.reltuples*(datahdr-12))/(bs-20::float)),0) AS iotta -- very rough approximation, assumes all cols
-{% endhighlight %}
+```sql
+COALESCE(CEIL((c2.reltuples*(datahdr-12))/(bs-20::float)),0) AS iotta -- very rough approximation, assumes all cols
+```
 
-p. Oh, ok. The query estimates the ideal size of each index considering it references *ALL* the table fields.  It's quite rare to find a btree index on all fields of a table, and obviously there's no point having multiple indexes on a table, all of them referencing all fields of the table.
+Oh, ok. The query estimates the ideal size of each index considering it references *ALL* the table fields.  It's quite rare to find a btree index on all fields of a table, and obviously there's no point having multiple indexes on a table, all of them referencing all fields of the table.
 
-h2. A look at the real bloat
+##A look at the real bloat
 
-p. First, let see how the indexes are really bloated:
+First, let see how the indexes are really bloated:
 
-{% highlight psql %}
+```
 pagila=# create schema stattuple;
 pagila=# create extension pgstattuple with schema stattuple;
 pagila=# SELECT relname, pg_table_size(oid) as index_size,
@@ -74,11 +90,14 @@ WHERE relname ~ 'test' AND relkind = 'i';
  test_pkey                                     |     376832 |       10.25
  test_inventory_id_idx                         |     507904 |       34.11
  test_rental_date_inventory_id_customer_id_idx |     630784 |       26.14
-{% endhighlight %}
+```
 
-p. First point, the bloat on indexes is not 10% everywhere, only for the PK. This is because indexes were created *BEFORE* inserting data.  So it looks like data were naturally order on the PK on table "rental" when scanning it sequentially.  What if we load data sorting on "inventory_id" field ?
+First point, the bloat on indexes is not 10% everywhere, only for the PK. This
+is because indexes were created *BEFORE* inserting data.  So it looks like data
+were naturally order on the PK on table "rental" when scanning it sequentially.
+What if we load data sorting on "inventory_id" field ?
 
-{% highlight psql %}
+```
 pagila=# TRUNCATE test;
 pagila=# INSERT INTO test SELECT * FROM rental ORDER BY inventory_id ;
 pagila=# SELECT relname, pg_table_size(oid) as index_size,
@@ -91,11 +110,13 @@ WHERE relname ~ 'test' AND relkind = 'i';
  test_pkey                                     |     524288 |       36.22
  test_inventory_id_idx                         |     376832 |       10.25
  test_rental_date_inventory_id_customer_id_idx |     647168 |       28.04
-{% endhighlight %}
+```
 
-p. Ok, it totally makes sense there: index <code>test_inventory_id_idx</code> is now 10% bloated.  First lesson: Do not create your indexes before loading your datas! Demo:
+Ok, it totally makes sense there: index `test_inventory_id_idx` is now 10%
+bloated.  First lesson: Do not create your indexes before loading your datas!
+Demo:
 
-{% highlight psql %}
+```
 pagila=# DROP TABLE test;
 pagila=# CREATE TABLE test (LIKE rental INCLUDING DEFAULTS INCLUDING CONSTRAINTS);
 pagila=# INSERT INTO test SELECT * FROM rental;
@@ -113,17 +134,22 @@ WHERE relname ~ 'test' AND relkind = 'i';
  test_pkey                                     |     376832 |       10.25
  test_inventory_id_idx                         |     376832 |       10.25
  test_rental_date_inventory_id_customer_id_idx |     524288 |       10.73
-{% endhighlight %}
+```
 
-h2. A better query to estimate index bloat?
+##A better query to estimate index bloat?
 
-??Wait, you just showed us you can have the real bloat on indexes, why would I want a loose estimate from a query relying on stats?!??
+> Wait, you just showed us you can have the real bloat on indexes, why would I
+> want a loose estimate from a query relying on stats?!
 
-p. Because I feel bad reading the whole index again and again from monitoring tools every few minutes.  Having a loose estimate is good enough in some cases.  And anyway, I want to dig into this for education :-)
+Because I feel bad reading the whole index again and again from monitoring
+tools every few minutes.  Having a loose estimate is good enough in some cases.
+ And anyway, I want to dig into this for education :-)
 
-p. So, I tried to write a query able to give a better estimate of bloat *ONLY* for indexes.  I picked some parts of the original bloat query, but rewrote mostly everything.  Here is the result:
+So, I tried to write a query able to give a better estimate of bloat *ONLY* for
+indexes.  I picked some parts of the original bloat query, but rewrote mostly
+everything.  Here is the result:
 
-{% highlight postgresql %}
+```
 -- change to the max number of field per index if not default.
 \set index_max_keys 32
 -- (readonly) IndexTupleData size
@@ -190,11 +216,11 @@ FROM (
 ) as sub
 JOIN pg_class c ON c.oid=sub.table_oid
 ORDER BY 2,3,4
-{% endhighlight %}
+```
 
-p. How does it perform compared to the actual values? Let's go back to a bloated situation:
+How does it perform compared to the actual values? Let's go back to a bloated situation:
 
-{% highlight psql %}
+```
 pagila=$ TRUNCATE test ;
 pagila=$ INSERT INTO test SELECT * FROM rental;
 pagila=$ SELECT relname, pg_table_size(oid) as index_size,
@@ -209,24 +235,24 @@ pagila=$ ANALYZE test;
  test_inventory_id_idx                         |     507904 |       34.11
  test_pkey                                     |     376832 |       10.25
  test_rental_date_inventory_id_customer_id_idx |     630784 |       26.14
-{% endhighlight %}
+```
 
-p. I created the file "~/tmp/bloat_index.sql" with this estimated indexes bloat query filtering on table "test", here is its result:
+I created the file "~/tmp/bloat_index.sql" with this estimated indexes bloat query filtering on table "test", here is its result:
 
-{% highlight psql %}
+```
 pagila=# \i ~/tmp/bloat_index.sql 
  current_database | nspname | table_name |                  index_name                   | totalbytes | wastedbytes |      realbloat      
 ------------------+---------+------------+-----------------------------------------------+------------+-------------+---------------------
  pagila           | public  | test       | test_inventory_id_idx                         |     507904 |      172032 | 33.8709677419354839
  pagila           | public  | test       | test_pkey                                     |     376832 |       40960 | 10.8695652173913043
  pagila           | public  | test       | test_rental_date_inventory_id_customer_id_idx |     630784 |      172032 | 27.2727272727272727
-{% endhighlight %}
+```
 
-p. Well, pretty close :-)
+Well, pretty close :-)
 
-p. Let's REINDEX:
+Let's REINDEX:
 
-{% highlight psql %}
+```
 pagila=# REINDEX TABLE test;
 pagila=# ANALYZE test;
 pagila=# SELECT relname, pg_table_size(oid) as index_size,
@@ -247,13 +273,14 @@ pagila=# \i ~/tmp/bloat_index.sql
  pagila           | public  | test       | test_inventory_id_idx                         |     376832 |       40960 | 10.8695652173913043
  pagila           | public  | test       | test_pkey                                     |     376832 |       40960 | 10.8695652173913043
  pagila           | public  | test       | test_rental_date_inventory_id_customer_id_idx |     524288 |       65536 | 12.5000000000000000
-{% endhighlight %}
+```
 
-p. Not bad. 
+Not bad. 
 
-p. Let's create some bloat. The table is approx. 160,000 rows, so the following query updates ~10% of the table:
+Let's create some bloat. The table is approx. 160,000 rows, so the following
+query updates ~10% of the table:
 
-{% highlight psql %}
+```
 pagila=# UPDATE test SET rental_date = current_timestamp WHERE rental_id < 3200 AND rental_id%2 = 0;
 pagila=# ANALYZE test ;
 
@@ -277,11 +304,11 @@ pagila=# \i ~/tmp/bloat_index.sql
  pagila           | public  | test       | test_pkey                                     |     450560 |      114688 | 25.4545454545454545
  pagila           | public  | test       | test_rental_date_inventory_id_customer_id_idx |     598016 |      139264 | 23.2876712328767123
 (3 rows)
-{% endhighlight %}
+```
 
-p. Erk, not so good. Moar bloat?
+Erk, not so good. Moar bloat?
 
-{% highlight psql %}
+```
 pagila=# UPDATE test SET rental_date = current_timestamp WHERE rental_id%2 = 0;
 pagila=# ANALYZE test ;
 pagila=# SELECT relname, pg_table_size(oid) as index_size,
@@ -304,24 +331,37 @@ pagila=# \i ~/tmp/bloat_index.sql
  pagila           | public  | test       | test_pkey                                     |     737280 |      401408 | 54.4444444444444444
  pagila           | public  | test       | test_rental_date_inventory_id_customer_id_idx |     925696 |      466944 | 50.4424778761061947
 (3 rows)
-{% endhighlight %}
+```
 
-p. Well, better again.
+Well, better again.
 
-h2. Conclusion
+##Conclusion
 
-p. This new query performs much better for indexes than the usual one everyone knew for a long time.  But it isn't perfect, showing sometimes some quite wrong results.
+This new query performs much better for indexes than the usual one everyone
+knew for a long time.  But it isn't perfect, showing sometimes some quite wrong
+results.
 
-p. First issue, this query doesn't make any difference between branch nodes and leaves in indexes.  Rows values and references are kept in leaves, and only a fractional part of them are in branches.  I should do some more tests with larger indexes to see how it behaves with a lot of branch nodes.  As the number of branch nodes is supposed to be a logarithm of the total number of rows, maybe we could include some more guessing in the optimal index size computing.
+First issue, this query doesn't make any difference between branch nodes and
+leaves in indexes.  Rows values and references are kept in leaves, and only a
+fractional part of them are in branches.  I should do some more tests with
+larger indexes to see how it behaves with a lot of branch nodes.  As the number
+of branch nodes is supposed to be a logarithm of the total number of rows,
+maybe we could include some more guessing in the optimal index size computing.
 
-p. Second issue...keep in mind it is based on statistics.
+Second issue...keep in mind it is based on statistics.
 
-p. Anyway, as useful as this query can be, at least it has been funny to dive in indexes and pages guts.
+Anyway, as useful as this query can be, at least it has been funny to dive in
+indexes and pages guts.
 
-p. As a side note, I had been surprised to see that padding to <code>MAXALIGN</code> was applied on both tuple header AND tuple data.  My understanding is that for each row in an index leave page, we have:
+As a side note, I had been surprised to see that padding to `MAXALIGN` was
+applied on both tuple header AND tuple data.  My understanding is that for each
+row in an index leave page, we have:
 * the item_pointer at the beginning of the page,
-* the tuple header + data at the end of the page that must be aligned on <code>MAXALIGN</code>.
+* the tuple header + data at the end of the page that must be aligned on
+  `MAXALIGN`.
 
-p. Why ain't they padded *together* to <code>MAXALIGN</code>? Wouldn't this save some space?
+Why ain't they padded *together* to `MAXALIGN`? Wouldn't this save
+some space? 
 
-p. Thank you for reading till the end! Cheers, see you maybe in another post about table bloat next time ;-)
+Thank you for reading till the end! Cheers, see you maybe in another post about
+table bloat next time ;-) 

@@ -6,22 +6,26 @@ date: 2014-06-24 23:21:47 +0200
 tags: [bloat, postgresql]
 category: postgresql
 ---
-p. A few weeks ago, I "published":{%post_url 2014-03-28-Playing-with-indexes-and-better-bloat-estimate%} a query to estimate index bloat.  Since then, I went back on this query a few times to fix some drawbacks:
+A few weeks ago, I [published]( {%post_url 2014-03-28-Playing-with-indexes-and-better-bloat-estimate%} )
+a query to estimate index bloat.  Since then, I went back on this query a few
+times to fix some drawbacks:
 
 * making it compatible from PostgreSQL 7.4 to latest releases
 * restrict to B-tree index only
 * remove psql variables (sorry for code readability and documentation)
 * improve 64 vs. 32 bits detection
 
-p. This last one is actually far from perfect.  Very bad estimation could arise if the query is wrong about this size of pointers.
+This last one is actually far from perfect.  Very bad estimation could arise if
+the query is wrong about this size of pointers.
 
-h2. New version
+##New version
 
-p. Here is the gist of the new version of this query if you want to comment/patch: "https://gist.github.com/ioguix/c29d5790b8b93bf81c27":https://gist.github.com/ioguix/c29d5790b8b93bf81c27
+Here is the gist of the new version of this query if you want to comment/patch:
+[https://gist.github.com/ioguix/c29d5790b8b93bf81c27](https://gist.github.com/ioguix/c29d5790b8b93bf81c27)
 
-p. And the code itself:
+And the code itself:
 
-{% highlight sql %}
+```sql
 -- WARNING: executed with a non-superuser role, the query inspect only index on tables you are granted to read.
 SELECT current_database(), nspname AS schemaname, c.relname AS tablename, indexname, bs*(sub.relpages)::bigint AS real_size,
   bs*otta::bigint as estimated_size,
@@ -90,17 +94,21 @@ FROM (
 JOIN pg_class c ON c.oid=sub.table_oid
 WHERE sub.relpages > 2
 ORDER BY 2,3,4;
-{% endhighlight %}
+```
 
-p. I left commented some debug code to help diagnosing bad estimations.
+I left commented some debug code to help diagnosing bad estimations.
 
-p. __**Update**__ Following the "comment of Michael Banck":#comment-027, I updated the query and added a warning on top of the query. The query does not require to be superuser anymore, but you have to make sure the role you are using is able to access all your precious tables and indexes!
+__**Update**__ Following the [comment of Michael Banck](#comment-027), I
+updated the query and added a warning on top of the query. The query does not
+require to be superuser anymore, but you have to make sure the role you are
+using is able to access all your precious tables and indexes!
 
-h2. Known bug
+##Known bug
 
-p. While testing the query, I found a weird bug where negative bloats show up on some system indexes.  As instance:
+While testing the query, I found a weird bug where negative bloats show up on
+some system indexes.  As instance:
 
-{% highlight psql %}
+```
 postgres@pagila=# \i btree_bloat.sql
 ...
 -[ RECORD 4 ]----+----------------------------------------------------
@@ -113,11 +121,14 @@ estimated_size   | 262144
 bloat_size       | -139264
 bloat_ratio      | -113.3333333333333333
 ...
-{% endhighlight %}
+```
 
-p. After hunting for some time on this, I found that this was related to the <code>name</code> type.  This type has a fixed size of 64 bytes in stats, but they become a simple cstring in index with a variable length depending on real string values!
+After hunting for some time on this, I found that this was related to the
+`name` type.  This type has a fixed size of 64 bytes in stats, but
+they become a simple cstring in index with a variable length depending on real
+string values!
 
-{% highlight psql %}
+```
 postgres@pagila=# \d pg_attribute_relid_attnam_index
 Index "pg_catalog.pg_attribute_relid_attnam_index"
   Column  |  Type   | Definition 
@@ -142,10 +153,14 @@ postgres@pagila=# SELECT pg_column_size(attname), avg(length(attname)) FROM pg_c
  pg_column_size |        avg         
 ----------------+--------------------
              64 | 9.5131713992473486
-{% endhighlight %}
+```
 
-p. As the query rely on theses stats to compute the estimated size of the index depending on indexed fields and number of lines in the table, this difference with the real value size in indexes make the stats completely wrong.
+As the query rely on theses stats to compute the estimated size of the index
+depending on indexed fields and number of lines in the table, this difference
+with the real value size in indexes make the stats completely wrong.
 
-p. I'm not sure how I should handle this.  Maybe by defining some incompatible types with this query?  Moreover, I am curious about why <code>name</code> is a fixed length type...
+I'm not sure how I should handle this.  Maybe by defining some incompatible
+types with this query?  Moreover, I am curious about why `name` is a
+fixed length type...
 
-p. As usual, any feedback, help or answers on these two last posts is appreciated :)
+As usual, any feedback, help or answers on these two last posts is appreciated :)

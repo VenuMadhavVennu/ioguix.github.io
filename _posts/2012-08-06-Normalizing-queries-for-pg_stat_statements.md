@@ -6,13 +6,22 @@ date: 2012-08-06 19:53:00 +0200
 tags: [postgresql]
 category: postgresql
 ---
-p. Hey,
+Hey,
 
-p. If you follow PostgreSQL's development or "Depesz' blog":http://www.depesz.com/2012/03/30/waiting-for-9-2-pg_stat_statements-improvements/, you might know that "pg_stat_statement":http://www.postgresql.org/docs/9.1/static/pgstatstatements.html extension is getting a lot of improvement in 9.2 and especially is able to «lump "similar" queries together».  I will not re-phrase here what Despsz already explain on his blog.
+If you follow PostgreSQL's development or [Depesz' blog](http://www.depesz.com/2012/03/30/waiting-for-9-2-pg_stat_statements-improvements/),
+you might know that [pg_stat_statement](http://www.postgresql.org/docs/9.1/static/pgstatstatements.html)
+extension is getting a lot of improvement in 9.2 and especially is able to
+«lump "similar" queries together».  I will not re-phrase here what Despsz
+already explain on his blog.
 
-p. So, we have this great feature in 9.2, but what about previous release?  Until 9.1, pg_stat_statement is keeping track of most frequent queries individually.  No normalization, nothing.  It's been a while I've been thinking about importing pgBadger normalization code in SQL.  Next pieces of code are tested under PostgreSQL 9.1 but should be easy to port to previous versions.  So here is the function to create (I tried my best to keep it readable :-)):
+So, we have this great feature in 9.2, but what about previous release?  Until
+9.1, pg_stat_statement is keeping track of most frequent queries individually.
+No normalization, nothing.  It's been a while I've been thinking about
+importing pgBadger normalization code in SQL.  Next pieces of code are tested
+under PostgreSQL 9.1 but should be easy to port to previous versions.  So here
+is the function to create (I tried my best to keep it readable :-)):
 
-{% highlight postgresql %}
+```sql
 CREATE OR REPLACE FUNCTION normalize_query(IN TEXT, OUT TEXT) AS $body$
   SELECT
     regexp_replace(regexp_replace(regexp_replace(regexp_replace(
@@ -42,13 +51,16 @@ CREATE OR REPLACE FUNCTION normalize_query(IN TEXT, OUT TEXT) AS $body$
   ;
 $body$
 LANGUAGE SQL;
-{% endhighlight %}
+```
 
-p. Keep in mind that I extracted these regular expressions straight from pgbadger.  Any comment about how to make it quicker/better/simpler/whatever is appreciated!
+Keep in mind that I extracted these regular expressions straight from pgbadger.
+Any comment about how to make it quicker/better/simpler/whatever is
+appreciated!
 
-p. Here the associated view to group everything according to the normalized queries:
+Here the associated view to group everything according to the normalized
+queries:
 
-{% highlight postgresql %}
+```sql
 CREATE OR REPLACE VIEW pg_stat_statements_normalized AS
 SELECT userid, dbid, normalize_query(query) AS query, sum(calls) AS calls,
   sum(total_time) AS total_time, sum(rows) as rows,
@@ -62,11 +74,11 @@ SELECT userid, dbid, normalize_query(query) AS query, sum(calls) AS calls,
   sum(temp_blks_written) AS temp_blks_written
 FROM pg_stat_statements
 GROUP BY 1,2,3;
-{% endhighlight %}
+```
 
-p. Using this function and the view, a small <code>pgbench test (-t 30 -c 10)</code>, gives:
+Using this function and the view, a small `pgbench -t 30 -c 10`, gives:
 
-{% highlight psql %}
+```
 pgbench=> SELECT round(total_time::numeric/calls, 2) AS avg_time, calls, 
   round(total_time::numeric, 2) AS total_time, rows, query 
 FROM pg_stat_statements_normalized 
@@ -82,21 +94,22 @@ ORDER BY 1 DESC, 2 DESC;
      0.00 |   193 |       0.00 |  193 | select abalance from pgbench_accounts where aid = 0;
      0.00 |   183 |       0.26 |  183 | update pgbench_tellers set tbalance = tbalance + 0 where tid = 0;
      0.00 |     1 |       0.00 |    0 | truncate pgbench_history
-{% endhighlight %}
+```
 
-p. For information, the real non-normalized <code>pg_stat_statement</code> view is 959 lines:
+For information, the real non-normalized `pg_stat_statement` view is 959 lines:
 
-{% highlight psql %}
+```
 pgbench=> SELECT count(*) FROM pg_stat_statements;
 
  count 
 -------
    959
 (1 ligne)
-{% endhighlight %}
+```
 
-p. Obvisouly, regular expression are not magic and this will never be as strict as the engine itself. But at least it helps while waiting for 9.2 in production !
+Obvisouly, regular expression are not magic and this will never be as strict as
+the engine itself. But at least it helps while waiting for 9.2 in production !
 
-p. Do not hesitate to report me bugs and comment to improve it !
+Do not hesitate to report me bugs and comment to improve it !
 
-p. Cheers!
+Cheers!
