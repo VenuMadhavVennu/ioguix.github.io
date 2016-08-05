@@ -1,0 +1,4 @@
+<p>Hi Michael,</p>
+<p>That&#8217;s true. However, note that using <code>pg_stats</code>, you must make sure you are using a supervision role that is always granted to read all tables. If supervision role can not read some of the tables, the query just ignore them.</p>
+<p>I updated my query (here and on github) based on your diff and just added a comment about that. See: <a href="https://gist.github.com/ioguix/c29d5790b8b93bf81c27/revisions">https://gist.github.com/ioguix/c29d5790b8b93bf81c27/revisions</a></p>
+<p>Thanks,</p>
