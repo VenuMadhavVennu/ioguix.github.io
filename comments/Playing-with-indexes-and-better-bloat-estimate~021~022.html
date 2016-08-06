@@ -1,7 +1,13 @@
 <p>Josh,</p>
-<p>About <code>index_tuple_hdr</code>, I just realize I used it as a field name <span class="caps">AND</span> a psql variable, my bad. See the code bellow this comment in the query:</p>
-<p><code>/* per tuple header: add index_attribute_bm if some cols are null-able */ </code></p>
+
+<p>About <code>index_tuple_hdr</code>, I just realize I used it as a field name AND a psql variable, my bad. See the code bellow this comment in the query:</p>
+
+<p><code>/* per tuple header: add index_attribute_bm if some cols are null-able */</code></p>
+
 <p>So if you are referring to <code>index_tuple_hdr</code> at lines 11, 13 and 14, those are referring to the computed field, so no <code>:</code>, it would produce bad stats with indexes on NULLable cols.</p>
+
 <p>I fixed to query to remove this confusion.</p>
-<p>Good catch about the <code>\SET</code>! It appears there was some magic in my old blog system transforming it in uppercase. I&#8217;ll not investigate further as I moved to jekyll&#8230;</p>
+
+<p>Good catch about the <code>\SET</code>! It appears there was some magic in my old blog system transforming it in uppercase. I’ll not investigate further as I moved to jekyll…</p>
+
 <p>Thanks!</p>

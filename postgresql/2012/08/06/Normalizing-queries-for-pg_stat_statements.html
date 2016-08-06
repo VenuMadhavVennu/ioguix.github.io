@@ -197,8 +197,8 @@ the engine itself. But at least it helps while waiting for 9.2 in production!</p
         
         <div class="meta_infos">Mon, 06 Aug 2012 20:53:04 +0200</div>
 
-         <p>This is not the first place I see it, so I have to ask: why &#8220;[\t\s\r\n]+&#8221; and not simply \s+ ? \s class already includes \t, \r, \n, and most likely also \f and \v.</p>
-        
+         <p>This is not the first place I see it, so I have to ask: why “[\t\s\r\n]+” and not simply \s+ ? \s class already includes \t, \r, \n, and most likely also \f and \v.</p>
+ 
       </div>
     
   
@@ -211,8 +211,9 @@ the engine itself. But at least it helps while waiting for 9.2 in production!</p
         <div class="meta_infos">Mon, 06 Aug 2012 23:06:04 +0200</div>
 
          <p>@Depesz: mh, I have no explanation sorry, just copy/paste from pgfouine/pgbadger code :-)</p>
+
 <p>Fixed in the blog post.</p>
-        
+ 
       </div>
     
   
@@ -224,10 +225,12 @@ the engine itself. But at least it helps while waiting for 9.2 in production!</p
         
         <div class="meta_infos">Mon, 06 Aug 2012 22:28:43 +0200</div>
 
-         <p>When I first started reading this post, I assumed that the idea was to normalise the query text on the fly within the executor hooks that pg_stat_statements uses. While that might be quite inefficient, it would at least have the advantage of not eating an entry from the shared hashtable for every set of constants for every query seen.  The hashtable will constantly have entries evicted, so you&#8217;re only going to have a very limited window on the queries executed against the database. Look at the &#8220;calls&#8221; figure for each query after executing pgbench in your example.</p>
+         <p>When I first started reading this post, I assumed that the idea was to normalise the query text on the fly within the executor hooks that pg_stat_statements uses. While that might be quite inefficient, it would at least have the advantage of not eating an entry from the shared hashtable for every set of constants for every query seen.  The hashtable will constantly have entries evicted, so you’re only going to have a very limited window on the queries executed against the database. Look at the “calls” figure for each query after executing pgbench in your example.</p>
+
 <p>Why not somehow compile the regular expression ahead of time?</p>
-<p><span class="caps">FYI</span>, it isn&#8217;t that hard to backport the changes to the core system that make the new pg_stat_statements work (mostly it&#8217;s just that there are new hooks added). You&#8217;d have to fix pg_stat_statements to work with the 9.1 representation of the query tree (the code won&#8217;t compile, because the representation of <span class="caps">CTAS</span> changed, and perhaps other small things too). The &#8220;jumbling&#8221; code you&#8217;d have to modify is fairly straightforward though.</p>
-        
+
+<p>FYI, it isn’t that hard to backport the changes to the core system that make the new pg_stat_statements work (mostly it’s just that there are new hooks added). You’d have to fix pg_stat_statements to work with the 9.1 representation of the query tree (the code won’t compile, because the representation of CTAS changed, and perhaps other small things too). The “jumbling” code you’d have to modify is fairly straightforward though.</p>
+ 
       </div>
     
   
@@ -239,9 +242,10 @@ the engine itself. But at least it helps while waiting for 9.2 in production!</p
         
         <div class="meta_infos">Mon, 06 Aug 2012 23:38:40 +0200</div>
 
-         <p>@Peter Geoghegan: About backporting, my goal here was to give an easy trick on &lt;9.2 without patching/compiling code, just  pure and easy <span class="caps">SQL</span>.</p>
-<p>I&#8217;m not sure to understand the first part of your comment. If you talk about current implementation of pg_stat_statement in 9.2+, I&#8217;m not sure regular expression are the best way to normalize queries on the fly. I believe a tokenizer would be very useful in PostgreSQL core, and discussed it in past. Normalizing would just be another useful feature from it.</p>
-        
+         <p>@Peter Geoghegan: About backporting, my goal here was to give an easy trick on &lt;9.2 without patching/compiling code, just  pure and easy SQL.</p>
+
+<p>I’m not sure to understand the first part of your comment. If you talk about current implementation of pg_stat_statement in 9.2+, I’m not sure regular expression are the best way to normalize queries on the fly. I believe a tokenizer would be very useful in PostgreSQL core, and discussed it in past. Normalizing would just be another useful feature from it.</p>
+ 
       </div>
     
   
@@ -253,9 +257,10 @@ the engine itself. But at least it helps while waiting for 9.2 in production!</p
         
         <div class="meta_infos">Tue, 07 Aug 2012 00:53:33 +0200</div>
 
-         <p>There is a low-level interface to the authoritative scanner (tokenizer) used for lexing <span class="caps">SQL</span> in Postgres. That&#8217;s how I got 9.2&#8217;s pg_stat_statements to produce a normalised query string after the parser stage (note that that&#8217;s totally orthogonal to how the query fingerprinting works).  It&#8217;s been used by plpgsql for a long time.</p>
-<p>If you don&#8217;t understand my remarks about the problem with what you&#8217;ve done here, run pgbench in just the same way against 9.1, but with -M prepared. Then run without -M prepared, and apply your technique. What you&#8217;ve done here is going to fill the internal pg_stat_statements table too fast to be useful, because there will be a distinct entry for every set of constants for every query. Minor variations will be evicted, and query execution costs will be dramatically underestimated. That&#8217;s clearly what&#8217;s happened in your example.</p>
-        
+         <p>There is a low-level interface to the authoritative scanner (tokenizer) used for lexing SQL in Postgres. That’s how I got 9.2’s pg_stat_statements to produce a normalised query string after the parser stage (note that that’s totally orthogonal to how the query fingerprinting works).  It’s been used by plpgsql for a long time.</p>
+
+<p>If you don’t understand my remarks about the problem with what you’ve done here, run pgbench in just the same way against 9.1, but with -M prepared. Then run without -M prepared, and apply your technique. What you’ve done here is going to fill the internal pg_stat_statements table too fast to be useful, because there will be a distinct entry for every set of constants for every query. Minor variations will be evicted, and query execution costs will be dramatically underestimated. That’s clearly what’s happened in your example.</p>
+ 
       </div>
     
   
@@ -268,8 +273,9 @@ the engine itself. But at least it helps while waiting for 9.2 in production!</p
         <div class="meta_infos">Tue, 07 Aug 2012 11:07:01 +0200</div>
 
          <p>@Peter Geoghegan: Ok, I understood this time !</p>
-<p>Well, thank you to point this out, but this problem is inherent to pg_stat_statements anyway. The only thing I can think about to somehow limit this problem is to have a higher pg_stat_statements.max &#8230;</p>
-        
+
+<p>Well, thank you to point this out, but this problem is inherent to pg_stat_statements anyway. The only thing I can think about to somehow limit this problem is to have a higher pg_stat_statements.max …</p>
+ 
       </div>
     
   

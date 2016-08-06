@@ -1,11 +1,29 @@
 <p>Hi Clemens,</p>
-<p><cite>the bytes output should be converted into human readable format (mb,gb,etc)</cite></p>
+
+<blockquote>
+  <p>the bytes output should be converted into human readable format (mb,gb,etc)</p>
+</blockquote>
+
 <p>The main purpose of this query is supervision, so I need raw values, but adding some more fields with human values is clearly useful.</p>
-<p><cite>internal postgresql tables shouldn&#8217;t be shown</cite></p>
+
+<blockquote>
+  <p>internal postgresql tables shouldn’t be shown</p>
+</blockquote>
+
 <p>I decided to keep all the objects found in the database, even system ones. They can be removed easily by filtering out on the schemaname column if needed</p>
-<p><cite>it should be sorted by most bloat first</cite></p>
+
+<blockquote>
+  <p>it should be sorted by most bloat first</p>
+</blockquote>
+
 <p>Agree with that, easy to add.</p>
-<p><cite>See this index bloat query: <a href="https://gist.github.com/gullevek/32881d6b4c5b1ed0135c">https://gist.github.com/gullevek/32881d6b4c5b1ed0135c</a> (original here: <a href="https://gist.github.com/mbanck/9976015">https://gist.github.com/mbanck/9976015</a>)</cite></p>
-<p>I know this query, it has been written by Josh Berkus based on my previous post. As I commented in his blog, I don&#8217;t want to break compatibility with older release of PostgreSQL by using CTEs, just for human readability. I need it to monitor old releases (sadly, like 8.2, but even a 7.4!).</p>
-<p>I&#8217;ll update the query in my gist and this blog post with your comments.</p>
+
+<blockquote>
+  <p>See this index bloat query: <a href="">https://gist.github.com/gullevek/32881d6b4c5b1ed0135c</a> (original here: <a href="">https://gist.github.com/mbanck/9976015</a>)</p>
+</blockquote>
+
+<p>I know this query, it has been written by Josh Berkus based on my previous post. As I commented in his blog, I don’t want to break compatibility with older release of PostgreSQL by using CTEs, just for human readability. I need it to monitor old releases (sadly, like 8.2, but even a 7.4!).</p>
+
+<p>I’ll update the query in my gist and this blog post with your comments.</p>
+
 <p>Cheers,</p>

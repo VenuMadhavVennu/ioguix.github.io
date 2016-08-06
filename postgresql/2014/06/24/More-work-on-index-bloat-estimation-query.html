@@ -243,13 +243,15 @@ fixed length type…</p>
         <div class="meta_infos">Wed, 25 Jun 2014 04:52:08 +0200</div>
 
          <p>Interesting query, but there are several things that should be updated.</p>
+
 <ul>
-	<li>the bytes output should be converted into human readable format (mb,gb,etc)</li>
-	<li>internal postgresql tables shouldn&#8217;t be shown</li>
-	<li>it should be sorted by most bloat first</li>
+  <li>the bytes output should be converted into human readable format (mb,gb,etc)</li>
+  <li>internal postgresql tables shouldn’t be shown</li>
+  <li>it should be sorted by most bloat first</li>
 </ul>
-<p>See this index bloat query: <a href="https://gist.github.com/gullevek/32881d6b4c5b1ed0135c">https://gist.github.com/gullevek/32881d6b4c5b1ed0135c</a> (original here: <a href="https://gist.github.com/mbanck/9976015">https://gist.github.com/mbanck/9976015</a>)</p>
-        
+
+<p>See this index bloat query: <a href="">https://gist.github.com/gullevek/32881d6b4c5b1ed0135c</a> (original here: <a href="">https://gist.github.com/mbanck/9976015</a>)</p>
+ 
       </div>
     
   
@@ -262,17 +264,35 @@ fixed length type…</p>
         <div class="meta_infos">Wed, 25 Jun 2014 18:35:00 +0200</div>
 
          <p>Hi Clemens,</p>
-<p><cite>the bytes output should be converted into human readable format (mb,gb,etc)</cite></p>
+
+<blockquote>
+  <p>the bytes output should be converted into human readable format (mb,gb,etc)</p>
+</blockquote>
+
 <p>The main purpose of this query is supervision, so I need raw values, but adding some more fields with human values is clearly useful.</p>
-<p><cite>internal postgresql tables shouldn&#8217;t be shown</cite></p>
+
+<blockquote>
+  <p>internal postgresql tables shouldn’t be shown</p>
+</blockquote>
+
 <p>I decided to keep all the objects found in the database, even system ones. They can be removed easily by filtering out on the schemaname column if needed</p>
-<p><cite>it should be sorted by most bloat first</cite></p>
+
+<blockquote>
+  <p>it should be sorted by most bloat first</p>
+</blockquote>
+
 <p>Agree with that, easy to add.</p>
-<p><cite>See this index bloat query: <a href="https://gist.github.com/gullevek/32881d6b4c5b1ed0135c">https://gist.github.com/gullevek/32881d6b4c5b1ed0135c</a> (original here: <a href="https://gist.github.com/mbanck/9976015">https://gist.github.com/mbanck/9976015</a>)</cite></p>
-<p>I know this query, it has been written by Josh Berkus based on my previous post. As I commented in his blog, I don&#8217;t want to break compatibility with older release of PostgreSQL by using CTEs, just for human readability. I need it to monitor old releases (sadly, like 8.2, but even a 7.4!).</p>
-<p>I&#8217;ll update the query in my gist and this blog post with your comments.</p>
+
+<blockquote>
+  <p>See this index bloat query: <a href="">https://gist.github.com/gullevek/32881d6b4c5b1ed0135c</a> (original here: <a href="">https://gist.github.com/mbanck/9976015</a>)</p>
+</blockquote>
+
+<p>I know this query, it has been written by Josh Berkus based on my previous post. As I commented in his blog, I don’t want to break compatibility with older release of PostgreSQL by using CTEs, just for human readability. I need it to monitor old releases (sadly, like 8.2, but even a 7.4!).</p>
+
+<p>I’ll update the query in my gist and this blog post with your comments.</p>
+
 <p>Cheers,</p>
-        
+ 
       </div>
     
   
@@ -285,9 +305,11 @@ fixed length type…</p>
         <div class="meta_infos">Wed, 25 Jun 2014 14:04:55 +0200</div>
 
          <p>Re: name being a fixed length type</p>
-<p>See the bottom of this page: <a href="http://www.postgresql.org/docs/9.3/static/datatype-character.html">http://www.postgresql.org/docs/9.3/static/datatype-character.html</a></p>
-<p>I think &#8216;name&#8217; being fixed length is a tradeoff of space vs. time in the system catalogs.  It gives predictable row layouts in the critical catalogs, for initialization, recovery, etc.</p>
-        
+
+<p>See the bottom of this page: <a href="">http://www.postgresql.org/docs/9.3/static/datatype-character.html</a> </p>
+
+<p>I think ‘name’ being fixed length is a tradeoff of space vs. time in the system catalogs.  It gives predictable row layouts in the critical catalogs, for initialization, recovery, etc.</p>
+ 
       </div>
     
   
@@ -300,9 +322,11 @@ fixed length type…</p>
         <div class="meta_infos">Wed, 25 Jun 2014 18:46:00 +0200</div>
 
          <p>Hi Joe,</p>
-<p>Thank you for this answer and doc <span class="caps">URL</span>! I would have save a bit of time by reading this part of the doc first ;)</p>
+
+<p>Thank you for this answer and doc URL! I would have save a bit of time by reading this part of the doc first ;)</p>
+
 <p>Cheers,</p>
-        
+ 
       </div>
     
   
@@ -314,8 +338,8 @@ fixed length type…</p>
         
         <div class="meta_infos">Tue, 01 Jul 2014 21:34:03 +0200</div>
 
-         <p>Your query (still) requires superuser privileges due to using pg_statistic. This is not really great for monitoring queries, and can be easily avoided, as shown here (based on Josh Berkus&#8217; version of your earlier query): <a href="https://gist.github.com/mbanck/9976015/revisions">https://gist.github.com/mbanck/9976015/revisions</a>.</p>
-        
+         <p>Your query (still) requires superuser privileges due to using pg_statistic. This is not really great for monitoring queries, and can be easily avoided, as shown here (based on Josh Berkus’ version of your earlier query): <a href="">https://gist.github.com/mbanck/9976015/revisions</a>.</p>
+ 
       </div>
     
   
@@ -328,10 +352,13 @@ fixed length type…</p>
         <div class="meta_infos">Wed, 02 Jul 2014 13:08:00 +0200</div>
 
          <p>Hi Michael,</p>
-<p>That&#8217;s true. However, note that using <code>pg_stats</code>, you must make sure you are using a supervision role that is always granted to read all tables. If supervision role can not read some of the tables, the query just ignore them.</p>
-<p>I updated my query (here and on github) based on your diff and just added a comment about that. See: <a href="https://gist.github.com/ioguix/c29d5790b8b93bf81c27/revisions">https://gist.github.com/ioguix/c29d5790b8b93bf81c27/revisions</a></p>
+
+<p>That’s true. However, note that using @pg_stats@, you must make sure you are using a supervision role that is always granted to read all tables. If supervision role can not read some of the tables, the query just ignore them.</p>
+
+<p>I updated my query (here and on github) based on your diff and just added a comment about that. See: <a href="">https://gist.github.com/ioguix/c29d5790b8b93bf81c27/revisions</a> </p>
+
 <p>Thanks,</p>
-        
+ 
       </div>
     
   

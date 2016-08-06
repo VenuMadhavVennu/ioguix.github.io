@@ -470,7 +470,7 @@ table bloat next time ;-) </p>
         <div class="meta_infos">Sat, 29 Mar 2014 05:45:45 +0100</div>
 
          <p>The check_postgres project welcomes patches! :)</p>
-        
+ 
       </div>
     
   
@@ -482,9 +482,11 @@ table bloat next time ;-) </p>
         
         <div class="meta_infos">Tue, 01 Apr 2014 01:58:01 +0200</div>
 
-         <p>Thanks for posting this!  I&#8217;ve known for a while that the index bloat calculation was faulty, but haven&#8217;t quite known what was wrong with it.</p>
-<p>I&#8217;m working on a 2nd bloat calculation involving dead row counts &#8212; just for tables,though.</p>
-        
+         <p>Thanks for posting this!  I’ve known for a while that the index bloat calculation was faulty, but haven’t quite known what was wrong with it.</p>
+
+<p>I’m working on a 2nd bloat calculation involving dead row counts – just for tables,though.</p>
+
+ 
       </div>
     
   
@@ -496,13 +498,15 @@ table bloat next time ;-) </p>
         
         <div class="meta_infos">Tue, 01 Apr 2014 02:10:31 +0200</div>
 
-         <p>Actually, there&#8217;s some bugs in the query version as you&#8217;ve written it above:</p>
-<ol>
-	<li>It&#8217;s <code>\set</code>, not <code>\SET</code></li>
-	<li><code>index_tuple_hdr</code> is missing the <code>:</code> in two places.</li>
-</ol>
+         <p>Actually, there’s some bugs in the query version as you’ve written it above:</p>
+
+<ul>
+  <li>It’s <code>\set</code>, not <code>\SET</code></li>
+  <li><code>index_tuple_hdr</code> is missing the <code>:</code> in two places.</li>
+</ul>
+
 <p>Thanks!</p>
-        
+ 
       </div>
     
   
@@ -515,13 +519,19 @@ table bloat next time ;-) </p>
         <div class="meta_infos">Thu, 03 Apr 2014 15:43:33 +0200</div>
 
          <p>Josh,</p>
-<p>About <code>index_tuple_hdr</code>, I just realize I used it as a field name <span class="caps">AND</span> a psql variable, my bad. See the code bellow this comment in the query:</p>
-<p><code>/* per tuple header: add index_attribute_bm if some cols are null-able */ </code></p>
+
+<p>About <code>index_tuple_hdr</code>, I just realize I used it as a field name AND a psql variable, my bad. See the code bellow this comment in the query:</p>
+
+<p><code>/* per tuple header: add index_attribute_bm if some cols are null-able */</code></p>
+
 <p>So if you are referring to <code>index_tuple_hdr</code> at lines 11, 13 and 14, those are referring to the computed field, so no <code>:</code>, it would produce bad stats with indexes on NULLable cols.</p>
+
 <p>I fixed to query to remove this confusion.</p>
-<p>Good catch about the <code>\SET</code>! It appears there was some magic in my old blog system transforming it in uppercase. I&#8217;ll not investigate further as I moved to jekyll&#8230;</p>
+
+<p>Good catch about the <code>\SET</code>! It appears there was some magic in my old blog system transforming it in uppercase. I’ll not investigate further as I moved to jekyll…</p>
+
 <p>Thanks!</p>
-        
+ 
       </div>
     
   
