@@ -7,6 +7,27 @@
     <atom:link href="http://blog.ioguix.net/feed.xml" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>PAF, auto failover and more at PGConf.eu 2016</title>
+      <description>&lt;p&gt;You will find the slides of my talk here: &lt;a href=&quot;http://www.dalibo.org/_media/2016-pgconfeu-paf.html.gz&quot;&gt;http://www.dalibo.org/_media/2016-pgconfeu-paf.html.gz&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Demo’s videos are embedded in the html file.&lt;/p&gt;
+
+&lt;p&gt;I just fixed some typos, French words and added a slide to describe the demo
+environment.&lt;/p&gt;
+
+&lt;p&gt;The demos are actually based on the architecture described in the
+documentation: &lt;a href=&quot;http://dalibo.github.io/PAF/Quick_Start-CentOS-7.html&quot;&gt;http://dalibo.github.io/PAF/Quick_Start-CentOS-7.html&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Any kind of feedback or contribution is welcomed.&lt;/p&gt;
+
+&lt;p&gt;Cheers!&lt;/p&gt;
+</description>
+      <pubDate>Wed, 02 Nov 2016 22:22:00 +0100</pubDate>
+      <link>http://blog.ioguix.net/postgresql/2016/11/02/PAF-auto-failover-and-more.html</link>
+      <guid isPermaLink="true">http://blog.ioguix.net/postgresql/2016/11/02/PAF-auto-failover-and-more.html</guid>
+    </item>
+    
+    <item>
       <title>New repository for bloat estimation queries</title>
       <description>&lt;h2 id=&quot;new-repository&quot;&gt;New repository&lt;/h2&gt;
 
@@ -1753,36 +1774,6 @@ interested in: “logwatch”&lt;/p&gt;
       <pubDate>Mon, 06 Aug 2012 15:37:00 +0200</pubDate>
       <link>http://blog.ioguix.net/postgresql/2012/08/06/Using-pgBagder-and-logsaw-for-scheduled-reports.html</link>
       <guid isPermaLink="true">http://blog.ioguix.net/postgresql/2012/08/06/Using-pgBagder-and-logsaw-for-scheduled-reports.html</guid>
-    </item>
-    
-    <item>
-      <title>phpPgAdmin 5.0.2 in Debian unstable !</title>
-      <description>&lt;p&gt;Today, &lt;a href=&quot;http://www.df7cb.de/&quot;&gt;Christoph Berg&lt;/a&gt; has uploaded a new version of the
-phpPgAdmin package to the Debian unstable branch.  This package is based on the
-latest version of phpPgAdmin: 5.0.2.&lt;/p&gt;
-
-&lt;p&gt;This story starts around another beer during the
-&lt;a href=&quot;http://www.pgcon.org/2011/&quot;&gt;PGCon2011&lt;/a&gt;.  I was talking with
-&lt;a href=&quot;http://blog.tapoueh.org/&quot;&gt;Dimitri Fontaine&lt;/a&gt; about the status of the
-PostgreSQL’s Debian repository driven by our community.  I explained him how
-bad was the situation about phpPgAdmin’s package that was stuck at the 4.2.3
-version for all debian like distributions.  Because of that, we received a
-bunch of bug reports, comments and mails about things we already fixed in new
-versions.&lt;/p&gt;
-
-&lt;p&gt;As Dimitri is working with Christoph on the PostgreSQL Debian repo, he gave me
-his email address telling me that, as an official Debian developer, he could
-probably help me.  After some discussion about me becoming the official package
-maintainer, it seems Christophe finally did the package pretty quickly and
-added himself as co-maintainer of the project.&lt;/p&gt;
-
-&lt;p&gt;In conclusion, I’m glad to see a new package maintainer for our PPA package and
-I’ll do my best to help him on this purpose.  Thank you to Christoph and
-Dimitri!&lt;/p&gt;
-</description>
-      <pubDate>Thu, 16 Jun 2011 01:19:00 +0200</pubDate>
-      <link>http://blog.ioguix.net/postgresql/2011/06/16/phpPgAdmin-5.0.2-in-Debian-unstable.html</link>
-      <guid isPermaLink="true">http://blog.ioguix.net/postgresql/2011/06/16/phpPgAdmin-5.0.2-in-Debian-unstable.html</guid>
     </item>
     
   </channel>
