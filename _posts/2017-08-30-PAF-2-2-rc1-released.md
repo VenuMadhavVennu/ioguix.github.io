@@ -10,6 +10,9 @@ category: postgresql
 The first release candidate of the PAF resource agent for Pacemaker has been
 released yesterday.
 
+You'll find the tarball, packages and details there:
+[https://github.com/dalibo/PAF/releases/tag/v2.2_rc1]()
+
 The changelog since 2.1 includes:
 
 * new: support PostgreSQL 10
