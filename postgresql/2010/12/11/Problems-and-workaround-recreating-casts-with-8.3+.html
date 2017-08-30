@@ -63,13 +63,13 @@ effect. About a year ago, I found another quick-n-dirty fix for a customer.</p>
 
 <p>Here is the problem:</p>
 
-<figure class="highlight"><pre><code class="language-psql" data-lang="psql"><span></span><span class="gp">casts=#</span> <span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">test</span> <span class="k">AS</span> <span class="k">SELECT</span> <span class="n">generate_series</span><span class="p">(</span><span class="mf">1</span><span class="p">,</span><span class="mf">10</span><span class="p">)</span> <span class="k">as</span> <span class="n">id</span><span class="p">;</span>
+<div class="highlight"><pre><code class="language-psql" data-lang="psql"><span class="gp">casts=#</span> <span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">test</span> <span class="k">AS</span> <span class="k">SELECT</span> <span class="n">generate_series</span><span class="p">(</span><span class="mf">1</span><span class="p">,</span><span class="mf">10</span><span class="p">)</span> <span class="k">as</span> <span class="n">id</span><span class="p">;</span>
 <span class="go">SELECT</span>
 <span class="gp">casts=#</span> <span class="k">SELECT</span> <span class="n">id</span><span class="p">,</span> <span class="s1">&#39;value = &#39;</span> <span class="o">||</span> <span class="n">id</span> <span class="k">FROM</span> <span class="n">test</span> <span class="k">WHERE</span> <span class="n">id</span> <span class="o">=</span> <span class="s1">&#39;5&#39;</span><span class="o">::</span><span class="nb">text</span><span class="p">;</span>
 <span class="gs">ERROR:</span><span class="gr">  operator does not exist: integer = text</span>
 <span class="gr">LINE 1 : SELECT id, &#39;value = &#39; || id FROM test WHERE id = &#39;5&#39;::text;</span>
 <span class="gr">                                                         ^</span>
-<span class="gr">TIPS : No operator matches the given name and argument type(s). You might need to add explicit type casts.</span></code></pre></figure>
+<span class="gr">TIPS : No operator matches the given name and argument type(s). You might need to add explicit type casts.</span></code></pre></div>
 
 <p>The very well known solution is to recreate some of these implicit casts that
 were removed in 8.3. Peter Eisentraut blogged about that, you’ll find his SQL
@@ -79,7 +79,7 @@ script
 <p>However, as some users noticed in the comments, there is a side effect bug with
 this solution: it breaks the concatenation operator.</p>
 
-<figure class="highlight"><pre><code class="language-psql" data-lang="psql"><span></span><span class="gp">casts=#</span> <span class="k">BEGIN</span> <span class="p">;</span>
+<div class="highlight"><pre><code class="language-psql" data-lang="psql"><span class="gp">casts=#</span> <span class="k">BEGIN</span> <span class="p">;</span>
 <span class="go">BEGIN</span>
 <span class="gp">casts=#</span> <span class="kp">\i</span> <span class="ss">/tmp/implicit_casts.sql</span>
 <span class="go">CREATE FUNCTION</span>
@@ -93,12 +93,12 @@ this solution: it breaks the concatenation operator.</p>
 <span class="gr">                                ^</span>
 <span class="gr">TIPS : Could not choose a best candidate operator. You might need to add explicit type casts.</span>
 <span class="gp">casts=#</span> <span class="k">ROLLBACK</span> <span class="p">;</span>
-<span class="go">ROLLBACK</span></code></pre></figure>
+<span class="go">ROLLBACK</span></code></pre></div>
 
 <p>From here, the solution could be to cast one of the operand:</p>
 
-<figure class="highlight"><pre><code class="language-psql" data-lang="psql"><span></span><span class="gp">casts=#</span> <span class="k">SELECT</span> <span class="n">id</span><span class="p">,</span> <span class="s1">&#39;value = &#39;</span> <span class="o">||</span> <span class="n">id</span><span class="o">::</span><span class="nb">text</span> <span class="k">FROM</span> <span class="n">test</span> <span class="k">WHERE</span> <span class="n">id</span> <span class="o">=</span> <span class="s1">&#39;5&#39;</span><span class="o">::</span><span class="nb">text</span><span class="p">;</span>
-<span class="go">  5 | value = 5</span></code></pre></figure>
+<div class="highlight"><pre><code class="language-psql" data-lang="psql"><span class="gp">casts=#</span> <span class="k">SELECT</span> <span class="n">id</span><span class="p">,</span> <span class="s1">&#39;value = &#39;</span> <span class="o">||</span> <span class="n">id</span><span class="o">::</span><span class="nb">text</span> <span class="k">FROM</span> <span class="n">test</span> <span class="k">WHERE</span> <span class="n">id</span> <span class="o">=</span> <span class="s1">&#39;5&#39;</span><span class="o">::</span><span class="nb">text</span><span class="p">;</span>
+<span class="go">  5 | value = 5</span></code></pre></div>
 
 <p>But then, we are back to the application fix where it might worth spending more
 time fixing things in the good way.</p>
@@ -108,14 +108,14 @@ casts. You will find a sql file with a lot of those operators under the
 following link: <a href="https://gist.github.com/ioguix/4dd187986c4a1b7e1160">8.3 operator workaround.sql</a>.
 Here is a sample for text to integer comparison:</p>
 
-<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span></span><span class="k">CREATE</span> <span class="k">FUNCTION</span> <span class="n">pg_catalog</span><span class="p">.</span><span class="n">texteqint</span><span class="p">(</span><span class="nb">text</span><span class="p">,</span> <span class="nb">integer</span><span class="p">)</span> <span class="k">RETURNS</span> <span class="nb">BOOLEAN</span> <span class="k">STRICT</span> <span class="k">IMMUTABLE</span> <span class="k">LANGUAGE</span> <span class="k">SQL</span> <span class="k">AS</span> <span class="err">$$</span><span class="k">SELECT</span> <span class="n">textin</span><span class="p">(</span><span class="n">int4out</span><span class="p">(</span><span class="err">$</span><span class="mi">2</span><span class="p">))</span> <span class="o">=</span> <span class="err">$</span><span class="mi">1</span><span class="p">;</span><span class="err">$$</span><span class="p">;</span>
+<div class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">CREATE</span> <span class="k">FUNCTION</span> <span class="n">pg_catalog</span><span class="p">.</span><span class="n">texteqint</span><span class="p">(</span><span class="nb">text</span><span class="p">,</span> <span class="nb">integer</span><span class="p">)</span> <span class="k">RETURNS</span> <span class="nb">BOOLEAN</span> <span class="k">STRICT</span> <span class="k">IMMUTABLE</span> <span class="k">LANGUAGE</span> <span class="k">SQL</span> <span class="k">AS</span> <span class="err">$$</span><span class="k">SELECT</span> <span class="n">textin</span><span class="p">(</span><span class="n">int4out</span><span class="p">(</span><span class="err">$</span><span class="mi">2</span><span class="p">))</span> <span class="o">=</span> <span class="err">$</span><span class="mi">1</span><span class="p">;</span><span class="err">$$</span><span class="p">;</span>
 <span class="k">CREATE</span> <span class="k">FUNCTION</span> <span class="n">pg_catalog</span><span class="p">.</span><span class="n">inteqtext</span><span class="p">(</span><span class="nb">integer</span><span class="p">,</span> <span class="nb">text</span><span class="p">)</span> <span class="k">RETURNS</span> <span class="nb">BOOLEAN</span> <span class="k">STRICT</span> <span class="k">IMMUTABLE</span> <span class="k">LANGUAGE</span> <span class="k">SQL</span> <span class="k">AS</span> <span class="err">$$</span><span class="k">SELECT</span> <span class="n">textin</span><span class="p">(</span><span class="n">int4out</span><span class="p">(</span><span class="err">$</span><span class="mi">1</span><span class="p">))</span> <span class="o">=</span> <span class="err">$</span><span class="mi">2</span><span class="p">;</span><span class="err">$$</span><span class="p">;</span>
 <span class="k">CREATE</span> <span class="k">OPERATOR</span> <span class="n">pg_catalog</span><span class="p">.</span><span class="o">=</span> <span class="p">(</span> <span class="k">PROCEDURE</span> <span class="o">=</span> <span class="n">pg_catalog</span><span class="p">.</span><span class="n">texteqint</span><span class="p">,</span> <span class="n">LEFTARG</span><span class="o">=</span><span class="nb">text</span><span class="p">,</span> <span class="n">RIGHTARG</span><span class="o">=</span><span class="nb">integer</span><span class="p">,</span> <span class="n">COMMUTATOR</span><span class="o">=</span><span class="k">OPERATOR</span><span class="p">(</span><span class="n">pg_catalog</span><span class="p">.</span><span class="o">=</span><span class="p">));</span>
-<span class="k">CREATE</span> <span class="k">OPERATOR</span> <span class="n">pg_catalog</span><span class="p">.</span><span class="o">=</span> <span class="p">(</span> <span class="k">PROCEDURE</span> <span class="o">=</span> <span class="n">pg_catalog</span><span class="p">.</span><span class="n">inteqtext</span><span class="p">,</span> <span class="n">LEFTARG</span><span class="o">=</span><span class="nb">integer</span><span class="p">,</span> <span class="n">RIGHTARG</span><span class="o">=</span><span class="nb">text</span><span class="p">,</span> <span class="n">COMMUTATOR</span><span class="o">=</span><span class="k">OPERATOR</span><span class="p">(</span><span class="n">pg_catalog</span><span class="p">.</span><span class="o">=</span><span class="p">));</span></code></pre></figure>
+<span class="k">CREATE</span> <span class="k">OPERATOR</span> <span class="n">pg_catalog</span><span class="p">.</span><span class="o">=</span> <span class="p">(</span> <span class="k">PROCEDURE</span> <span class="o">=</span> <span class="n">pg_catalog</span><span class="p">.</span><span class="n">inteqtext</span><span class="p">,</span> <span class="n">LEFTARG</span><span class="o">=</span><span class="nb">integer</span><span class="p">,</span> <span class="n">RIGHTARG</span><span class="o">=</span><span class="nb">text</span><span class="p">,</span> <span class="n">COMMUTATOR</span><span class="o">=</span><span class="k">OPERATOR</span><span class="p">(</span><span class="n">pg_catalog</span><span class="p">.</span><span class="o">=</span><span class="p">));</span></code></pre></div>
 
 <p>Using this operator instead of implicit cast, the previous test shows:</p>
 
-<figure class="highlight"><pre><code class="language-psql" data-lang="psql"><span></span><span class="gp">casts=#</span> <span class="k">BEGIN</span> <span class="p">;</span>
+<div class="highlight"><pre><code class="language-psql" data-lang="psql"><span class="gp">casts=#</span> <span class="k">BEGIN</span> <span class="p">;</span>
 <span class="go">BEGIN</span>
 <span class="gp">casts=#</span> <span class="kp">\i</span> <span class="s1">&#39;/tmp/8.3 operator workaround.sql&#39;</span>
 <span class="go">CREATE FUNCTION</span>
@@ -134,7 +134,7 @@ Here is a sample for text to integer comparison:</p>
 <span class="gs">ERROR:</span><span class="gr">  operator does not exist: integer = text</span>
 <span class="gr">LINE 1 : SELECT id, &#39;value = &#39; || id FROM test WHERE id = &#39;5&#39;::text;</span>
 <span class="gr">                                                         ^</span>
-<span class="gr">TIPS : No operator matches the given name and argument type(s). You might need to add explicit type casts.</span></code></pre></figure>
+<span class="gr">TIPS : No operator matches the given name and argument type(s). You might need to add explicit type casts.</span></code></pre></div>
 
 <p>Same advice from Peter here: if possible, only create the operators you need to
 fix your application!</p>

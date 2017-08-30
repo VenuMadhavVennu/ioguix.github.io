@@ -66,7 +66,7 @@ pgBadger report.  For this demo, I’ll suppose:</p>
 <ul>
   <li>we have PostgreSQL’s log files in <code>/var/log/pgsql</code></li>
   <li>we want to produce a weekly report using pgBadger with the “postgres” system
-user…</li>
+user… </li>
   <li>…so we keep at least 8 days of log</li>
 </ul>
 
@@ -85,9 +85,9 @@ where the last one finished!</p>
 
 <p>We need to create a simple configuration file for logsaw:</p>
 
-<figure class="highlight"><pre><code class="language-console" data-lang="console"><span></span><span class="gp">$</span> cat &lt;&lt;EOF &gt; ~postgres/.logsaw
+<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="gp">$</span> cat &lt;&lt;EOF &gt; ~postgres/.logsaw
 <span class="go">LOGDIR=/var/log/pgsql/</span>
-<span class="go">EOF</span></code></pre></figure>
+<span class="go">EOF</span></code></pre></div>
 
 <p>There’s three more optional parameters in this configuration file you might
 want to know:</p>
@@ -106,15 +106,15 @@ You can add as many <code>REGEX</code> parameter than needed, each of them must 
 regular expression. When not defined, the default empty <code>REGEX</code> array means:
 «match all the lines».</li>
   <li>each time you call logsaw, it saves its states to your configuration file,
-adding parameters <code>FILEID</code> and <code>OFFSET</code>.</li>
+adding parameters <code>FILEID</code> and <code>OFFSET</code>. </li>
 </ul>
 
 <p>That’s it for logsaw. See its README files for more details, options and sample
-configuration file.</p>
+configuration file. </p>
 
 <p>Now, the command line to create the report using pgbadger:</p>
 
-<figure class="highlight"><pre><code class="language-console" data-lang="console"><span></span><span class="gp">$</span> logsaw <span class="p">|</span> pgbadger -g -o /path/to/report-<span class="k">$(</span>date +%Y%m%d<span class="k">)</span>.html -</code></pre></figure>
+<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="gp">$</span> logsaw <span class="p">|</span> pgbadger -g -o /path/to/report-<span class="k">$(</span>date +%Y%m%d<span class="k">)</span>.html -</code></pre></div>
 
 <p>You might want to add the <code>-f</code> option to pgbadger if it doesn’t
 guess the log format itself (stderr or syslog or csv).</p>
@@ -122,7 +122,7 @@ guess the log format itself (stderr or syslog or csv).</p>
 <p>About creating reports on a weekly basis, let’s say every sunday at 2:10am,
 using crontab:</p>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span><span class="m">10</span> <span class="m">2</span> <span class="m">1</span>-7 * <span class="m">7</span>  logsaw <span class="p">|</span> pgbadger -g -o /path/to/report-<span class="k">$(</span>date +<span class="se">\%</span>Y<span class="se">\%</span>m<span class="se">\%</span>d<span class="k">)</span>.html -</code></pre></figure>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="m">10</span> <span class="m">2</span> 1-7 * <span class="m">7</span>  logsaw <span class="p">|</span> pgbadger -g -o /path/to/report-<span class="k">$(</span>date +<span class="se">\%</span>Y<span class="se">\%</span>m<span class="se">\%</span>d<span class="k">)</span>.html -</code></pre></div>
 
 <p>Here you go, enjoy :)</p>
 
@@ -213,8 +213,9 @@ interested in: “logwatch”</p>
 
          <p>About creating reports with just pgbadger 2.x on a weekly basis, like in your example using crontab:</p>
 
-<pre><code>10 2 1-7 * 7  pgbadger -o /path/to/report-$(date +%Y%m%d).html -l /path/to/pgbadger-incremental.last `find /var/log/postgresql/postgresql.* -mtime -7`
-</code></pre>
+<p><code>
+10 2 1-7 * 7  pgbadger -o /path/to/report-$(date +%Y%m%d).html -l /path/to/pgbadger-incremental.last `find /var/log/postgresql/postgresql.* -mtime -7`
+</code></p>
  
       </div>
     

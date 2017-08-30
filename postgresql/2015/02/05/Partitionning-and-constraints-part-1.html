@@ -93,7 +93,7 @@ constraint across all partitions of a table. Next one covers how to reference a
 partitioned table. And maybe some other depending on the motivation,
 inspiration and feedback.</p>
 
-<p>##Study case</p>
+<h2 id="study-case">Study case</h2>
 
 <p>I chose to illustrate this article with a table partitioned by date range. This
 is a fairly frequent practice and adapting this article to another partitioning
@@ -110,9 +110,9 @@ values residing in different partitions. Exactly what we really want to avoid.</
 <p>So here is the dummy schema with table <code>master</code> partitioned across 5 childs
 using a date range key partitioning <code>ts</code>.</p>
 
-<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span></span><span class="k">BEGIN</span><span class="p">;</span>
+<div class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">BEGIN</span><span class="p">;</span>
 
-<span class="k">DROP</span> <span class="k">TABLE</span> <span class="k">IF</span> <span class="k">EXISTS</span> <span class="n">master</span><span class="p">,</span>
+<span class="k">DROP</span> <span class="k">TABLE</span> <span class="n">IF</span> <span class="k">EXISTS</span> <span class="n">master</span><span class="p">,</span>
   <span class="n">child0</span><span class="p">,</span> <span class="n">child1</span><span class="p">,</span> <span class="n">child2</span><span class="p">,</span> <span class="n">child3</span><span class="p">,</span> <span class="n">child4</span><span class="p">;</span>
 
 <span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">master</span> <span class="p">(</span>
@@ -164,30 +164,30 @@ using a date range key partitioning <code>ts</code>.</p>
 <span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">child4</span> <span class="k">ALTER</span> <span class="n">ts</span> <span class="k">SET</span>
   <span class="k">DEFAULT</span> <span class="n">TIMESTAMPTZ</span> <span class="s1">&#39;2014-01-01 00:00:00&#39;</span> <span class="o">+</span> <span class="p">(</span><span class="n">random</span><span class="p">()</span><span class="o">*</span><span class="mi">31449600</span><span class="p">)::</span><span class="nb">int</span> <span class="o">*</span> <span class="nb">INTERVAL</span> <span class="s1">&#39;1s&#39;</span><span class="p">;</span>
 
-<span class="k">COMMIT</span><span class="p">;</span></code></pre></figure>
+<span class="k">COMMIT</span><span class="p">;</span></code></pre></div>
 
 <p>The <code>SET DEFAULT</code> are only there to keep other commands simple to read. Note
 that I do not create the trigger on INSERT and UPDATE on the master table. This
 is out of the scope of this article, will not be needed and add no challenge to
 the subject.</p>
 
-<p>##The naive solution</p>
+<h2 id="the-naive-solution">The naive solution</h2>
 
 <p>Of course, the whole trick revolves around triggers. We have to check the
 uniqueness of a PK value across all partitions after any INSERT or UPDATE on
 any of them, for each rows. Let’s dive in and get wet with a first naive
 version of such a trigger:</p>
 
-<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span></span><span class="k">CREATE</span> <span class="k">OR</span> <span class="k">REPLACE</span> <span class="k">FUNCTION</span> <span class="n">master_id_pkey</span><span class="p">()</span> 
+<div class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">CREATE</span> <span class="k">OR</span> <span class="k">REPLACE</span> <span class="k">FUNCTION</span> <span class="n">master_id_pkey</span><span class="p">()</span> 
   <span class="k">RETURNS</span> <span class="k">trigger</span> 
   <span class="k">LANGUAGE</span> <span class="n">plpgsql</span> 
 <span class="k">AS</span> <span class="err">$$</span>
 <span class="k">BEGIN</span>
-  <span class="k">IF</span> <span class="k">count</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">FROM</span> <span class="n">master</span> <span class="k">WHERE</span> <span class="n">id</span> <span class="o">=</span> <span class="k">NEW</span><span class="p">.</span><span class="n">id</span> <span class="k">THEN</span>
+  <span class="n">IF</span> <span class="k">count</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">FROM</span> <span class="n">master</span> <span class="k">WHERE</span> <span class="n">id</span> <span class="o">=</span> <span class="k">NEW</span><span class="p">.</span><span class="n">id</span> <span class="k">THEN</span>
     <span class="n">RAISE</span> <span class="k">EXCEPTION</span> <span class="s1">&#39;duplicate key value violates unique constraint &quot;%&quot; ON &quot;%&quot;&#39;</span><span class="p">,</span> 
       <span class="n">TG_NAME</span><span class="p">,</span> <span class="n">TG_TABLE_NAME</span> 
       <span class="k">USING</span> <span class="n">DETAIL</span> <span class="o">=</span> <span class="n">format</span><span class="p">(</span><span class="s1">&#39;Key (id)=(%s) already exists.&#39;</span><span class="p">,</span> <span class="k">NEW</span><span class="p">.</span><span class="n">id</span><span class="p">);</span>
-  <span class="k">END</span> <span class="k">IF</span><span class="p">;</span>
+  <span class="k">END</span> <span class="n">IF</span><span class="p">;</span>
 
   <span class="k">RETURN</span> <span class="k">NULL</span><span class="p">;</span>
 <span class="k">END</span>
@@ -204,14 +204,14 @@ version of such a trigger:</p>
 <span class="k">CREATE</span> <span class="k">TRIGGER</span> <span class="n">children_id_pkey</span> <span class="k">AFTER</span> <span class="k">INSERT</span> <span class="k">OR</span> <span class="k">UPDATE</span> <span class="k">ON</span> <span class="n">child3</span>
      <span class="k">FOR</span> <span class="k">EACH</span> <span class="k">ROW</span> <span class="k">EXECUTE</span> <span class="k">PROCEDURE</span> <span class="k">public</span><span class="p">.</span><span class="n">master_id_pkey</span><span class="p">();</span>
 <span class="k">CREATE</span> <span class="k">TRIGGER</span> <span class="n">children_id_pkey</span> <span class="k">AFTER</span> <span class="k">INSERT</span> <span class="k">OR</span> <span class="k">UPDATE</span> <span class="k">ON</span> <span class="n">child4</span>
-     <span class="k">FOR</span> <span class="k">EACH</span> <span class="k">ROW</span> <span class="k">EXECUTE</span> <span class="k">PROCEDURE</span> <span class="k">public</span><span class="p">.</span><span class="n">master_id_pkey</span><span class="p">();</span></code></pre></figure>
+     <span class="k">FOR</span> <span class="k">EACH</span> <span class="k">ROW</span> <span class="k">EXECUTE</span> <span class="k">PROCEDURE</span> <span class="k">public</span><span class="p">.</span><span class="n">master_id_pkey</span><span class="p">();</span></code></pre></div>
 
 <p>Obviously, each partition need the trigger to check that the PK value it is
 about to write does not already exist in one of its siblings. The trigger
 function itself is quite easy to understand: if we find a row with the same
 value as the PK, raise an exception. Tests sounds promising:</p>
 
-<figure class="highlight"><pre><code class="language-psql" data-lang="psql"><span></span><span class="gp">=#</span> <span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">child0</span> <span class="p">(</span><span class="k">comment</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="s1">&#39;test 1&#39;</span><span class="p">);</span>
+<div class="highlight"><pre><code class="language-psql" data-lang="psql"><span class="gp">=#</span> <span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">child0</span> <span class="p">(</span><span class="k">comment</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="s1">&#39;test 1&#39;</span><span class="p">);</span>
 <span class="gp">=#</span> <span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">child1</span> <span class="p">(</span><span class="k">comment</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="s1">&#39;test 2&#39;</span><span class="p">);</span>
 <span class="gp">=#</span> <span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">child2</span> <span class="p">(</span><span class="k">comment</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="s1">&#39;test 3&#39;</span><span class="p">);</span>
 <span class="gp">=#</span> <span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">child3</span> <span class="p">(</span><span class="k">comment</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="s1">&#39;test 4&#39;</span><span class="p">);</span>
@@ -230,13 +230,13 @@ value as the PK, raise an exception. Tests sounds promising:</p>
 <span class="gp">=#</span> <span class="k">BEGIN</span> <span class="p">;</span>
 <span class="gp">=#</span> <span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">child0</span> <span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="k">comment</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="mf">5</span><span class="p">,</span> <span class="s1">&#39;test 6&#39;</span><span class="p">);</span>
 <span class="gs">ERROR:</span><span class="gr">  duplicate key value violates unique constraint &quot;children_id_pkey&quot; ON &quot;child0&quot;</span>
-<span class="gs">DETAIL:</span><span class="gr">  Key (id)=(5) already exists.</span></code></pre></figure>
+<span class="gs">DETAIL:</span><span class="gr">  Key (id)=(5) already exists.</span></code></pre></div>
 
 <p>OK, it works like expected. But there is two big issues with this situation.
 The first one is that a race condition involving two transactions or more is
 able to break our home made unique constraint:</p>
 
-<figure class="highlight"><pre><code class="language-psql" data-lang="psql"><span></span><span class="gp">session 1=#</span> <span class="k">BEGIN</span><span class="p">;</span>
+<div class="highlight"><pre><code class="language-psql" data-lang="psql"><span class="gp">session 1=#</span> <span class="k">BEGIN</span><span class="p">;</span>
 <span class="go">BEGIN</span>
 
 <span class="gp">session 2=#</span> <span class="k">BEGIN</span><span class="p">;</span>
@@ -253,7 +253,7 @@ able to break our home made unique constraint:</p>
 <span class="go"> tableoid | id |  dummy   | comment |           ts           </span>
 <span class="go">----------+----+----------+---------+------------------------</span>
 <span class="go"> child0   |  6 | 28510860 | test 6  | 2010-01-08 17:36:39+01</span>
-<span class="go"> child1   |  6 |  2188136 | test 7  | 2011-07-15 07:13:59+02</span></code></pre></figure>
+<span class="go"> child1   |  6 |  2188136 | test 7  | 2011-07-15 07:13:59+02</span></code></pre></div>
 
 <p>The second issue is that real constraints can be deferred, which means
 constraints are disabled during a transaction and enforced on user request and
@@ -270,12 +270,12 @@ pages.</p>
 <p>Yes, documentation says triggers can be deferred when defined as
 <code>CONSTRAINT TRIGGER</code>. So we can solve this issue by recreating our triggers:</p>
 
-<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span></span><span class="k">DROP</span> <span class="k">TRIGGER</span> <span class="k">IF</span> <span class="k">EXISTS</span> <span class="n">children_id_pkey</span> <span class="k">ON</span> <span class="n">master</span><span class="p">;</span>
-<span class="k">DROP</span> <span class="k">TRIGGER</span> <span class="k">IF</span> <span class="k">EXISTS</span> <span class="n">children_id_pkey</span> <span class="k">ON</span> <span class="n">child0</span><span class="p">;</span>
-<span class="k">DROP</span> <span class="k">TRIGGER</span> <span class="k">IF</span> <span class="k">EXISTS</span> <span class="n">children_id_pkey</span> <span class="k">ON</span> <span class="n">child1</span><span class="p">;</span>
-<span class="k">DROP</span> <span class="k">TRIGGER</span> <span class="k">IF</span> <span class="k">EXISTS</span> <span class="n">children_id_pkey</span> <span class="k">ON</span> <span class="n">child2</span><span class="p">;</span>
-<span class="k">DROP</span> <span class="k">TRIGGER</span> <span class="k">IF</span> <span class="k">EXISTS</span> <span class="n">children_id_pkey</span> <span class="k">ON</span> <span class="n">child3</span><span class="p">;</span>
-<span class="k">DROP</span> <span class="k">TRIGGER</span> <span class="k">IF</span> <span class="k">EXISTS</span> <span class="n">children_id_pkey</span> <span class="k">ON</span> <span class="n">child4</span><span class="p">;</span>
+<div class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">DROP</span> <span class="k">TRIGGER</span> <span class="n">IF</span> <span class="k">EXISTS</span> <span class="n">children_id_pkey</span> <span class="k">ON</span> <span class="n">master</span><span class="p">;</span>
+<span class="k">DROP</span> <span class="k">TRIGGER</span> <span class="n">IF</span> <span class="k">EXISTS</span> <span class="n">children_id_pkey</span> <span class="k">ON</span> <span class="n">child0</span><span class="p">;</span>
+<span class="k">DROP</span> <span class="k">TRIGGER</span> <span class="n">IF</span> <span class="k">EXISTS</span> <span class="n">children_id_pkey</span> <span class="k">ON</span> <span class="n">child1</span><span class="p">;</span>
+<span class="k">DROP</span> <span class="k">TRIGGER</span> <span class="n">IF</span> <span class="k">EXISTS</span> <span class="n">children_id_pkey</span> <span class="k">ON</span> <span class="n">child2</span><span class="p">;</span>
+<span class="k">DROP</span> <span class="k">TRIGGER</span> <span class="n">IF</span> <span class="k">EXISTS</span> <span class="n">children_id_pkey</span> <span class="k">ON</span> <span class="n">child3</span><span class="p">;</span>
+<span class="k">DROP</span> <span class="k">TRIGGER</span> <span class="n">IF</span> <span class="k">EXISTS</span> <span class="n">children_id_pkey</span> <span class="k">ON</span> <span class="n">child4</span><span class="p">;</span>
 <span class="k">CREATE</span> <span class="k">CONSTRAINT</span> <span class="k">TRIGGER</span> <span class="n">children_id_pkey</span> <span class="k">AFTER</span> <span class="k">INSERT</span> <span class="k">OR</span> <span class="k">UPDATE</span> <span class="k">ON</span> <span class="n">master</span>
      <span class="k">DEFERRABLE</span> <span class="k">INITIALLY</span> <span class="k">IMMEDIATE</span> <span class="k">FOR</span> <span class="k">EACH</span> <span class="k">ROW</span> <span class="k">EXECUTE</span> <span class="k">PROCEDURE</span> <span class="k">public</span><span class="p">.</span><span class="n">master_id_pkey</span><span class="p">();</span>
 <span class="k">CREATE</span> <span class="k">CONSTRAINT</span> <span class="k">TRIGGER</span> <span class="n">children_id_pkey</span> <span class="k">AFTER</span> <span class="k">INSERT</span> <span class="k">OR</span> <span class="k">UPDATE</span> <span class="k">ON</span> <span class="n">child0</span>
@@ -287,14 +287,14 @@ pages.</p>
 <span class="k">CREATE</span> <span class="k">CONSTRAINT</span> <span class="k">TRIGGER</span> <span class="n">children_id_pkey</span> <span class="k">AFTER</span> <span class="k">INSERT</span> <span class="k">OR</span> <span class="k">UPDATE</span> <span class="k">ON</span> <span class="n">child3</span>
      <span class="k">DEFERRABLE</span> <span class="k">INITIALLY</span> <span class="k">IMMEDIATE</span> <span class="k">FOR</span> <span class="k">EACH</span> <span class="k">ROW</span> <span class="k">EXECUTE</span> <span class="k">PROCEDURE</span> <span class="k">public</span><span class="p">.</span><span class="n">master_id_pkey</span><span class="p">();</span>
 <span class="k">CREATE</span> <span class="k">CONSTRAINT</span> <span class="k">TRIGGER</span> <span class="n">children_id_pkey</span> <span class="k">AFTER</span> <span class="k">INSERT</span> <span class="k">OR</span> <span class="k">UPDATE</span> <span class="k">ON</span> <span class="n">child4</span>
-     <span class="k">DEFERRABLE</span> <span class="k">INITIALLY</span> <span class="k">IMMEDIATE</span> <span class="k">FOR</span> <span class="k">EACH</span> <span class="k">ROW</span> <span class="k">EXECUTE</span> <span class="k">PROCEDURE</span> <span class="k">public</span><span class="p">.</span><span class="n">master_id_pkey</span><span class="p">();</span></code></pre></figure>
+     <span class="k">DEFERRABLE</span> <span class="k">INITIALLY</span> <span class="k">IMMEDIATE</span> <span class="k">FOR</span> <span class="k">EACH</span> <span class="k">ROW</span> <span class="k">EXECUTE</span> <span class="k">PROCEDURE</span> <span class="k">public</span><span class="p">.</span><span class="n">master_id_pkey</span><span class="p">();</span></code></pre></div>
 
 <p>The <code>INITIALLY IMMEDIATE</code> means the trigger constraint will be executed right
 after the related statement. The opposite <code>DEFERRED</code> behavior fire the trigger
 at the very end of the transaction unless the user decide to <code>SET CONSTRAINTS {
 ALL | name [, ...] } IMMEDIATE</code> somewhere during the transaction.</p>
 
-<p>##Defering the trigger to avoid the race condition ?</p>
+<h2 id="defering-the-trigger-to-avoid-the-race-condition-">Defering the trigger to avoid the race condition ?</h2>
 
 <p>Now, if you step back a second to look at what we have, you might wonder if
 forcing our constraints triggers to be <code>DEFERRABLE INITIALLY DEFERRED</code> would
@@ -317,7 +317,7 @@ close enough to break things. It is pretty easy to prove with the following
 bash loop hammering each partitions with 100 INSERTs with colliding values as
 PK. Note that the triggers has been altered to <code>INITIALLY DEFERRED</code>:</p>
 
-<figure class="highlight"><pre><code class="language-console" data-lang="console"><span></span><span class="gp">$</span> psql -c <span class="s1">&#39;\d child*&#39;</span> part <span class="p">|</span> grep children_id_pkey
+<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="gp">$</span> psql -c <span class="s1">&#39;\d child*&#39;</span> part <span class="p">|</span> grep children_id_pkey
 <span class="go">    children_id_pkey AFTER INSERT OR UPDATE ON child0 DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE PROCEDURE master_id_pkey()</span>
 <span class="go">    children_id_pkey AFTER INSERT OR UPDATE ON child1 DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE PROCEDURE master_id_pkey()</span>
 <span class="go">    children_id_pkey AFTER INSERT OR UPDATE ON child2 DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE PROCEDURE master_id_pkey()</span>
@@ -326,7 +326,7 @@ PK. Note that the triggers has been altered to <code>INITIALLY DEFERRED</code>:<
 
 <span class="gp">$</span> psql -c <span class="s1">&#39;truncate master cascade&#39;</span> part
 
-<span class="gp">$</span> <span class="k">for</span> i in <span class="o">{</span><span class="m">1</span>..100<span class="o">}</span><span class="p">;</span> <span class="k">do</span>
+<span class="gp">$</span> <span class="k">for</span> i in <span class="o">{</span>1..100<span class="o">}</span><span class="p">;</span> <span class="k">do</span>
 <span class="gp">&gt;</span>   psql -c <span class="s2">&quot;INSERT INTO child0 (id, comment) SELECT count(*)+1, &#39;duplicated ?&#39; FROM master&quot;</span> part <span class="p">&amp;</span>
 <span class="gp">&gt;</span>   psql -c <span class="s2">&quot;INSERT INTO child1 (id, comment) SELECT count(*)+1, &#39;duplicated ?&#39; FROM master&quot;</span> part <span class="p">&amp;</span>
 <span class="gp">&gt;</span>   psql -c <span class="s2">&quot;INSERT INTO child2 (id, comment) SELECT count(*)+1, &#39;duplicated ?&#39; FROM master&quot;</span> part <span class="p">&amp;</span>
@@ -347,7 +347,7 @@ PK. Note that the triggers has been altered to <code>INITIALLY DEFERRED</code>:<
 <span class="go">   149 |       1 |   209</span>
 <span class="go">    23 |       2 |   209</span>
 <span class="go">     3 |       3 |   209</span>
-<span class="go">     1 |       5 |   209</span></code></pre></figure>
+<span class="go">     1 |       5 |   209</span></code></pre></div>
 
 <p>Well, that’s pretty bad, we have a bunch of duplicated key. 23 of them appear
 in two different partitions, three others in three different partitions and
@@ -356,12 +356,12 @@ scenario. Note that on 500 inserts, only 209 survived in total. That makes 291
 exceptions raised out of 324 expected, counting the duplicated keys that were
 not caught.</p>
 
-<p>##Isolation level?</p>
+<h2 id="isolation-level">Isolation level?</h2>
 
 <p>Well, last chance. If this many transactions were committed in the exact same
 time, maybe we can force them to serialize with isolation level <code>SERIALIZABLE</code>?</p>
 
-<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span></span><span class="k">ALTER</span> <span class="k">DATABASE</span> <span class="n">part</span> <span class="k">SET</span> <span class="n">default_transaction_isolation</span> <span class="k">TO</span> <span class="k">SERIALIZABLE</span></code></pre></figure>
+<div class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">ALTER</span> <span class="k">DATABASE</span> <span class="n">part</span> <span class="k">SET</span> <span class="n">default_transaction_isolation</span> <span class="k">TO</span> <span class="k">SERIALIZABLE</span></code></pre></div>
 
 <p>After applying the preceding query, I re-ran the same scenario as the previous
 test: only 76 rows survived out of the 500 INSERTs, all of them unique. At
@@ -372,10 +372,10 @@ transactions are virtually serialized or rollback’ed. Log file confirms a lot
 of serialization conflicts were raised, grep’ing the log file shows 415
 serialization exceptions and only 9 from our trigger:</p>
 
-<figure class="highlight"><pre><code class="language-text" data-lang="text"><span></span>ERROR:  could not serialize access due to read/write dependencies among transactions
+<div class="highlight"><pre><code class="language-text" data-lang="text">ERROR:  could not serialize access due to read/write dependencies among transactions
 DETAIL:  Reason code: Canceled on identification as a pivot, during conflict in checking.
 HINT:  The transaction might succeed if retried.
-STATEMENT:  INSERT INTO child3 (id, comment) SELECT count(*)+1, &#39;duplicated ?&#39; FROM master</code></pre></figure>
+STATEMENT:  INSERT INTO child3 (id, comment) SELECT count(*)+1, &#39;duplicated ?&#39; FROM master</code></pre></div>
 
 <p>This solution work, but having to stay in SERIALIZABLE mode to achieve our goal
 is a heavy constraint to carry. Moreover, we have the same problem than with
@@ -383,7 +383,7 @@ DEFERRED triggers: as a simple user can change its isolation level, any bug in
 the application or not informed user can lead to scenarios with silent
 duplications. Fortunately, another simpler and safer solution exist.</p>
 
-<p>##Real solution: adding locks</p>
+<h2 id="real-solution-adding-locks">Real solution: adding locks</h2>
 
 <p>The <code>SERIALIZABLE</code> solution works because to emulate serial transaction
 execution for all transactions, it takes <strong>predicate locks</strong> behind the scene
@@ -403,36 +403,36 @@ the documentation says: «It is up to the application to use them correctly».</
 <p>The idea now is simply to acquire an advisory lock on the same value as NEW.id
 in the trigger function. It should do the trick, cleanly, safely:</p>
 
-<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span></span><span class="k">CREATE</span> <span class="k">OR</span> <span class="k">REPLACE</span> <span class="k">FUNCTION</span> <span class="k">public</span><span class="p">.</span><span class="n">master_id_pkey</span><span class="p">()</span>
+<div class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">CREATE</span> <span class="k">OR</span> <span class="k">REPLACE</span> <span class="k">FUNCTION</span> <span class="k">public</span><span class="p">.</span><span class="n">master_id_pkey</span><span class="p">()</span>
  <span class="k">RETURNS</span> <span class="k">trigger</span>
  <span class="k">LANGUAGE</span> <span class="n">plpgsql</span>
 <span class="k">AS</span> <span class="err">$</span><span class="k">function</span><span class="err">$</span>
 <span class="k">BEGIN</span>
   <span class="n">PERFORM</span> <span class="n">pg_advisory_xact_lock</span><span class="p">(</span><span class="k">NEW</span><span class="p">.</span><span class="n">id</span><span class="p">);</span>
 
-  <span class="k">IF</span> <span class="k">count</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">FROM</span> <span class="n">master</span> <span class="k">WHERE</span> <span class="n">id</span> <span class="o">=</span> <span class="k">NEW</span><span class="p">.</span><span class="n">id</span> <span class="k">THEN</span>
+  <span class="n">IF</span> <span class="k">count</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">FROM</span> <span class="n">master</span> <span class="k">WHERE</span> <span class="n">id</span> <span class="o">=</span> <span class="k">NEW</span><span class="p">.</span><span class="n">id</span> <span class="k">THEN</span>
      <span class="n">RAISE</span> <span class="k">EXCEPTION</span> <span class="s1">&#39;duplicate key value violates unique constraint &quot;%&quot; ON &quot;%&quot;&#39;</span><span class="p">,</span> 
       <span class="n">TG_NAME</span><span class="p">,</span> <span class="n">TG_TABLE_NAME</span> 
       <span class="k">USING</span> <span class="n">DETAIL</span> <span class="o">=</span> <span class="n">format</span><span class="p">(</span><span class="s1">&#39;Key (id)=(%s) already exists.&#39;</span><span class="p">,</span> <span class="k">NEW</span><span class="p">.</span><span class="n">id</span><span class="p">);</span>
-  <span class="k">END</span> <span class="k">IF</span><span class="p">;</span>
+  <span class="k">END</span> <span class="n">IF</span><span class="p">;</span>
 
   <span class="k">RETURN</span> <span class="k">NULL</span><span class="p">;</span>
 <span class="k">END</span>
-<span class="err">$</span><span class="k">function</span><span class="err">$</span><span class="p">;</span></code></pre></figure>
+<span class="err">$</span><span class="k">function</span><span class="err">$</span><span class="p">;</span></code></pre></div>
 
 <p>And with this version of <code>master_id_pkey()</code>, in “read committed” isolation
 level, here is result of the same scenario as in the previous chapter,
 executing 500 INSERTs concurrently with conflicting keys:</p>
 
-<figure class="highlight"><pre><code class="language-console" data-lang="console"><span></span><span class="gp">$</span> psql -f /tmp/count_duplicated_id.sql part
+<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="gp">$</span> psql -f /tmp/count_duplicated_id.sql part
 <span class="go"> count | appears | total </span>
 <span class="go">-------+---------+-------</span>
 <span class="go">    85 |       1 |    85 </span>
-<span class="go">(1 row)</span></code></pre></figure>
+<span class="go">(1 row)</span></code></pre></div>
 
 <p>Sounds good. What about a small pgbench scenario?</p>
 
-<figure class="highlight"><pre><code class="language-console" data-lang="console"><span></span><span class="gp">$</span> cat /tmp/scenario_id.sql 
+<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="gp">$</span> cat /tmp/scenario_id.sql 
 <span class="go">\setrandom part 0 4</span>
 <span class="go">DO $func$ BEGIN EXECUTE format(&#39;INSERT INTO child%s (id, comment) SELECT count(*)+1, $1 FROM master&#39;, :part) USING &#39;duplicated ?&#39;; EXCEPTION WHEN OTHERS THEN RAISE LOG &#39;Duplicate exception caught!&#39;; END $func$;</span>
 
@@ -456,7 +456,7 @@ executing 500 INSERTs concurrently with conflicting keys:</p>
 <span class="go"> 48351 |       1 | 48351</span>
 
 <span class="gp">$</span> grep -c <span class="s2">&quot;LOG:  Duplicate&quot;</span> <span class="nv">$LOGFILE</span>
-<span class="go">82557</span></code></pre></figure>
+<span class="go">82557</span></code></pre></div>
 
 <p>After this 5 minute run with 5 workers inserting as fast as they can highly
 conflicting data, we have 48,351 rows in the partitions, 82,557 conflicting
@@ -475,25 +475,25 @@ on a normal table as well, right?</p>
 <p>Wow, at last, finished. What? No? I can hear you thinking it only applies on
 integers. OK, bonus.</p>
 
-<p>##Supporting other types</p>
+<h2 id="supporting-other-types">Supporting other types</h2>
 
 <p>Supporting unique constraint on integers was straightforward using advisory
 locks. But how can this applies to other types? Like text for instance ? Easy:
 hash it<sup id="fnref:1"><a href="#fn:1" class="footnote">1</a></sup>! For the purpose of this last chapter, lets add a unique constraint
 on <code>comment</code>:</p>
 
-<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span></span><span class="k">CREATE</span> <span class="k">OR</span> <span class="k">REPLACE</span> <span class="k">FUNCTION</span> <span class="k">public</span><span class="p">.</span><span class="n">master_comment_unq</span><span class="p">()</span>
+<div class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">CREATE</span> <span class="k">OR</span> <span class="k">REPLACE</span> <span class="k">FUNCTION</span> <span class="k">public</span><span class="p">.</span><span class="n">master_comment_unq</span><span class="p">()</span>
  <span class="k">RETURNS</span> <span class="k">trigger</span>
  <span class="k">LANGUAGE</span> <span class="n">plpgsql</span>
 <span class="k">AS</span> <span class="err">$</span><span class="k">function</span><span class="err">$</span>
 <span class="k">BEGIN</span>
   <span class="n">PERFORM</span> <span class="n">pg_advisory_xact_lock</span><span class="p">(</span><span class="n">hashtext</span><span class="p">(</span><span class="k">NEW</span><span class="p">.</span><span class="k">comment</span><span class="p">));</span>
 
-  <span class="k">IF</span> <span class="k">count</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">FROM</span> <span class="n">master</span> <span class="k">WHERE</span> <span class="k">comment</span> <span class="o">=</span> <span class="k">NEW</span><span class="p">.</span><span class="k">comment</span> <span class="k">THEN</span>
+  <span class="n">IF</span> <span class="k">count</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">FROM</span> <span class="n">master</span> <span class="k">WHERE</span> <span class="k">comment</span> <span class="o">=</span> <span class="k">NEW</span><span class="p">.</span><span class="k">comment</span> <span class="k">THEN</span>
     <span class="n">RAISE</span> <span class="k">EXCEPTION</span> <span class="s1">&#39;duplicate key value violates unique constraint &quot;%&quot; ON &quot;%&quot;&#39;</span><span class="p">,</span> 
       <span class="n">TG_NAME</span><span class="p">,</span> <span class="n">TG_TABLE_NAME</span>
       <span class="k">USING</span> <span class="n">DETAIL</span> <span class="o">=</span> <span class="n">format</span><span class="p">(</span><span class="s1">&#39;Key (comment)=(%L) already exists.&#39;</span><span class="p">,</span> <span class="k">NEW</span><span class="p">.</span><span class="k">comment</span><span class="p">);</span>
-  <span class="k">END</span> <span class="k">IF</span><span class="p">;</span>
+  <span class="k">END</span> <span class="n">IF</span><span class="p">;</span>
 
   <span class="k">RETURN</span> <span class="k">NULL</span><span class="p">;</span>
 <span class="k">END</span>
@@ -503,7 +503,7 @@ on <code>comment</code>:</p>
   <span class="k">DEFERRABLE</span> <span class="k">INITIALLY</span> <span class="k">IMMEDIATE</span> <span class="k">FOR</span> <span class="k">EACH</span> <span class="k">ROW</span> <span class="k">EXECUTE</span> <span class="k">PROCEDURE</span> <span class="k">public</span><span class="p">.</span><span class="n">master_comment_unq</span><span class="p">();</span>
 <span class="c1">-- [...]</span>
 <span class="k">CREATE</span> <span class="k">CONSTRAINT</span> <span class="k">TRIGGER</span> <span class="n">children_comment_unq</span> <span class="k">AFTER</span> <span class="k">INSERT</span> <span class="k">OR</span> <span class="k">UPDATE</span> <span class="k">ON</span> <span class="n">child4</span>
-  <span class="k">DEFERRABLE</span> <span class="k">INITIALLY</span> <span class="k">IMMEDIATE</span> <span class="k">FOR</span> <span class="k">EACH</span> <span class="k">ROW</span> <span class="k">EXECUTE</span> <span class="k">PROCEDURE</span> <span class="k">public</span><span class="p">.</span><span class="n">master_comment_unq</span><span class="p">();</span></code></pre></figure>
+  <span class="k">DEFERRABLE</span> <span class="k">INITIALLY</span> <span class="k">IMMEDIATE</span> <span class="k">FOR</span> <span class="k">EACH</span> <span class="k">ROW</span> <span class="k">EXECUTE</span> <span class="k">PROCEDURE</span> <span class="k">public</span><span class="p">.</span><span class="n">master_comment_unq</span><span class="p">();</span></code></pre></div>
 
 <p>If you followed this far, no need to play the “find the error game” to identify
 what’s the most important change here. The lock is taken on the result of the
@@ -526,7 +526,7 @@ memory, write in an unlogged table (erk), whatever you want.</p>
 
 <p>Time to test now.</p>
 
-<figure class="highlight"><pre><code class="language-console" data-lang="console"><span></span><span class="gp">$</span> cat /tmp/scenario_comment.sql 
+<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="gp">$</span> cat /tmp/scenario_comment.sql 
 <span class="go">\setrandom part 0 4</span>
 <span class="go">DO $func$ BEGIN EXECUTE format(&#39;INSERT INTO child%s (comment) SELECT &#39;&#39;duplicated &#39;&#39;||count(1) from master&#39;, :part); EXCEPTION WHEN OTHERS THEN RAISE LOG &#39;Duplicate exception caught!&#39;; END $func$;</span>
 
@@ -554,14 +554,14 @@ memory, write in an unlogged table (erk), whatever you want.</p>
 <span class="gp">&gt;</span><span class="s"> EOQ</span>
 <span class="go"> count | appears | total </span>
 <span class="go">-------+---------+-------</span>
-<span class="go"> 29785 |       1 | 29785</span></code></pre></figure>
+<span class="go"> 29785 |       1 | 29785</span></code></pre></div>
 
 <p>Wow (again), only 29,785 rows out of 93,902 transactions escaped of that
 intense-colliding scenario. And we only find unique values across all
 partitions, as expected. Aaaaand grep-ing from the log file, I can find 64,117
 rejected rows…</p>
 
-<p>##Conclusion</p>
+<h2 id="conclusion">Conclusion</h2>
 
 <p>Such a long way already. Thank you for reading so far. At first I thought I
 could write about unique and foreign keys in the same article, but look at what

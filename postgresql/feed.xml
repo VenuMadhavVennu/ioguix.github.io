@@ -7,56 +7,6 @@
     <atom:link href="http://blog.ioguix.net/postgresql/feed.xml" rel="self" type="application/rss+xml" />
     
     <item>
-      <title>PAF 2.2 rc1 released</title>
-      <description>&lt;p&gt;The first release candidate of the PAF resource agent for Pacemaker has been
-released yesterday.&lt;/p&gt;
-
-&lt;p&gt;The changelog since 2.1 includes:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;new: support PostgreSQL 10&lt;/li&gt;
-  &lt;li&gt;new: add the maxlag parameter to exclude lagging slaves from promotion, 
-Thomas Reiss&lt;/li&gt;
-  &lt;li&gt;new: support for multiple pgsqlms resources in the same cluster&lt;/li&gt;
-  &lt;li&gt;new: provide comprehensive error messages to crm_mon&lt;/li&gt;
-  &lt;li&gt;fix: follow the resource agent man page naming policy and section&lt;/li&gt;
-  &lt;li&gt;fix: add documentation to the pgsqlms man page&lt;/li&gt;
-  &lt;li&gt;fix: do not rely on crm_failcount, suggested on the clusterlabs lists&lt;/li&gt;
-  &lt;li&gt;misc: improve the RPM packaging&lt;/li&gt;
-  &lt;li&gt;misc: check Pacemaker compatibility and resource setup&lt;/li&gt;
-  &lt;li&gt;misc: improve the election process by including timelines comparison&lt;/li&gt;
-  &lt;li&gt;misc: various code cleanup, factorization and module improvement&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;But I have some other great news as well. First, various documentation pages
-has been updated:&lt;/p&gt;
-&lt;ul&gt;
-  &lt;li&gt;the Debian cookbook catched up with the CentOS one&lt;/li&gt;
-  &lt;li&gt;quick starts has been updated and improved&lt;/li&gt;
-  &lt;li&gt;a new quick start for Debian 9 has been added (spoiler: crmsh is much better
-supported under Debian)&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;See &lt;a href=&quot;&quot;&gt;http://dalibo.github.io/PAF/documentation.html&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;Second, PAF packages are now available in the yum PGDG repository thanks to
-Devrim! It currently delivers 2.1 or 1.1 depending on your distro, but will
-delivers 2.2 as soon as it is officially released.&lt;/p&gt;
-
-&lt;p&gt;Moreover, 2.2 is currently in the pgdg-testing repositories of
-&lt;a href=&quot;&quot;&gt;http://apt.postgresql.org&lt;/a&gt;. It will hit the stable ones after its official
-release as well. Thank you Adrian Vondendriesch for your help and patches!&lt;/p&gt;
-
-&lt;p&gt;Of course, any kind of feedback or contribution is welcomed.&lt;/p&gt;
-
-&lt;p&gt;Cheers!&lt;/p&gt;
-</description>
-      <pubDate>Wed, 30 Aug 2017 14:00:00 +0200</pubDate>
-      <link>http://blog.ioguix.net/postgresql/2017/08/30/PAF-2-2-rc1-released.html</link>
-      <guid isPermaLink="true">http://blog.ioguix.net/postgresql/2017/08/30/PAF-2-2-rc1-released.html</guid>
-    </item>
-    
-    <item>
       <title>PAF, auto failover and more at PGConf.eu 2016</title>
       <description>&lt;p&gt;You will find the slides of my talk here: &lt;a href=&quot;http://www.dalibo.org/_media/2016-pgconfeu-paf.html.gz&quot;&gt;http://www.dalibo.org/_media/2016-pgconfeu-paf.html.gz&lt;/a&gt;&lt;/p&gt;
 
@@ -79,7 +29,7 @@ documentation: &lt;a href=&quot;http://dalibo.github.io/PAF/Quick_Start-CentOS-7
     
     <item>
       <title>New repository for bloat estimation queries</title>
-      <description>&lt;p&gt;##New repository&lt;/p&gt;
+      <description>&lt;h2 id=&quot;new-repository&quot;&gt;New repository&lt;/h2&gt;
 
 &lt;p&gt;It’s been almost a year now that I wrote the first version of the btree bloat
 estimation query.  Then, came the first fixes, the bloat estimation queries for
@@ -96,7 +46,7 @@ pull requests.  Another way to help is to discuss your results or report bugs
 by opening &lt;a href=&quot;https://github.com/ioguix/pgsql-bloat-estimation/issues&quot;&gt;issues&lt;/a&gt;.
 This can lead to bug fixes or the creation of a FAQ.&lt;/p&gt;
 
-&lt;p&gt;##Changelog&lt;/p&gt;
+&lt;h2 id=&quot;changelog&quot;&gt;Changelog&lt;/h2&gt;
 
 &lt;p&gt;Here is a quick changelog since my
 &lt;a href=&quot;/postgresql/2014/11/03/Btree-bloat-query-part-4.html&quot;&gt;last post about bloat&lt;/a&gt;:&lt;/p&gt;
@@ -150,7 +100,7 @@ constraint across all partitions of a table. Next one covers how to reference a
 partitioned table. And maybe some other depending on the motivation,
 inspiration and feedback.&lt;/p&gt;
 
-&lt;p&gt;##Study case&lt;/p&gt;
+&lt;h2 id=&quot;study-case&quot;&gt;Study case&lt;/h2&gt;
 
 &lt;p&gt;I chose to illustrate this article with a table partitioned by date range. This
 is a fairly frequent practice and adapting this article to another partitioning
@@ -167,9 +117,9 @@ values residing in different partitions. Exactly what we really want to avoid.&l
 &lt;p&gt;So here is the dummy schema with table &lt;code&gt;master&lt;/code&gt; partitioned across 5 childs
 using a date range key partitioning &lt;code&gt;ts&lt;/code&gt;.&lt;/p&gt;
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-sql&quot; data-lang=&quot;sql&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;BEGIN&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-sql&quot; data-lang=&quot;sql&quot;&gt;&lt;span class=&quot;k&quot;&gt;BEGIN&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 
-&lt;span class=&quot;k&quot;&gt;DROP&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;IF&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;EXISTS&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;master&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;DROP&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;IF&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;EXISTS&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;master&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
   &lt;span class=&quot;n&quot;&gt;child0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;child1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;child2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;child3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;child4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 
 &lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;master&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
@@ -221,30 +171,30 @@ using a date range key partitioning &lt;code&gt;ts&lt;/code&gt;.&lt;/p&gt;
 &lt;span class=&quot;k&quot;&gt;ALTER&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;child4&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;ALTER&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ts&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;SET&lt;/span&gt;
   &lt;span class=&quot;k&quot;&gt;DEFAULT&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;TIMESTAMPTZ&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;2014-01-01 00:00:00&amp;#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;random&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;31449600&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)::&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;INTERVAL&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;1s&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 
-&lt;span class=&quot;k&quot;&gt;COMMIT&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;span class=&quot;k&quot;&gt;COMMIT&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;The &lt;code&gt;SET DEFAULT&lt;/code&gt; are only there to keep other commands simple to read. Note
 that I do not create the trigger on INSERT and UPDATE on the master table. This
 is out of the scope of this article, will not be needed and add no challenge to
 the subject.&lt;/p&gt;
 
-&lt;p&gt;##The naive solution&lt;/p&gt;
+&lt;h2 id=&quot;the-naive-solution&quot;&gt;The naive solution&lt;/h2&gt;
 
 &lt;p&gt;Of course, the whole trick revolves around triggers. We have to check the
 uniqueness of a PK value across all partitions after any INSERT or UPDATE on
 any of them, for each rows. Let’s dive in and get wet with a first naive
 version of such a trigger:&lt;/p&gt;
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-sql&quot; data-lang=&quot;sql&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;OR&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;REPLACE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;FUNCTION&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;master_id_pkey&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; 
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-sql&quot; data-lang=&quot;sql&quot;&gt;&lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;OR&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;REPLACE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;FUNCTION&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;master_id_pkey&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; 
   &lt;span class=&quot;k&quot;&gt;RETURNS&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;trigger&lt;/span&gt; 
   &lt;span class=&quot;k&quot;&gt;LANGUAGE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;plpgsql&lt;/span&gt; 
 &lt;span class=&quot;k&quot;&gt;AS&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;$$&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;BEGIN&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;IF&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;count&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;FROM&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;master&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;WHERE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;id&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;NEW&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;id&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;THEN&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;IF&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;count&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;FROM&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;master&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;WHERE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;id&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;NEW&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;id&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;THEN&lt;/span&gt;
     &lt;span class=&quot;n&quot;&gt;RAISE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;EXCEPTION&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;duplicate key value violates unique constraint &amp;quot;%&amp;quot; ON &amp;quot;%&amp;quot;&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; 
       &lt;span class=&quot;n&quot;&gt;TG_NAME&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;TG_TABLE_NAME&lt;/span&gt; 
       &lt;span class=&quot;k&quot;&gt;USING&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;DETAIL&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;Key (id)=(%s) already exists.&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;NEW&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;END&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;IF&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;END&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;IF&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 
   &lt;span class=&quot;k&quot;&gt;RETURN&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;NULL&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;END&lt;/span&gt;
@@ -261,14 +211,14 @@ version of such a trigger:&lt;/p&gt;
 &lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TRIGGER&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;children_id_pkey&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;AFTER&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;INSERT&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;OR&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;UPDATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;ON&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;child3&lt;/span&gt;
      &lt;span class=&quot;k&quot;&gt;FOR&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;EACH&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;ROW&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;EXECUTE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;PROCEDURE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;master_id_pkey&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TRIGGER&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;children_id_pkey&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;AFTER&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;INSERT&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;OR&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;UPDATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;ON&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;child4&lt;/span&gt;
-     &lt;span class=&quot;k&quot;&gt;FOR&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;EACH&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;ROW&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;EXECUTE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;PROCEDURE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;master_id_pkey&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+     &lt;span class=&quot;k&quot;&gt;FOR&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;EACH&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;ROW&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;EXECUTE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;PROCEDURE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;master_id_pkey&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;Obviously, each partition need the trigger to check that the PK value it is
 about to write does not already exist in one of its siblings. The trigger
 function itself is quite easy to understand: if we find a row with the same
 value as the PK, raise an exception. Tests sounds promising:&lt;/p&gt;
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-psql&quot; data-lang=&quot;psql&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&quot;gp&quot;&gt;=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;INSERT&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;INTO&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;child0&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;comment&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;VALUES&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;test 1&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-psql&quot; data-lang=&quot;psql&quot;&gt;&lt;span class=&quot;gp&quot;&gt;=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;INSERT&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;INTO&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;child0&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;comment&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;VALUES&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;test 1&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
 &lt;span class=&quot;gp&quot;&gt;=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;INSERT&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;INTO&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;child1&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;comment&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;VALUES&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;test 2&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
 &lt;span class=&quot;gp&quot;&gt;=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;INSERT&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;INTO&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;child2&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;comment&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;VALUES&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;test 3&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
 &lt;span class=&quot;gp&quot;&gt;=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;INSERT&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;INTO&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;child3&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;comment&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;VALUES&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;test 4&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
@@ -287,13 +237,13 @@ value as the PK, raise an exception. Tests sounds promising:&lt;/p&gt;
 &lt;span class=&quot;gp&quot;&gt;=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;BEGIN&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 &lt;span class=&quot;gp&quot;&gt;=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;INSERT&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;INTO&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;child0&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;comment&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;VALUES&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;test 6&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
 &lt;span class=&quot;gs&quot;&gt;ERROR:&lt;/span&gt;&lt;span class=&quot;gr&quot;&gt;  duplicate key value violates unique constraint &amp;quot;children_id_pkey&amp;quot; ON &amp;quot;child0&amp;quot;&lt;/span&gt;
-&lt;span class=&quot;gs&quot;&gt;DETAIL:&lt;/span&gt;&lt;span class=&quot;gr&quot;&gt;  Key (id)=(5) already exists.&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;span class=&quot;gs&quot;&gt;DETAIL:&lt;/span&gt;&lt;span class=&quot;gr&quot;&gt;  Key (id)=(5) already exists.&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;OK, it works like expected. But there is two big issues with this situation.
 The first one is that a race condition involving two transactions or more is
 able to break our home made unique constraint:&lt;/p&gt;
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-psql&quot; data-lang=&quot;psql&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&quot;gp&quot;&gt;session 1=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;BEGIN&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-psql&quot; data-lang=&quot;psql&quot;&gt;&lt;span class=&quot;gp&quot;&gt;session 1=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;BEGIN&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt;BEGIN&lt;/span&gt;
 
 &lt;span class=&quot;gp&quot;&gt;session 2=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;BEGIN&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
@@ -310,7 +260,7 @@ able to break our home made unique constraint:&lt;/p&gt;
 &lt;span class=&quot;go&quot;&gt; tableoid | id |  dummy   | comment |           ts           &lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt;----------+----+----------+---------+------------------------&lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt; child0   |  6 | 28510860 | test 6  | 2010-01-08 17:36:39+01&lt;/span&gt;
-&lt;span class=&quot;go&quot;&gt; child1   |  6 |  2188136 | test 7  | 2011-07-15 07:13:59+02&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;span class=&quot;go&quot;&gt; child1   |  6 |  2188136 | test 7  | 2011-07-15 07:13:59+02&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;The second issue is that real constraints can be deferred, which means
 constraints are disabled during a transaction and enforced on user request and
@@ -327,12 +277,12 @@ pages.&lt;/p&gt;
 &lt;p&gt;Yes, documentation says triggers can be deferred when defined as
 &lt;code&gt;CONSTRAINT TRIGGER&lt;/code&gt;. So we can solve this issue by recreating our triggers:&lt;/p&gt;
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-sql&quot; data-lang=&quot;sql&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;DROP&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TRIGGER&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;IF&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;EXISTS&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;children_id_pkey&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;ON&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;master&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;DROP&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TRIGGER&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;IF&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;EXISTS&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;children_id_pkey&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;ON&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;child0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;DROP&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TRIGGER&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;IF&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;EXISTS&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;children_id_pkey&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;ON&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;child1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;DROP&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TRIGGER&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;IF&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;EXISTS&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;children_id_pkey&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;ON&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;child2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;DROP&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TRIGGER&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;IF&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;EXISTS&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;children_id_pkey&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;ON&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;child3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;DROP&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TRIGGER&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;IF&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;EXISTS&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;children_id_pkey&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;ON&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;child4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-sql&quot; data-lang=&quot;sql&quot;&gt;&lt;span class=&quot;k&quot;&gt;DROP&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TRIGGER&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;IF&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;EXISTS&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;children_id_pkey&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;ON&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;master&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;DROP&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TRIGGER&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;IF&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;EXISTS&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;children_id_pkey&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;ON&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;child0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;DROP&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TRIGGER&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;IF&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;EXISTS&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;children_id_pkey&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;ON&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;child1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;DROP&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TRIGGER&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;IF&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;EXISTS&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;children_id_pkey&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;ON&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;child2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;DROP&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TRIGGER&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;IF&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;EXISTS&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;children_id_pkey&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;ON&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;child3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;DROP&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TRIGGER&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;IF&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;EXISTS&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;children_id_pkey&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;ON&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;child4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;CONSTRAINT&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TRIGGER&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;children_id_pkey&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;AFTER&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;INSERT&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;OR&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;UPDATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;ON&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;master&lt;/span&gt;
      &lt;span class=&quot;k&quot;&gt;DEFERRABLE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;INITIALLY&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;IMMEDIATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;FOR&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;EACH&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;ROW&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;EXECUTE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;PROCEDURE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;master_id_pkey&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;CONSTRAINT&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TRIGGER&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;children_id_pkey&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;AFTER&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;INSERT&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;OR&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;UPDATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;ON&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;child0&lt;/span&gt;
@@ -344,14 +294,14 @@ pages.&lt;/p&gt;
 &lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;CONSTRAINT&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TRIGGER&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;children_id_pkey&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;AFTER&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;INSERT&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;OR&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;UPDATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;ON&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;child3&lt;/span&gt;
      &lt;span class=&quot;k&quot;&gt;DEFERRABLE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;INITIALLY&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;IMMEDIATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;FOR&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;EACH&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;ROW&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;EXECUTE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;PROCEDURE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;master_id_pkey&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;CONSTRAINT&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TRIGGER&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;children_id_pkey&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;AFTER&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;INSERT&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;OR&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;UPDATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;ON&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;child4&lt;/span&gt;
-     &lt;span class=&quot;k&quot;&gt;DEFERRABLE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;INITIALLY&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;IMMEDIATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;FOR&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;EACH&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;ROW&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;EXECUTE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;PROCEDURE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;master_id_pkey&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+     &lt;span class=&quot;k&quot;&gt;DEFERRABLE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;INITIALLY&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;IMMEDIATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;FOR&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;EACH&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;ROW&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;EXECUTE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;PROCEDURE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;master_id_pkey&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;The &lt;code&gt;INITIALLY IMMEDIATE&lt;/code&gt; means the trigger constraint will be executed right
 after the related statement. The opposite &lt;code&gt;DEFERRED&lt;/code&gt; behavior fire the trigger
 at the very end of the transaction unless the user decide to &lt;code&gt;SET CONSTRAINTS {
 ALL | name [, ...] } IMMEDIATE&lt;/code&gt; somewhere during the transaction.&lt;/p&gt;
 
-&lt;p&gt;##Defering the trigger to avoid the race condition ?&lt;/p&gt;
+&lt;h2 id=&quot;defering-the-trigger-to-avoid-the-race-condition-&quot;&gt;Defering the trigger to avoid the race condition ?&lt;/h2&gt;
 
 &lt;p&gt;Now, if you step back a second to look at what we have, you might wonder if
 forcing our constraints triggers to be &lt;code&gt;DEFERRABLE INITIALLY DEFERRED&lt;/code&gt; would
@@ -374,7 +324,7 @@ close enough to break things. It is pretty easy to prove with the following
 bash loop hammering each partitions with 100 INSERTs with colliding values as
 PK. Note that the triggers has been altered to &lt;code&gt;INITIALLY DEFERRED&lt;/code&gt;:&lt;/p&gt;
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-console&quot; data-lang=&quot;console&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&quot;gp&quot;&gt;$&lt;/span&gt; psql -c &lt;span class=&quot;s1&quot;&gt;&amp;#39;\d child*&amp;#39;&lt;/span&gt; part &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; grep children_id_pkey
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-console&quot; data-lang=&quot;console&quot;&gt;&lt;span class=&quot;gp&quot;&gt;$&lt;/span&gt; psql -c &lt;span class=&quot;s1&quot;&gt;&amp;#39;\d child*&amp;#39;&lt;/span&gt; part &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; grep children_id_pkey
 &lt;span class=&quot;go&quot;&gt;    children_id_pkey AFTER INSERT OR UPDATE ON child0 DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE PROCEDURE master_id_pkey()&lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt;    children_id_pkey AFTER INSERT OR UPDATE ON child1 DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE PROCEDURE master_id_pkey()&lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt;    children_id_pkey AFTER INSERT OR UPDATE ON child2 DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE PROCEDURE master_id_pkey()&lt;/span&gt;
@@ -383,7 +333,7 @@ PK. Note that the triggers has been altered to &lt;code&gt;INITIALLY DEFERRED&lt
 
 &lt;span class=&quot;gp&quot;&gt;$&lt;/span&gt; psql -c &lt;span class=&quot;s1&quot;&gt;&amp;#39;truncate master cascade&amp;#39;&lt;/span&gt; part
 
-&lt;span class=&quot;gp&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; i in &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;..100&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+&lt;span class=&quot;gp&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; i in &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;1..100&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
 &lt;span class=&quot;gp&quot;&gt;&amp;gt;&lt;/span&gt;   psql -c &lt;span class=&quot;s2&quot;&gt;&amp;quot;INSERT INTO child0 (id, comment) SELECT count(*)+1, &amp;#39;duplicated ?&amp;#39; FROM master&amp;quot;&lt;/span&gt; part &lt;span class=&quot;p&quot;&gt;&amp;amp;&lt;/span&gt;
 &lt;span class=&quot;gp&quot;&gt;&amp;gt;&lt;/span&gt;   psql -c &lt;span class=&quot;s2&quot;&gt;&amp;quot;INSERT INTO child1 (id, comment) SELECT count(*)+1, &amp;#39;duplicated ?&amp;#39; FROM master&amp;quot;&lt;/span&gt; part &lt;span class=&quot;p&quot;&gt;&amp;amp;&lt;/span&gt;
 &lt;span class=&quot;gp&quot;&gt;&amp;gt;&lt;/span&gt;   psql -c &lt;span class=&quot;s2&quot;&gt;&amp;quot;INSERT INTO child2 (id, comment) SELECT count(*)+1, &amp;#39;duplicated ?&amp;#39; FROM master&amp;quot;&lt;/span&gt; part &lt;span class=&quot;p&quot;&gt;&amp;amp;&lt;/span&gt;
@@ -404,7 +354,7 @@ PK. Note that the triggers has been altered to &lt;code&gt;INITIALLY DEFERRED&lt
 &lt;span class=&quot;go&quot;&gt;   149 |       1 |   209&lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt;    23 |       2 |   209&lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt;     3 |       3 |   209&lt;/span&gt;
-&lt;span class=&quot;go&quot;&gt;     1 |       5 |   209&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;span class=&quot;go&quot;&gt;     1 |       5 |   209&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;Well, that’s pretty bad, we have a bunch of duplicated key. 23 of them appear
 in two different partitions, three others in three different partitions and
@@ -413,12 +363,12 @@ scenario. Note that on 500 inserts, only 209 survived in total. That makes 291
 exceptions raised out of 324 expected, counting the duplicated keys that were
 not caught.&lt;/p&gt;
 
-&lt;p&gt;##Isolation level?&lt;/p&gt;
+&lt;h2 id=&quot;isolation-level&quot;&gt;Isolation level?&lt;/h2&gt;
 
 &lt;p&gt;Well, last chance. If this many transactions were committed in the exact same
 time, maybe we can force them to serialize with isolation level &lt;code&gt;SERIALIZABLE&lt;/code&gt;?&lt;/p&gt;
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-sql&quot; data-lang=&quot;sql&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;ALTER&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;DATABASE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;part&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;SET&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;default_transaction_isolation&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TO&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;SERIALIZABLE&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-sql&quot; data-lang=&quot;sql&quot;&gt;&lt;span class=&quot;k&quot;&gt;ALTER&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;DATABASE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;part&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;SET&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;default_transaction_isolation&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TO&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;SERIALIZABLE&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;After applying the preceding query, I re-ran the same scenario as the previous
 test: only 76 rows survived out of the 500 INSERTs, all of them unique. At
@@ -429,10 +379,10 @@ transactions are virtually serialized or rollback’ed. Log file confirms a lot
 of serialization conflicts were raised, grep’ing the log file shows 415
 serialization exceptions and only 9 from our trigger:&lt;/p&gt;
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;&lt;span&gt;&lt;/span&gt;ERROR:  could not serialize access due to read/write dependencies among transactions
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;ERROR:  could not serialize access due to read/write dependencies among transactions
 DETAIL:  Reason code: Canceled on identification as a pivot, during conflict in checking.
 HINT:  The transaction might succeed if retried.
-STATEMENT:  INSERT INTO child3 (id, comment) SELECT count(*)+1, &amp;#39;duplicated ?&amp;#39; FROM master&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+STATEMENT:  INSERT INTO child3 (id, comment) SELECT count(*)+1, &amp;#39;duplicated ?&amp;#39; FROM master&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;This solution work, but having to stay in SERIALIZABLE mode to achieve our goal
 is a heavy constraint to carry. Moreover, we have the same problem than with
@@ -440,7 +390,7 @@ DEFERRED triggers: as a simple user can change its isolation level, any bug in
 the application or not informed user can lead to scenarios with silent
 duplications. Fortunately, another simpler and safer solution exist.&lt;/p&gt;
 
-&lt;p&gt;##Real solution: adding locks&lt;/p&gt;
+&lt;h2 id=&quot;real-solution-adding-locks&quot;&gt;Real solution: adding locks&lt;/h2&gt;
 
 &lt;p&gt;The &lt;code&gt;SERIALIZABLE&lt;/code&gt; solution works because to emulate serial transaction
 execution for all transactions, it takes &lt;strong&gt;predicate locks&lt;/strong&gt; behind the scene
@@ -460,36 +410,36 @@ the documentation says: «It is up to the application to use them correctly».&l
 &lt;p&gt;The idea now is simply to acquire an advisory lock on the same value as NEW.id
 in the trigger function. It should do the trick, cleanly, safely:&lt;/p&gt;
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-sql&quot; data-lang=&quot;sql&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;OR&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;REPLACE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;FUNCTION&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;master_id_pkey&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-sql&quot; data-lang=&quot;sql&quot;&gt;&lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;OR&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;REPLACE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;FUNCTION&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;master_id_pkey&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
  &lt;span class=&quot;k&quot;&gt;RETURNS&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;trigger&lt;/span&gt;
  &lt;span class=&quot;k&quot;&gt;LANGUAGE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;plpgsql&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;AS&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;BEGIN&lt;/span&gt;
   &lt;span class=&quot;n&quot;&gt;PERFORM&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pg_advisory_xact_lock&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;NEW&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
 
-  &lt;span class=&quot;k&quot;&gt;IF&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;count&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;FROM&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;master&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;WHERE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;id&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;NEW&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;id&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;THEN&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;IF&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;count&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;FROM&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;master&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;WHERE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;id&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;NEW&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;id&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;THEN&lt;/span&gt;
      &lt;span class=&quot;n&quot;&gt;RAISE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;EXCEPTION&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;duplicate key value violates unique constraint &amp;quot;%&amp;quot; ON &amp;quot;%&amp;quot;&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; 
       &lt;span class=&quot;n&quot;&gt;TG_NAME&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;TG_TABLE_NAME&lt;/span&gt; 
       &lt;span class=&quot;k&quot;&gt;USING&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;DETAIL&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;Key (id)=(%s) already exists.&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;NEW&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;END&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;IF&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;END&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;IF&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 
   &lt;span class=&quot;k&quot;&gt;RETURN&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;NULL&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;END&lt;/span&gt;
-&lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;And with this version of &lt;code&gt;master_id_pkey()&lt;/code&gt;, in “read committed” isolation
 level, here is result of the same scenario as in the previous chapter,
 executing 500 INSERTs concurrently with conflicting keys:&lt;/p&gt;
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-console&quot; data-lang=&quot;console&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&quot;gp&quot;&gt;$&lt;/span&gt; psql -f /tmp/count_duplicated_id.sql part
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-console&quot; data-lang=&quot;console&quot;&gt;&lt;span class=&quot;gp&quot;&gt;$&lt;/span&gt; psql -f /tmp/count_duplicated_id.sql part
 &lt;span class=&quot;go&quot;&gt; count | appears | total &lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt;-------+---------+-------&lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt;    85 |       1 |    85 &lt;/span&gt;
-&lt;span class=&quot;go&quot;&gt;(1 row)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;span class=&quot;go&quot;&gt;(1 row)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;Sounds good. What about a small pgbench scenario?&lt;/p&gt;
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-console&quot; data-lang=&quot;console&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&quot;gp&quot;&gt;$&lt;/span&gt; cat /tmp/scenario_id.sql 
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-console&quot; data-lang=&quot;console&quot;&gt;&lt;span class=&quot;gp&quot;&gt;$&lt;/span&gt; cat /tmp/scenario_id.sql 
 &lt;span class=&quot;go&quot;&gt;\setrandom part 0 4&lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt;DO $func$ BEGIN EXECUTE format(&amp;#39;INSERT INTO child%s (id, comment) SELECT count(*)+1, $1 FROM master&amp;#39;, :part) USING &amp;#39;duplicated ?&amp;#39;; EXCEPTION WHEN OTHERS THEN RAISE LOG &amp;#39;Duplicate exception caught!&amp;#39;; END $func$;&lt;/span&gt;
 
@@ -513,7 +463,7 @@ executing 500 INSERTs concurrently with conflicting keys:&lt;/p&gt;
 &lt;span class=&quot;go&quot;&gt; 48351 |       1 | 48351&lt;/span&gt;
 
 &lt;span class=&quot;gp&quot;&gt;$&lt;/span&gt; grep -c &lt;span class=&quot;s2&quot;&gt;&amp;quot;LOG:  Duplicate&amp;quot;&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$LOGFILE&lt;/span&gt;
-&lt;span class=&quot;go&quot;&gt;82557&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;span class=&quot;go&quot;&gt;82557&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;After this 5 minute run with 5 workers inserting as fast as they can highly
 conflicting data, we have 48,351 rows in the partitions, 82,557 conflicting
@@ -532,25 +482,25 @@ on a normal table as well, right?&lt;/p&gt;
 &lt;p&gt;Wow, at last, finished. What? No? I can hear you thinking it only applies on
 integers. OK, bonus.&lt;/p&gt;
 
-&lt;p&gt;##Supporting other types&lt;/p&gt;
+&lt;h2 id=&quot;supporting-other-types&quot;&gt;Supporting other types&lt;/h2&gt;
 
 &lt;p&gt;Supporting unique constraint on integers was straightforward using advisory
 locks. But how can this applies to other types? Like text for instance ? Easy:
 hash it&lt;sup id=&quot;fnref:1&quot;&gt;&lt;a href=&quot;#fn:1&quot; class=&quot;footnote&quot;&gt;1&lt;/a&gt;&lt;/sup&gt;! For the purpose of this last chapter, lets add a unique constraint
 on &lt;code&gt;comment&lt;/code&gt;:&lt;/p&gt;
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-sql&quot; data-lang=&quot;sql&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;OR&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;REPLACE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;FUNCTION&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;master_comment_unq&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-sql&quot; data-lang=&quot;sql&quot;&gt;&lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;OR&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;REPLACE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;FUNCTION&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;master_comment_unq&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
  &lt;span class=&quot;k&quot;&gt;RETURNS&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;trigger&lt;/span&gt;
  &lt;span class=&quot;k&quot;&gt;LANGUAGE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;plpgsql&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;AS&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;BEGIN&lt;/span&gt;
   &lt;span class=&quot;n&quot;&gt;PERFORM&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pg_advisory_xact_lock&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;hashtext&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;NEW&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;comment&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;));&lt;/span&gt;
 
-  &lt;span class=&quot;k&quot;&gt;IF&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;count&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;FROM&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;master&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;WHERE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;comment&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;NEW&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;comment&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;THEN&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;IF&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;count&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;FROM&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;master&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;WHERE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;comment&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;NEW&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;comment&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;THEN&lt;/span&gt;
     &lt;span class=&quot;n&quot;&gt;RAISE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;EXCEPTION&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;duplicate key value violates unique constraint &amp;quot;%&amp;quot; ON &amp;quot;%&amp;quot;&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; 
       &lt;span class=&quot;n&quot;&gt;TG_NAME&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;TG_TABLE_NAME&lt;/span&gt;
       &lt;span class=&quot;k&quot;&gt;USING&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;DETAIL&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;Key (comment)=(%L) already exists.&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;NEW&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;comment&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;END&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;IF&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;END&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;IF&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 
   &lt;span class=&quot;k&quot;&gt;RETURN&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;NULL&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;END&lt;/span&gt;
@@ -560,7 +510,7 @@ on &lt;code&gt;comment&lt;/code&gt;:&lt;/p&gt;
   &lt;span class=&quot;k&quot;&gt;DEFERRABLE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;INITIALLY&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;IMMEDIATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;FOR&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;EACH&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;ROW&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;EXECUTE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;PROCEDURE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;master_comment_unq&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
 &lt;span class=&quot;c1&quot;&gt;-- [...]&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;CONSTRAINT&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TRIGGER&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;children_comment_unq&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;AFTER&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;INSERT&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;OR&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;UPDATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;ON&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;child4&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;DEFERRABLE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;INITIALLY&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;IMMEDIATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;FOR&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;EACH&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;ROW&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;EXECUTE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;PROCEDURE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;master_comment_unq&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+  &lt;span class=&quot;k&quot;&gt;DEFERRABLE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;INITIALLY&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;IMMEDIATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;FOR&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;EACH&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;ROW&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;EXECUTE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;PROCEDURE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;master_comment_unq&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;If you followed this far, no need to play the “find the error game” to identify
 what’s the most important change here. The lock is taken on the result of the
@@ -583,7 +533,7 @@ memory, write in an unlogged table (erk), whatever you want.&lt;/p&gt;
 
 &lt;p&gt;Time to test now.&lt;/p&gt;
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-console&quot; data-lang=&quot;console&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&quot;gp&quot;&gt;$&lt;/span&gt; cat /tmp/scenario_comment.sql 
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-console&quot; data-lang=&quot;console&quot;&gt;&lt;span class=&quot;gp&quot;&gt;$&lt;/span&gt; cat /tmp/scenario_comment.sql 
 &lt;span class=&quot;go&quot;&gt;\setrandom part 0 4&lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt;DO $func$ BEGIN EXECUTE format(&amp;#39;INSERT INTO child%s (comment) SELECT &amp;#39;&amp;#39;duplicated &amp;#39;&amp;#39;||count(1) from master&amp;#39;, :part); EXCEPTION WHEN OTHERS THEN RAISE LOG &amp;#39;Duplicate exception caught!&amp;#39;; END $func$;&lt;/span&gt;
 
@@ -611,14 +561,14 @@ memory, write in an unlogged table (erk), whatever you want.&lt;/p&gt;
 &lt;span class=&quot;gp&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt; EOQ&lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt; count | appears | total &lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt;-------+---------+-------&lt;/span&gt;
-&lt;span class=&quot;go&quot;&gt; 29785 |       1 | 29785&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;span class=&quot;go&quot;&gt; 29785 |       1 | 29785&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;Wow (again), only 29,785 rows out of 93,902 transactions escaped of that
 intense-colliding scenario. And we only find unique values across all
 partitions, as expected. Aaaaand grep-ing from the log file, I can find 64,117
 rejected rows…&lt;/p&gt;
 
-&lt;p&gt;##Conclusion&lt;/p&gt;
+&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h2&gt;
 
 &lt;p&gt;Such a long way already. Thank you for reading so far. At first I thought I
 could write about unique and foreign keys in the same article, but look at what
@@ -674,7 +624,7 @@ BTree indexes:
   &lt;li&gt;for 8.2 and more: &lt;a href=&quot;&quot;&gt;https://gist.github.com/ioguix/c29d5790b8b93bf81c27&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;##Columns has been ignored&lt;/p&gt;
+&lt;h2 id=&quot;columns-has-been-ignored&quot;&gt;Columns has been ignored&lt;/h2&gt;
 
 &lt;p&gt;In two different situations, some index fields were just ignored by the query:&lt;/p&gt;
 
@@ -693,7 +643,7 @@ seems to me there’s no solution for 7.4.&lt;/p&gt;
 ignored in both cases, s the bloat sounds much bigger with the old version of
 the query. Here is a demo with an index on expression:&lt;/p&gt;
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-psql&quot; data-lang=&quot;psql&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&quot;gp&quot;&gt;postgres@pagila=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;create&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;index&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;test_expression&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;on&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;test&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rental_id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;md5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rental_id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;));&lt;/span&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-psql&quot; data-lang=&quot;psql&quot;&gt;&lt;span class=&quot;gp&quot;&gt;postgres@pagila=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;create&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;index&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;test_expression&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;on&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;test&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rental_id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;md5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rental_id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;));&lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt;CREATE INDEX&lt;/span&gt;
 
 &lt;span class=&quot;gp&quot;&gt;postgres@pagila=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;analyze&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
@@ -702,14 +652,14 @@ the query. Here is a demo with an index on expression:&lt;/p&gt;
 &lt;span class=&quot;gp&quot;&gt;postgres@pagila=#&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;\i&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;old/btree_bloat.sql-20141022&lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt; current_database | schemaname | tblname |     idxname     | real_size | estimated_size | bloat_size |        bloat_ratio         | is_na &lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt;------------------+------------+---------+-----------------+-----------+----------------+------------+----------------------------+-------&lt;/span&gt;
-&lt;span class=&quot;go&quot;&gt; pagila           | public     | test    | test_expression |    974848 |         335872 |     638976 |        65.5462184873949580 | f&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;span class=&quot;go&quot;&gt; pagila           | public     | test    | test_expression |    974848 |         335872 |     638976 |        65.5462184873949580 | f&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;Most of this 65% bloat estimation are actually the data of the missing field.
 The result is much more coherent with the latest version of the query for a
 freshly created index, supposed to have around 10% of bloat as showed in the
 2nd query:&lt;/p&gt;
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-psql&quot; data-lang=&quot;psql&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&quot;gp&quot;&gt;postgres@pagila=#&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;\i&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;sql/btree_bloat.sql&lt;/span&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-psql&quot; data-lang=&quot;psql&quot;&gt;&lt;span class=&quot;gp&quot;&gt;postgres@pagila=#&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;\i&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;sql/btree_bloat.sql&lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt; current_database | schemaname | tblname |     idxname     | real_size | estimated_size | bloat_size |   bloat_ratio    | is_na &lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt;------------------+------------+---------+-----------------+-----------+----------------+------------+------------------+-------&lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt; pagila           | public     | test    | test_expression |    974848 |         851968 |     122880 | 12.6050420168067 | f&lt;/span&gt;
@@ -718,15 +668,15 @@ freshly created index, supposed to have around 10% of bloat as showed in the
 &lt;span class=&quot;k&quot;&gt;FROM&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pg_class&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;WHERE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;relname&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;test_expression&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt;     relname     | bloat_ratio &lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt;-----------------+-------------&lt;/span&gt;
-&lt;span class=&quot;go&quot;&gt; test_expression |       10.33&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;span class=&quot;go&quot;&gt; test_expression |       10.33&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
-&lt;p&gt;##Wrong estimation for varlena types&lt;/p&gt;
+&lt;h2 id=&quot;wrong-estimation-for-varlena-types&quot;&gt;Wrong estimation for varlena types&lt;/h2&gt;
 
 &lt;p&gt;After fixing the query for indexes on expression, I noticed some negative bloat
 estimation for the biggest ones: the real index was smaller than the estimated
 one!&lt;/p&gt;
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-psql&quot; data-lang=&quot;psql&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&quot;gp&quot;&gt;postgres@pagila=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;create&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;table&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;test3&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;generate_series&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;10000000&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-psql&quot; data-lang=&quot;psql&quot;&gt;&lt;span class=&quot;gp&quot;&gt;postgres@pagila=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;create&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;table&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;test3&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;generate_series&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;10000000&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt;SELECT 10000000&lt;/span&gt;
 
 &lt;span class=&quot;gp&quot;&gt;postgres@pagila=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;create&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;index&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;on&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;test3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;md5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;));&lt;/span&gt;
@@ -735,7 +685,7 @@ one!&lt;/p&gt;
 &lt;span class=&quot;gp&quot;&gt;postgres@pagila=#&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;\i&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;~/sql/old/btree_bloat.sql-20141027&lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt; current_database | schemaname | tblname |     idxname     | real_size | estimated_size | bloat_size |     bloat_ratio     | is_na &lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt;------------------+------------+---------+-----------------+-----------+----------------+------------+---------------------+-------&lt;/span&gt;
-&lt;span class=&quot;go&quot;&gt; pagila           | public     | test3   | test3_i_md5_idx | 590536704 |      601776128 |  -11239424 | -1.9032557881448805 | f&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;span class=&quot;go&quot;&gt; pagila           | public     | test3   | test3_i_md5_idx | 590536704 |      601776128 |  -11239424 | -1.9032557881448805 | f&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;In this version of the query, I am computing and adding the headers length of
 varlena types (text, bytea, etc) to the statistics(see
@@ -750,7 +700,7 @@ bytes long. In the following results, we can see the average length from
 &lt;code&gt;pg_stats&lt;/code&gt; is &lt;code&gt;32+1&lt;/code&gt; for one md5, and &lt;code&gt;4*32+4&lt;/code&gt; for a string of 4 concatenated
 md5, supposed to be 128 byte long:&lt;/p&gt;
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-psql&quot; data-lang=&quot;psql&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&quot;gp&quot;&gt;postgres@pagila=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;create&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;table&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;test2&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;md5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;repeat&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;md5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;generate_series&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-psql&quot; data-lang=&quot;psql&quot;&gt;&lt;span class=&quot;gp&quot;&gt;postgres@pagila=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;create&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;table&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;test2&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;md5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;repeat&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;md5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;generate_series&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt;SELECT 5&lt;/span&gt;
 
 &lt;span class=&quot;gp&quot;&gt;postgres@pagila=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;analyze&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;test2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
@@ -761,11 +711,11 @@ md5, supposed to be 128 byte long:&lt;/p&gt;
 &lt;span class=&quot;go&quot;&gt;-----------+---------+-----------&lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt; test2     | i       |         4&lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt; test2     | md5     |        33&lt;/span&gt;
-&lt;span class=&quot;go&quot;&gt; test2     | repeat  |       132&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;span class=&quot;go&quot;&gt; test2     | repeat  |       132&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;After removing this part of the query, stats for &lt;code&gt;test3_i_md5_idx&lt;/code&gt; are much better:&lt;/p&gt;
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-psql&quot; data-lang=&quot;psql&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&quot;gp&quot;&gt;postgres@pagila=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;SELECT&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;relname&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-psql&quot; data-lang=&quot;psql&quot;&gt;&lt;span class=&quot;gp&quot;&gt;postgres@pagila=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;SELECT&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;relname&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
   &lt;span class=&quot;mf&quot;&gt;100&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;stattuple&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pgstatindex&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;relname&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;avg_leaf_density&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;AS&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;bloat_ratio&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;FROM&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pg_class&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;WHERE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;relname&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;test3_i_md5_idx&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt;     relname     | bloat_ratio &lt;/span&gt;
@@ -775,11 +725,11 @@ md5, supposed to be 128 byte long:&lt;/p&gt;
 &lt;span class=&quot;gp&quot;&gt;postgres@pagila=#&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;\i&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;~/sql/old/btree_bloat.sql-20141028&lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt; current_database | schemaname | tblname |     idxname     | real_size | estimated_size | bloat_size |     bloat_ratio     | is_na &lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt;------------------+------------+---------+-----------------+-----------+----------------+------------+---------------------+-------&lt;/span&gt;
-&lt;span class=&quot;go&quot;&gt; pagila           | public     | test3   | test3_i_md5_idx | 590536704 |      521535488 |   69001216 | 11.6844923495221052 | f&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;span class=&quot;go&quot;&gt; pagila           | public     | test3   | test3_i_md5_idx | 590536704 |      521535488 |   69001216 | 11.6844923495221052 | f&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;This is a nice bug fix AND one complexity out of the query. Code simplification is always a good news :)&lt;/p&gt;
 
-&lt;p&gt;##Adding a bit of Opaque Data&lt;/p&gt;
+&lt;h2 id=&quot;adding-a-bit-of-opaque-data&quot;&gt;Adding a bit of Opaque Data&lt;/h2&gt;
 
 &lt;p&gt;When studying the Btree layout, I forgot about one small non-data area in index
 pages: the “Special space”, aka. “Opaque Data” in code sources. The previous
@@ -798,7 +748,7 @@ definitely help the bloat estimation accuracy. Using the previous demo on
 &lt;code&gt;test3_i_md5_idx&lt;/code&gt;, here is the comparison of real bloat, estimation without
 considering the special space and estimation considering it:&lt;/p&gt;
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-psql&quot; data-lang=&quot;psql&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&quot;gp&quot;&gt;postgres@pagila=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;SELECT&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;relname&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-psql&quot; data-lang=&quot;psql&quot;&gt;&lt;span class=&quot;gp&quot;&gt;postgres@pagila=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;SELECT&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;relname&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
   &lt;span class=&quot;mf&quot;&gt;100&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;stattuple&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pgstatindex&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;relname&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;avg_leaf_density&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;AS&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;bloat_ratio&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;FROM&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pg_class&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;WHERE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;relname&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;test3_i_md5_idx&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt;     relname     | bloat_ratio &lt;/span&gt;
@@ -813,11 +763,11 @@ considering the special space and estimation considering it:&lt;/p&gt;
 &lt;span class=&quot;gp&quot;&gt;postgres@pagila=#&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;\i&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;~/sql/btree_bloat.sql&lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt; current_database | schemaname | tblname |     idxname     | real_size | estimated_size | bloat_size |   bloat_ratio    | is_na &lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt;------------------+------------+---------+-----------------+-----------+----------------+------------+------------------+-------&lt;/span&gt;
-&lt;span class=&quot;go&quot;&gt; pagila           | public     | test3   | test3_i_md5_idx | 590536704 |      525139968 |   65396736 | 11.0741187731491 | f&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;span class=&quot;go&quot;&gt; pagila           | public     | test3   | test3_i_md5_idx | 590536704 |      525139968 |   65396736 | 11.0741187731491 | f&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;This is only an approximative 5% difference for the estimated size of this particular index.&lt;/p&gt;
 
-&lt;p&gt;##Conclusion&lt;/p&gt;
+&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h2&gt;
 
 &lt;p&gt;I never mentioned it before, but these queries are used in
 &lt;a href=&quot;https://github.com/OPMDG/check_pgactivity&quot;&gt;check_pgactivity&lt;/a&gt; (a nagios plugin
@@ -871,22 +821,22 @@ bloat query, this query pay attention to:&lt;/p&gt;
   &lt;li&gt;for PostgreSQL 9.0 and after: &lt;a href=&quot;&quot;&gt;https://gist.github.com/ioguix/4f95917f90c9e26df1b2&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;##Tests&lt;/p&gt;
+&lt;h2 id=&quot;tests&quot;&gt;Tests&lt;/h2&gt;
 
 &lt;p&gt;I created the file &lt;code&gt;sql/bloat_tables.sql&lt;/code&gt; with the 9.0 and more query version.
 I edited the query to add the bloat reported by &lt;code&gt;pgstattuple&lt;/code&gt; (free_percent +
 dead_tuple_percent) to compare both results and added the following filter:&lt;/p&gt;
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-sql&quot; data-lang=&quot;sql&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;-- remove Non Applicable tables&lt;/span&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-sql&quot; data-lang=&quot;sql&quot;&gt;&lt;span class=&quot;c1&quot;&gt;-- remove Non Applicable tables&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;NOT&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;is_na&lt;/span&gt;
 &lt;span class=&quot;c1&quot;&gt;-- remove tables with real bloat &amp;lt; 1 block&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;AND&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tblpages&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;((&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pst&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;free_percent&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pst&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dead_tuple_percent&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;float4&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;100&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;
 &lt;span class=&quot;c1&quot;&gt;-- filter on table name using the parameter :tblname&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;AND&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tblname&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;LIKE&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;tblname&amp;#39;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;span class=&quot;k&quot;&gt;AND&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tblname&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;LIKE&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;tblname&amp;#39;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;Here is the result on a fresh pagila database:&lt;/p&gt;
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-psql&quot; data-lang=&quot;psql&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&quot;gp&quot;&gt;postgres@pagila=#&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;\set&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;tblname&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;%&lt;/span&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-psql&quot; data-lang=&quot;psql&quot;&gt;&lt;span class=&quot;gp&quot;&gt;postgres@pagila=#&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;\set&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;tblname&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;%&lt;/span&gt;
 &lt;span class=&quot;gp&quot;&gt;postgres@pagila=#&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;\i&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;sql/bloat_tables.sql&lt;/span&gt; 
 &lt;span class=&quot;go&quot;&gt; current_database | schemaname |    tblname     | real_size | bloat_size | tblpages | is_na |   bloat_ratio    | real_frag &lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt;------------------+------------+----------------+-----------+------------+----------+-------+------------------+-----------&lt;/span&gt;
@@ -895,12 +845,12 @@ dead_tuple_percent) to compare both results and added the following filter:&lt;/
 &lt;span class=&quot;go&quot;&gt; pagila           | public     | customer       |     73728 |       8192 |        9 | f     | 11.1111111111111 |     11.47&lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt; pagila           | public     | film           |    450560 |       8192 |       55 | f     | 1.81818181818182 |      3.26&lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt; pagila           | public     | rental         |   1228800 |     131072 |      150 | f     | 10.6666666666667 |      0.67&lt;/span&gt;
-&lt;span class=&quot;go&quot;&gt;(5 rows)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;span class=&quot;go&quot;&gt;(5 rows)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;Well, not too bad. Let’s consider the largest table, clone it and create some
 bloat:&lt;/p&gt;
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-psql&quot; data-lang=&quot;psql&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&quot;gp&quot;&gt;postgres@pagila=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;create&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;table&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;film2&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;film&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-psql&quot; data-lang=&quot;psql&quot;&gt;&lt;span class=&quot;gp&quot;&gt;postgres@pagila=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;create&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;table&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;film2&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;film&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt;SELECT 1000&lt;/span&gt;
 &lt;span class=&quot;gp&quot;&gt;postgres@pagila=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;analyze&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;film2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt;ANALYZE&lt;/span&gt;
@@ -922,13 +872,13 @@ bloat:&lt;/p&gt;
 &lt;span class=&quot;go&quot;&gt; current_database | schemaname | tblname | real_size | bloat_size | tblpages | is_na |   bloat_ratio    | real_frag &lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt;------------------+------------+---------+-----------+------------+----------+-------+------------------+-----------&lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt; pagila           | public     | film2   |    450560 |     122880 |       55 | f     | 27.2727272727273 |     27.29&lt;/span&gt;
-&lt;span class=&quot;go&quot;&gt;(1 row)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;span class=&quot;go&quot;&gt;(1 row)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;Again, the bloat reported here is pretty close to the reality!&lt;/p&gt;
 
 &lt;p&gt;Some more tests:&lt;/p&gt;
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-psql&quot; data-lang=&quot;psql&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&quot;gp&quot;&gt;postgres@pagila=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;delete&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;film2&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;where&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;film_id&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;333&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-psql&quot; data-lang=&quot;psql&quot;&gt;&lt;span class=&quot;gp&quot;&gt;postgres@pagila=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;delete&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;film2&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;where&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;film_id&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;333&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt;DELETE 83&lt;/span&gt;
 &lt;span class=&quot;gp&quot;&gt;postgres@pagila=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;analyze&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;film2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt;ANALYZE&lt;/span&gt;
@@ -946,21 +896,21 @@ bloat:&lt;/p&gt;
 &lt;span class=&quot;go&quot;&gt; current_database | schemaname | tblname | real_size | bloat_size | tblpages | is_na |   bloat_ratio    | real_frag &lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt;------------------+------------+---------+-----------+------------+----------+-------+------------------+-----------&lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt; pagila           | public     | film2   |    450560 |     303104 |       55 | f     | 67.2727272727273 |     66.43&lt;/span&gt;
-&lt;span class=&quot;go&quot;&gt;(1 row)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;span class=&quot;go&quot;&gt;(1 row)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;Good, good, good. What next?&lt;/p&gt;
 
-&lt;p&gt;##The alignment deviation&lt;/p&gt;
+&lt;h2 id=&quot;the-alignment-deviation&quot;&gt;The alignment deviation&lt;/h2&gt;
 
 &lt;p&gt;You might have noticed I did not mentioned this table with a large deviation
 between the statistical bloat and the real one, called &lt;code&gt;rental&lt;/code&gt;:&lt;/p&gt;
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-psql&quot; data-lang=&quot;psql&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&quot;gp&quot;&gt;postgres@pagila=#&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;\set&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;tblname&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;rental&lt;/span&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-psql&quot; data-lang=&quot;psql&quot;&gt;&lt;span class=&quot;gp&quot;&gt;postgres@pagila=#&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;\set&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;tblname&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;rental&lt;/span&gt;
 &lt;span class=&quot;gp&quot;&gt;postgres@pagila=#&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;\i&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;sql/bloat_tables.sql&lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt; current_database | schemaname | tblname | real_size | bloat_size | tblpages | is_na |   bloat_ratio    | real_frag &lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt;------------------+------------+---------+-----------+------------+----------+-------+------------------+-----------&lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt; pagila           | public     | rental  |   1228800 |     131072 |      150 | f     | 10.6666666666667 |      0.67&lt;/span&gt;
-&lt;span class=&quot;go&quot;&gt;(1 row)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;span class=&quot;go&quot;&gt;(1 row)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;This particular situation is exactly why I loved writing these bloat queries
 (including the btree one), confronting the statistics and the reality and
@@ -977,9 +927,9 @@ are given in &lt;a href=&quot;http://www.postgresql.org/docs/current/static/cata
 page from PostgreSQL document, see field &lt;code&gt;typalign&lt;/code&gt;.&lt;/p&gt;
 
 &lt;p&gt;So let’s demonstrate how it influence the bloat here. Back to the rental table,
-here is its definition:&lt;/p&gt;
+here is its definition: &lt;/p&gt;
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-psql&quot; data-lang=&quot;psql&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&quot;gp&quot;&gt;postgres@pagila=#&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;\d&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;rental&lt;/span&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-psql&quot; data-lang=&quot;psql&quot;&gt;&lt;span class=&quot;gp&quot;&gt;postgres@pagila=#&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;\d&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;rental&lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt;                                          Table &amp;quot;public.rental&amp;quot;&lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt;    Column    |            Type             |                         Modifiers                          &lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt;--------------+-----------------------------+------------------------------------------------------------&lt;/span&gt;
@@ -989,7 +939,7 @@ here is its definition:&lt;/p&gt;
 &lt;span class=&quot;go&quot;&gt; customer_id  | smallint                    | not null&lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt; return_date  | timestamp without time zone | &lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt; staff_id     | smallint                    | not null&lt;/span&gt;
-&lt;span class=&quot;go&quot;&gt; last_update  | timestamp without time zone | not null default now()&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;span class=&quot;go&quot;&gt; last_update  | timestamp without time zone | not null default now()&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;All the fields here are fixed-size types, so it is quite easy to compute the
 row size:&lt;/p&gt;
@@ -1007,18 +957,18 @@ possible alignment is every 8 bytes from the begining of the row&lt;/li&gt;
 alignment optimization and the order of the fields, we now have (ascii art is
 easier to explain):&lt;/p&gt;
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;&lt;span&gt;&lt;/span&gt;|0     1     2     3     4     5     6     7     8     |
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;|0     1     2     3     4     5     6     7     8     |
 |       rental_id       |***********PADDING************|
 |                     rental_date                      |
 |     inventory_id      |customer_id|******PADDING*****|
 |                     return_date                      |
 | staff_id  |*****************PADDING******************|
-|                     last_update                      |&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+|                     last_update                      |&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;That makes 12 bytes of padding and a total row size of 48 bytes instead of 36.
-Here are the 10%! Let’s double check this by the experience:&lt;/p&gt;
+Here are the 10%! Let’s double check this by the experience: &lt;/p&gt;
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-psql&quot; data-lang=&quot;psql&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&quot;gp&quot;&gt;postgres@pagila=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;create&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;table&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rental2&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rental_date&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;return_date&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-psql&quot; data-lang=&quot;psql&quot;&gt;&lt;span class=&quot;gp&quot;&gt;postgres@pagila=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;create&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;table&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rental2&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rental_date&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;return_date&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
 &lt;span class=&quot;n&quot;&gt;last_update&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rental_id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;inventory_id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;customer_id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;staff_id&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;public&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rental&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; 
 &lt;span class=&quot;go&quot;&gt;SELECT 16044&lt;/span&gt;
 &lt;span class=&quot;gp&quot;&gt;postgres@pagila=#&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;\d&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;rental2&lt;/span&gt;
@@ -1046,18 +996,18 @@ Here are the 10%! Let’s double check this by the experience:&lt;/p&gt;
 &lt;span class=&quot;go&quot;&gt;     ?column?     &lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt;------------------&lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt; 10.6666666666667&lt;/span&gt;
-&lt;span class=&quot;go&quot;&gt;(1 row)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;span class=&quot;go&quot;&gt;(1 row)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;Removing the “remove tables with real bloat &amp;lt; 1 block” filter from my demo
 query, we have now:&lt;/p&gt;
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-psql&quot; data-lang=&quot;psql&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&quot;gp&quot;&gt;postgres@pagila=#&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;\set&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;tblname&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;rental%&lt;/span&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-psql&quot; data-lang=&quot;psql&quot;&gt;&lt;span class=&quot;gp&quot;&gt;postgres@pagila=#&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;\set&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;tblname&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;rental%&lt;/span&gt;
 &lt;span class=&quot;gp&quot;&gt;postgres@pagila=#&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;\i&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;sql/bloat_tables.sql&lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt; current_database | schemaname | tblname | real_size | bloat_size | tblpages | is_na |   bloat_ratio    | real_frag &lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt;------------------+------------+---------+-----------+------------+----------+-------+------------------+-----------&lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt; pagila           | public     | rental  |   1228800 |     131072 |      150 | f     | 10.6666666666667 |      0.67&lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt; pagila           | public     | rental2 |   1097728 |          0 |      134 | f     |                0 |      0.41&lt;/span&gt;
-&lt;span class=&quot;go&quot;&gt;(2 rows)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;span class=&quot;go&quot;&gt;(2 rows)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;Great!&lt;/p&gt;
 
@@ -1065,7 +1015,7 @@ query, we have now:&lt;/p&gt;
 will live with that. By the way, this alignment overhead might be a nice
 subject for a script measuring it per tables.&lt;/p&gt;
 
-&lt;p&gt;##Known issues&lt;/p&gt;
+&lt;h2 id=&quot;known-issues&quot;&gt;Known issues&lt;/h2&gt;
 
 &lt;p&gt;The same than for the Btree statistical bloat query: I’m pretty sure the query
 will have a pretty bad estimation with array types. I’ll investigate about that
@@ -1080,7 +1030,7 @@ later.&lt;/p&gt;
     
     <item>
       <title>Btree bloat query changelog - part 3</title>
-      <description>&lt;p&gt;##Changelog&lt;/p&gt;
+      <description>&lt;h2 id=&quot;changelog&quot;&gt;Changelog&lt;/h2&gt;
 
 &lt;p&gt;Here are some fresh news about my previous work (see
 &lt;a href=&quot;/postgresql/2014/03/28/Playing-with-indexes-and-better-bloat-estimate.html&quot;&gt;part 1&lt;/a&gt;
@@ -1102,7 +1052,7 @@ Thequery now try to consider their header part&lt;/li&gt;
   &lt;li&gt;ignore non-valid indexes for 8.2 and more&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;##Known issue&lt;/p&gt;
+&lt;h2 id=&quot;known-issue&quot;&gt;Known issue&lt;/h2&gt;
 
 &lt;p&gt;While working on table bloat (I will blog about that very soon), I found a
 large deviation on statistics on array types. I’m not sure how to handle
@@ -1131,14 +1081,14 @@ times to fix some drawbacks:&lt;/p&gt;
 &lt;p&gt;This last one is actually far from perfect.  Very bad estimation could arise if
 the query is wrong about this size of pointers.&lt;/p&gt;
 
-&lt;p&gt;##New version&lt;/p&gt;
+&lt;h2 id=&quot;new-version&quot;&gt;New version&lt;/h2&gt;
 
 &lt;p&gt;Here is the gist of the new version of this query if you want to comment/patch:
 &lt;a href=&quot;https://gist.github.com/ioguix/c29d5790b8b93bf81c27&quot;&gt;https://gist.github.com/ioguix/c29d5790b8b93bf81c27&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;And the code itself:&lt;/p&gt;
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-sql&quot; data-lang=&quot;sql&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;-- WARNING: executed with a non-superuser role, the query inspect only index on tables you are granted to read.&lt;/span&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-sql&quot; data-lang=&quot;sql&quot;&gt;&lt;span class=&quot;c1&quot;&gt;-- WARNING: executed with a non-superuser role, the query inspect only index on tables you are granted to read.&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;SELECT&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;current_database&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(),&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nspname&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;AS&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;schemaname&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;relname&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;AS&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tablename&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;indexname&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;bs&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sub&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;relpages&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)::&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;bigint&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;AS&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;real_size&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
   &lt;span class=&quot;n&quot;&gt;bs&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;otta&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;bigint&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;estimated_size&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
   &lt;span class=&quot;n&quot;&gt;bs&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sub&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;relpages&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;otta&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)::&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;bigint&lt;/span&gt;                                     &lt;span class=&quot;k&quot;&gt;AS&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;bloat_size&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
@@ -1205,7 +1155,7 @@ the query is wrong about this size of pointers.&lt;/p&gt;
 &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sub&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;JOIN&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pg_class&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;c&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;ON&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;oid&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sub&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;table_oid&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;WHERE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sub&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;relpages&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;ORDER&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;BY&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;span class=&quot;k&quot;&gt;ORDER&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;BY&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;I left commented some debug code to help diagnosing bad estimations.&lt;/p&gt;
 
@@ -1214,12 +1164,12 @@ updated the query and added a warning on top of the query. The query does not
 require to be superuser anymore, but you have to make sure the role you are
 using is able to access all your precious tables and indexes!&lt;/p&gt;
 
-&lt;p&gt;##Known bug&lt;/p&gt;
+&lt;h2 id=&quot;known-bug&quot;&gt;Known bug&lt;/h2&gt;
 
 &lt;p&gt;While testing the query, I found a weird bug where negative bloats show up on
 some system indexes.  As instance:&lt;/p&gt;
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-psql&quot; data-lang=&quot;psql&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&quot;gp&quot;&gt;postgres@pagila=#&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;\i&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;btree_bloat.sql&lt;/span&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-psql&quot; data-lang=&quot;psql&quot;&gt;&lt;span class=&quot;gp&quot;&gt;postgres@pagila=#&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;\i&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;btree_bloat.sql&lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt;...&lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt;-[ RECORD 4 ]----+----------------------------------------------------&lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt;current_database | pagila&lt;/span&gt;
@@ -1230,14 +1180,14 @@ some system indexes.  As instance:&lt;/p&gt;
 &lt;span class=&quot;go&quot;&gt;estimated_size   | 262144&lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt;bloat_size       | -139264&lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt;bloat_ratio      | -113.3333333333333333&lt;/span&gt;
-&lt;span class=&quot;go&quot;&gt;...&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;span class=&quot;go&quot;&gt;...&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;After hunting for some time on this, I found that this was related to the
 &lt;code&gt;name&lt;/code&gt; type.  This type has a fixed size of 64 bytes in stats, but
 they become a simple cstring in index with a variable length depending on real
 string values!&lt;/p&gt;
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-psql&quot; data-lang=&quot;psql&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&quot;gp&quot;&gt;postgres@pagila=#&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;\d&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;pg_attribute_relid_attnam_index&lt;/span&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-psql&quot; data-lang=&quot;psql&quot;&gt;&lt;span class=&quot;gp&quot;&gt;postgres@pagila=#&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;\d&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;pg_attribute_relid_attnam_index&lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt;Index &amp;quot;pg_catalog.pg_attribute_relid_attnam_index&amp;quot;&lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt;  Column  |  Type   | Definition &lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt;----------+---------+------------&lt;/span&gt;
@@ -1260,7 +1210,7 @@ string values!&lt;/p&gt;
 &lt;span class=&quot;gp&quot;&gt;postgres@pagila=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;SELECT&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pg_column_size&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;attname&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;avg&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;attname&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;FROM&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pg_catalog&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pg_attribute&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;GROUP&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;BY&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt; pg_column_size |        avg         &lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt;----------------+--------------------&lt;/span&gt;
-&lt;span class=&quot;go&quot;&gt;             64 | 9.5131713992473486&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;span class=&quot;go&quot;&gt;             64 | 9.5131713992473486&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;As the query rely on theses stats to compute the estimated size of the index
 depending on indexed fields and number of lines in the table, this difference
@@ -1295,12 +1245,12 @@ supposed to &lt;code&gt;REINDEX&lt;/code&gt;.  While writing a detailed answer w
 quite a surprise seeing an estimated index size ratio of 0.7 for a simple
 table!  I realized I never payed much attention to this part of the result…&lt;/p&gt;
 
-&lt;p&gt;##The problem&lt;/p&gt;
+&lt;h2 id=&quot;the-problem&quot;&gt;The problem&lt;/h2&gt;
 
 &lt;p&gt;Here is a test table, a copy table &lt;code&gt;rental&lt;/code&gt; from
 &lt;a href=&quot;http://pgfoundry.org/frs/download.php/1719/pagila-0.10.1.zip&quot;&gt;pagila&lt;/a&gt; project:&lt;/p&gt;
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-psql&quot; data-lang=&quot;psql&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&quot;gp&quot;&gt;pagila=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;test&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;LIKE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rental&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;INCLUDING&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;DEFAULTS&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;INCLUDING&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;CONSTRAINTS&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;INCLUDING&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;INDEXES&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-psql&quot; data-lang=&quot;psql&quot;&gt;&lt;span class=&quot;gp&quot;&gt;pagila=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;test&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;LIKE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rental&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;INCLUDING&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;DEFAULTS&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;INCLUDING&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;CONSTRAINTS&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;INCLUDING&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;INDEXES&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
 &lt;span class=&quot;gp&quot;&gt;pagila=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;INSERT&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;INTO&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;test&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;SELECT&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;FROM&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rental&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 &lt;span class=&quot;gp&quot;&gt;pagila=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;ANALYZE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 &lt;span class=&quot;gp&quot;&gt;pagila=#&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;\d&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;test&lt;/span&gt;
@@ -1317,18 +1267,18 @@ table!  I realized I never payed much attention to this part of the result…&lt
 &lt;span class=&quot;go&quot;&gt;Indexes:&lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt;    &amp;quot;test_pkey&amp;quot; PRIMARY KEY, btree (rental_id)&lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt;    &amp;quot;test_rental_date_inventory_id_customer_id_idx&amp;quot; UNIQUE, btree (rental_date, inventory_id, customer_id)&lt;/span&gt;
-&lt;span class=&quot;go&quot;&gt;    &amp;quot;test_inventory_id_idx&amp;quot; btree (inventory_id)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;span class=&quot;go&quot;&gt;    &amp;quot;test_inventory_id_idx&amp;quot; btree (inventory_id)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;I copy pasted the bloat query in file &lt;code&gt;~/tmp/bloat_original.sql&lt;/code&gt;, here is its output for this table:&lt;/p&gt;
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-psql&quot; data-lang=&quot;psql&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&quot;gp&quot;&gt;postgres@pagila=#&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;\i&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;~/tmp/bloat_original.sql&lt;/span&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-psql&quot; data-lang=&quot;psql&quot;&gt;&lt;span class=&quot;gp&quot;&gt;postgres@pagila=#&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;\i&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;~/tmp/bloat_original.sql&lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt; current_database | schemaname |    tablename     | tbloat | wastedbytes |                        iname                        | ibloat | wastedibytes &lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt;------------------+------------+------------------+--------+-------------+-----------------------------------------------------+--------+--------------&lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt;...&lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt; pagila           | public     | test             |    1.2 |      188416 | test_pkey                                           |    0.5 |            0&lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt; pagila           | public     | test             |    1.2 |      188416 | test_rental_date_inventory_id_customer_id_idx       |    0.8 |            0&lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt; pagila           | public     | test             |    1.2 |      188416 | test_inventory_id_idx                               |    0.7 |            0&lt;/span&gt;
-&lt;span class=&quot;go&quot;&gt;...&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;span class=&quot;go&quot;&gt;...&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;A B-tree index is filled at 90% per default, see storage parameter
 &lt;a href=&quot;http://www.postgresql.org/docs/9.3/static/sql-createindex.html#SQL-CREATEINDEX-STORAGE-PARAMETERS&quot;&gt;FILL FACTOR&lt;/a&gt;.
@@ -1341,18 +1291,18 @@ smaller than it is supposed to be ?&lt;/p&gt;
 &lt;p&gt;I hadn’t to dive deap in the query, after a closer look at the query code and
 comments, we find:&lt;/p&gt;
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-sql&quot; data-lang=&quot;sql&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;COALESCE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;CEIL&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;((&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;c2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;reltuples&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;datahdr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;12&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;bs&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;20&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;float&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)),&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;AS&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;iotta&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;-- very rough approximation, assumes all cols&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-sql&quot; data-lang=&quot;sql&quot;&gt;&lt;span class=&quot;n&quot;&gt;COALESCE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;CEIL&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;((&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;c2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;reltuples&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;datahdr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;12&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;bs&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;20&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;float&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)),&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;AS&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;iotta&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;-- very rough approximation, assumes all cols&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;Oh, ok. The query estimates the ideal size of each index considering it
 references &lt;em&gt;ALL&lt;/em&gt; the table fields.  It’s quite rare to find a btree index on
 all fields of a table, and obviously there’s no point having multiple indexes
 on a table, all of them referencing all fields of the table.&lt;/p&gt;
 
-&lt;p&gt;##A look at the real bloat&lt;/p&gt;
+&lt;h2 id=&quot;a-look-at-the-real-bloat&quot;&gt;A look at the real bloat&lt;/h2&gt;
 
 &lt;p&gt;First, let see how the indexes are really bloated:&lt;/p&gt;
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-psql&quot; data-lang=&quot;psql&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&quot;gp&quot;&gt;pagila=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;create&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;schema&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;stattuple&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-psql&quot; data-lang=&quot;psql&quot;&gt;&lt;span class=&quot;gp&quot;&gt;pagila=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;create&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;schema&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;stattuple&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 &lt;span class=&quot;gp&quot;&gt;pagila=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;create&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;extension&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pgstattuple&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;with&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;schema&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;stattuple&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 &lt;span class=&quot;gp&quot;&gt;pagila=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;SELECT&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;relname&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pg_table_size&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;oid&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;index_size&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
   &lt;span class=&quot;mf&quot;&gt;100&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;stattuple&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pgstatindex&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;relname&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;avg_leaf_density&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;AS&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;bloat_ratio&lt;/span&gt;
@@ -1363,14 +1313,14 @@ on a table, all of them referencing all fields of the table.&lt;/p&gt;
 &lt;span class=&quot;go&quot;&gt;-----------------------------------------------+------------+-------------&lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt; test_pkey                                     |     376832 |       10.25&lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt; test_inventory_id_idx                         |     507904 |       34.11&lt;/span&gt;
-&lt;span class=&quot;go&quot;&gt; test_rental_date_inventory_id_customer_id_idx |     630784 |       26.14&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;span class=&quot;go&quot;&gt; test_rental_date_inventory_id_customer_id_idx |     630784 |       26.14&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;First point, the bloat on indexes is not 10% everywhere, only for the PK. This
 is because indexes were created &lt;em&gt;BEFORE&lt;/em&gt; inserting data.  So it looks like data
 were naturally order on the PK on table “rental” when scanning it sequentially.
 What if we load data sorting on “inventory_id” field ?&lt;/p&gt;
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-psql&quot; data-lang=&quot;psql&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&quot;gp&quot;&gt;pagila=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TRUNCATE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;test&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-psql&quot; data-lang=&quot;psql&quot;&gt;&lt;span class=&quot;gp&quot;&gt;pagila=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TRUNCATE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;test&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 &lt;span class=&quot;gp&quot;&gt;pagila=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;INSERT&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;INTO&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;test&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;SELECT&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;FROM&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rental&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;ORDER&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;BY&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;inventory_id&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 &lt;span class=&quot;gp&quot;&gt;pagila=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;SELECT&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;relname&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pg_table_size&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;oid&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;index_size&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
   &lt;span class=&quot;mf&quot;&gt;100&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;stattuple&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pgstatindex&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;relname&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;avg_leaf_density&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;AS&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;bloat_ratio&lt;/span&gt;
@@ -1381,13 +1331,13 @@ What if we load data sorting on “inventory_id” field ?&lt;/p&gt;
 &lt;span class=&quot;go&quot;&gt;-----------------------------------------------+------------+-------------&lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt; test_pkey                                     |     524288 |       36.22&lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt; test_inventory_id_idx                         |     376832 |       10.25&lt;/span&gt;
-&lt;span class=&quot;go&quot;&gt; test_rental_date_inventory_id_customer_id_idx |     647168 |       28.04&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;span class=&quot;go&quot;&gt; test_rental_date_inventory_id_customer_id_idx |     647168 |       28.04&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;Ok, it totally makes sense there: index &lt;code&gt;test_inventory_id_idx&lt;/code&gt; is now 10%
 bloated.  First lesson: Do not create your indexes before loading your datas!
 Demo:&lt;/p&gt;
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-psql&quot; data-lang=&quot;psql&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&quot;gp&quot;&gt;pagila=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;DROP&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;test&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-psql&quot; data-lang=&quot;psql&quot;&gt;&lt;span class=&quot;gp&quot;&gt;pagila=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;DROP&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;test&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 &lt;span class=&quot;gp&quot;&gt;pagila=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;test&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;LIKE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rental&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;INCLUDING&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;DEFAULTS&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;INCLUDING&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;CONSTRAINTS&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
 &lt;span class=&quot;gp&quot;&gt;pagila=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;INSERT&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;INTO&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;test&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;SELECT&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;FROM&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rental&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 &lt;span class=&quot;gp&quot;&gt;pagila=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;ALTER&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;test&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;ADD&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;CONSTRAINT&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;test_pkey&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;PRIMARY&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;KEY&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rental_id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt; 
@@ -1403,9 +1353,9 @@ Demo:&lt;/p&gt;
 &lt;span class=&quot;go&quot;&gt;-----------------------------------------------+------------+-------------&lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt; test_pkey                                     |     376832 |       10.25&lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt; test_inventory_id_idx                         |     376832 |       10.25&lt;/span&gt;
-&lt;span class=&quot;go&quot;&gt; test_rental_date_inventory_id_customer_id_idx |     524288 |       10.73&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;span class=&quot;go&quot;&gt; test_rental_date_inventory_id_customer_id_idx |     524288 |       10.73&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
-&lt;p&gt;##A better query to estimate index bloat?&lt;/p&gt;
+&lt;h2 id=&quot;a-better-query-to-estimate-index-bloat&quot;&gt;A better query to estimate index bloat?&lt;/h2&gt;
 
 &lt;blockquote&gt;
   &lt;p&gt;Wait, you just showed us you can have the real bloat on indexes, why would I
@@ -1420,7 +1370,7 @@ And anyway, I want to dig into this for education :-)&lt;/p&gt;
 indexes.  I picked some parts of the original bloat query, but rewrote mostly
 everything.  Here is the result:&lt;/p&gt;
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-sql&quot; data-lang=&quot;sql&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;-- change to the max number of field per index if not default.&lt;/span&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-sql&quot; data-lang=&quot;sql&quot;&gt;&lt;span class=&quot;c1&quot;&gt;-- change to the max number of field per index if not default.&lt;/span&gt;
 &lt;span class=&quot;err&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;set&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;index_max_keys&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;32&lt;/span&gt;
 &lt;span class=&quot;c1&quot;&gt;-- (readonly) IndexTupleData size&lt;/span&gt;
 &lt;span class=&quot;err&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;set&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;index_tuple_hdr&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;
@@ -1485,12 +1435,12 @@ everything.  Here is the result:&lt;/p&gt;
     &lt;span class=&quot;k&quot;&gt;LEFT&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;JOIN&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pg_am&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;am&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;ON&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;s2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;relam&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;am&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;oid&lt;/span&gt;
 &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sub&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;JOIN&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pg_class&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;c&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;ON&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;oid&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sub&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;table_oid&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;ORDER&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;BY&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;span class=&quot;k&quot;&gt;ORDER&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;BY&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;How does it perform compared to the actual values? Let’s go back to a bloated
-situation:&lt;/p&gt;
+situation: &lt;/p&gt;
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-psql&quot; data-lang=&quot;psql&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&quot;gp&quot;&gt;pagila=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TRUNCATE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;test&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-psql&quot; data-lang=&quot;psql&quot;&gt;&lt;span class=&quot;gp&quot;&gt;pagila=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TRUNCATE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;test&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 &lt;span class=&quot;gp&quot;&gt;pagila=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;INSERT&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;INTO&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;test&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;SELECT&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;FROM&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rental&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 &lt;span class=&quot;gp&quot;&gt;pagila=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;SELECT&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;relname&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pg_table_size&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;oid&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;index_size&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
   &lt;span class=&quot;mf&quot;&gt;100&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;stattuple&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pgstatindex&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;relname&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;avg_leaf_density&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;AS&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;bloat_ratio&lt;/span&gt;
@@ -1503,23 +1453,23 @@ situation:&lt;/p&gt;
 &lt;span class=&quot;go&quot;&gt;-----------------------------------------------+------------+-------------&lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt; test_inventory_id_idx                         |     507904 |       34.11&lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt; test_pkey                                     |     376832 |       10.25&lt;/span&gt;
-&lt;span class=&quot;go&quot;&gt; test_rental_date_inventory_id_customer_id_idx |     630784 |       26.14&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;span class=&quot;go&quot;&gt; test_rental_date_inventory_id_customer_id_idx |     630784 |       26.14&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;I created the file “~/tmp/bloat_index.sql” with this estimated indexes bloat
 query filtering on table &lt;code&gt;test&lt;/code&gt;, here is its result:&lt;/p&gt;
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-psql&quot; data-lang=&quot;psql&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&quot;gp&quot;&gt;pagila=#&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;\i&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;~/tmp/bloat_index.sql&lt;/span&gt; 
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-psql&quot; data-lang=&quot;psql&quot;&gt;&lt;span class=&quot;gp&quot;&gt;pagila=#&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;\i&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;~/tmp/bloat_index.sql&lt;/span&gt; 
 &lt;span class=&quot;go&quot;&gt; current_database | nspname | table_name |                  index_name                   | totalbytes | wastedbytes |      realbloat      &lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt;------------------+---------+------------+-----------------------------------------------+------------+-------------+---------------------&lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt; pagila           | public  | test       | test_inventory_id_idx                         |     507904 |      172032 | 33.8709677419354839&lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt; pagila           | public  | test       | test_pkey                                     |     376832 |       40960 | 10.8695652173913043&lt;/span&gt;
-&lt;span class=&quot;go&quot;&gt; pagila           | public  | test       | test_rental_date_inventory_id_customer_id_idx |     630784 |      172032 | 27.2727272727272727&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;span class=&quot;go&quot;&gt; pagila           | public  | test       | test_rental_date_inventory_id_customer_id_idx |     630784 |      172032 | 27.2727272727272727&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;Well, pretty close :-)&lt;/p&gt;
 
 &lt;p&gt;Let’s REINDEX:&lt;/p&gt;
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-psql&quot; data-lang=&quot;psql&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&quot;gp&quot;&gt;pagila=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;REINDEX&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;test&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-psql&quot; data-lang=&quot;psql&quot;&gt;&lt;span class=&quot;gp&quot;&gt;pagila=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;REINDEX&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;test&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 &lt;span class=&quot;gp&quot;&gt;pagila=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;ANALYZE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;test&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 &lt;span class=&quot;gp&quot;&gt;pagila=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;SELECT&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;relname&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pg_table_size&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;oid&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;index_size&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
   &lt;span class=&quot;mf&quot;&gt;100&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;stattuple&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pgstatindex&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;relname&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;avg_leaf_density&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;AS&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;bloat_ratio&lt;/span&gt;
@@ -1538,14 +1488,14 @@ query filtering on table &lt;code&gt;test&lt;/code&gt;, here is its result:&lt;/
 &lt;span class=&quot;go&quot;&gt;------------------+---------+------------+-----------------------------------------------+------------+-------------+---------------------&lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt; pagila           | public  | test       | test_inventory_id_idx                         |     376832 |       40960 | 10.8695652173913043&lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt; pagila           | public  | test       | test_pkey                                     |     376832 |       40960 | 10.8695652173913043&lt;/span&gt;
-&lt;span class=&quot;go&quot;&gt; pagila           | public  | test       | test_rental_date_inventory_id_customer_id_idx |     524288 |       65536 | 12.5000000000000000&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;span class=&quot;go&quot;&gt; pagila           | public  | test       | test_rental_date_inventory_id_customer_id_idx |     524288 |       65536 | 12.5000000000000000&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
-&lt;p&gt;Not bad.&lt;/p&gt;
+&lt;p&gt;Not bad. &lt;/p&gt;
 
 &lt;p&gt;Let’s create some bloat. The table is approx. 160,000 rows, so the following
 query updates ~10% of the table:&lt;/p&gt;
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-psql&quot; data-lang=&quot;psql&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&quot;gp&quot;&gt;pagila=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;UPDATE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;test&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;SET&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rental_date&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;current_timestamp&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;WHERE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rental_id&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;3200&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;AND&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rental_id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-psql&quot; data-lang=&quot;psql&quot;&gt;&lt;span class=&quot;gp&quot;&gt;pagila=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;UPDATE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;test&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;SET&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rental_date&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;current_timestamp&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;WHERE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rental_id&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;3200&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;AND&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rental_id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 &lt;span class=&quot;gp&quot;&gt;pagila=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;ANALYZE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;test&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 
 &lt;span class=&quot;gp&quot;&gt;pagila=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;SELECT&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;relname&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pg_table_size&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;oid&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;index_size&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
@@ -1567,11 +1517,11 @@ query updates ~10% of the table:&lt;/p&gt;
 &lt;span class=&quot;go&quot;&gt; pagila           | public  | test       | test_inventory_id_idx                         |     475136 |      139264 | 29.3103448275862069&lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt; pagila           | public  | test       | test_pkey                                     |     450560 |      114688 | 25.4545454545454545&lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt; pagila           | public  | test       | test_rental_date_inventory_id_customer_id_idx |     598016 |      139264 | 23.2876712328767123&lt;/span&gt;
-&lt;span class=&quot;go&quot;&gt;(3 rows)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;span class=&quot;go&quot;&gt;(3 rows)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;Erk, not so good. Moar bloat?&lt;/p&gt;
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-psql&quot; data-lang=&quot;psql&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&quot;gp&quot;&gt;pagila=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;UPDATE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;test&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;SET&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rental_date&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;current_timestamp&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;WHERE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rental_id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-psql&quot; data-lang=&quot;psql&quot;&gt;&lt;span class=&quot;gp&quot;&gt;pagila=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;UPDATE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;test&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;SET&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rental_date&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;current_timestamp&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;WHERE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rental_id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 &lt;span class=&quot;gp&quot;&gt;pagila=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;ANALYZE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;test&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 &lt;span class=&quot;gp&quot;&gt;pagila=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;SELECT&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;relname&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pg_table_size&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;oid&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;index_size&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
   &lt;span class=&quot;mf&quot;&gt;100&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;stattuple&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pgstatindex&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;relname&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;avg_leaf_density&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;AS&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;bloat_ratio&lt;/span&gt;
@@ -1592,11 +1542,11 @@ query updates ~10% of the table:&lt;/p&gt;
 &lt;span class=&quot;go&quot;&gt; pagila           | public  | test       | test_inventory_id_idx                         |     745472 |      409600 | 54.9450549450549451&lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt; pagila           | public  | test       | test_pkey                                     |     737280 |      401408 | 54.4444444444444444&lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt; pagila           | public  | test       | test_rental_date_inventory_id_customer_id_idx |     925696 |      466944 | 50.4424778761061947&lt;/span&gt;
-&lt;span class=&quot;go&quot;&gt;(3 rows)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;span class=&quot;go&quot;&gt;(3 rows)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;Well, better again.&lt;/p&gt;
 
-&lt;p&gt;##Conclusion&lt;/p&gt;
+&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h2&gt;
 
 &lt;p&gt;This new query performs much better for indexes than the usual one everyone
 knew for a long time.  But it isn’t perfect, showing sometimes some quite wrong
@@ -1616,18 +1566,16 @@ indexes and pages guts.&lt;/p&gt;
 
 &lt;p&gt;As a side note, I had been surprised to see that padding to &lt;code&gt;MAXALIGN&lt;/code&gt; was
 applied on both tuple header AND tuple data.  My understanding is that for each
-row in an index leave page, we have:&lt;/p&gt;
-&lt;ul&gt;
-  &lt;li&gt;the item_pointer at the beginning of the page,&lt;/li&gt;
-  &lt;li&gt;the tuple header + data at the end of the page that must be aligned on
-&lt;code&gt;MAXALIGN&lt;/code&gt;.&lt;/li&gt;
-&lt;/ul&gt;
+row in an index leave page, we have:
+* the item_pointer at the beginning of the page,
+* the tuple header + data at the end of the page that must be aligned on
+  &lt;code&gt;MAXALIGN&lt;/code&gt;.&lt;/p&gt;
 
 &lt;p&gt;Why ain’t they padded &lt;em&gt;together&lt;/em&gt; to &lt;code&gt;MAXALIGN&lt;/code&gt;? Wouldn’t this save
-some space?&lt;/p&gt;
+some space? &lt;/p&gt;
 
 &lt;p&gt;Thank you for reading till the end! Cheers, see you maybe in another post about
-table bloat next time ;-)&lt;/p&gt;
+table bloat next time ;-) &lt;/p&gt;
 </description>
       <pubDate>Fri, 28 Mar 2014 07:05:00 +0100</pubDate>
       <link>http://blog.ioguix.net/postgresql/2014/03/28/Playing-with-indexes-and-better-bloat-estimate.html</link>
@@ -1653,7 +1601,7 @@ importing pgBadger normalization code in SQL.  Next pieces of code are tested
 under PostgreSQL 9.1 but should be easy to port to previous versions.  So here
 is the function to create (I tried my best to keep it readable :-)):&lt;/p&gt;
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-sql&quot; data-lang=&quot;sql&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;OR&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;REPLACE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;FUNCTION&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;normalize_query&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;IN&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;TEXT&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;OUT&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;TEXT&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;AS&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;body$&lt;/span&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-sql&quot; data-lang=&quot;sql&quot;&gt;&lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;OR&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;REPLACE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;FUNCTION&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;normalize_query&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;IN&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;TEXT&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;OUT&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;TEXT&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;AS&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;body$&lt;/span&gt;
   &lt;span class=&quot;k&quot;&gt;SELECT&lt;/span&gt;
     &lt;span class=&quot;n&quot;&gt;regexp_replace&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;regexp_replace&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;regexp_replace&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;regexp_replace&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
     &lt;span class=&quot;n&quot;&gt;regexp_replace&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;regexp_replace&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;regexp_replace&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;regexp_replace&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
@@ -1681,7 +1629,7 @@ is the function to create (I tried my best to keep it readable :-)):&lt;/p&gt;
     &lt;span class=&quot;s1&quot;&gt;&amp;#39;in\s*\([&amp;#39;&amp;#39;0x,\s]*\)&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;          &lt;span class=&quot;s1&quot;&gt;&amp;#39;in (...)&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;    &lt;span class=&quot;s1&quot;&gt;&amp;#39;g&amp;#39;&lt;/span&gt;   &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
   &lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 &lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;body$&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;LANGUAGE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;SQL&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;span class=&quot;k&quot;&gt;LANGUAGE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;SQL&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;Keep in mind that I extracted these regular expressions straight from pgbadger.
 Any comment about how to make it quicker/better/simpler/whatever is
@@ -1690,7 +1638,7 @@ appreciated!&lt;/p&gt;
 &lt;p&gt;Here the associated view to group everything according to the normalized
 queries:&lt;/p&gt;
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-sql&quot; data-lang=&quot;sql&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;OR&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;REPLACE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;VIEW&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pg_stat_statements_normalized&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;AS&lt;/span&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-sql&quot; data-lang=&quot;sql&quot;&gt;&lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;OR&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;REPLACE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;VIEW&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pg_stat_statements_normalized&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;AS&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;SELECT&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;userid&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dbid&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;normalize_query&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;query&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;AS&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;query&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;sum&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;calls&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;AS&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;calls&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
   &lt;span class=&quot;k&quot;&gt;sum&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;total_time&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;AS&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;total_time&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;sum&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;rows&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;rows&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
   &lt;span class=&quot;k&quot;&gt;sum&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;shared_blks_hit&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;AS&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;shared_blks_hit&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
@@ -1702,11 +1650,11 @@ queries:&lt;/p&gt;
   &lt;span class=&quot;k&quot;&gt;sum&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;temp_blks_read&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;AS&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;temp_blks_read&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
   &lt;span class=&quot;k&quot;&gt;sum&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;temp_blks_written&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;AS&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;temp_blks_written&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;FROM&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pg_stat_statements&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;GROUP&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;BY&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;span class=&quot;k&quot;&gt;GROUP&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;BY&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;Using this function and the view, a small &lt;code&gt;pgbench -t 30 -c 10&lt;/code&gt;, gives:&lt;/p&gt;
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-psql&quot; data-lang=&quot;psql&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&quot;gp&quot;&gt;pgbench=&amp;gt;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;SELECT&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;round&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;total_time&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;numeric&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;calls&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;AS&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;avg_time&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;calls&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; 
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-psql&quot; data-lang=&quot;psql&quot;&gt;&lt;span class=&quot;gp&quot;&gt;pgbench=&amp;gt;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;SELECT&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;round&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;total_time&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;numeric&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;calls&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;AS&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;avg_time&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;calls&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; 
   &lt;span class=&quot;n&quot;&gt;round&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;total_time&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;numeric&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;AS&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;total_time&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;rows&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;query&lt;/span&gt; 
 &lt;span class=&quot;k&quot;&gt;FROM&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pg_stat_statements_normalized&lt;/span&gt; 
 &lt;span class=&quot;k&quot;&gt;ORDER&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;BY&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;DESC&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;2&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;DESC&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
@@ -1720,16 +1668,16 @@ queries:&lt;/p&gt;
 &lt;span class=&quot;go&quot;&gt;     0.00 |   196 |       0.00 |  196 | insert into pgbench_history (tid, bid, aid, delta, mtime) values (0, 0, 0, 0, current_timestamp);&lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt;     0.00 |   193 |       0.00 |  193 | select abalance from pgbench_accounts where aid = 0;&lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt;     0.00 |   183 |       0.26 |  183 | update pgbench_tellers set tbalance = tbalance + 0 where tid = 0;&lt;/span&gt;
-&lt;span class=&quot;go&quot;&gt;     0.00 |     1 |       0.00 |    0 | truncate pgbench_history&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;span class=&quot;go&quot;&gt;     0.00 |     1 |       0.00 |    0 | truncate pgbench_history&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;For information, the real non-normalized &lt;code&gt;pg_stat_statement&lt;/code&gt; view is 959 lines:&lt;/p&gt;
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-psql&quot; data-lang=&quot;psql&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&quot;gp&quot;&gt;pgbench=&amp;gt;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;SELECT&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;count&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;FROM&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pg_stat_statements&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-psql&quot; data-lang=&quot;psql&quot;&gt;&lt;span class=&quot;gp&quot;&gt;pgbench=&amp;gt;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;SELECT&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;count&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;FROM&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pg_stat_statements&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 
 &lt;span class=&quot;go&quot;&gt; count &lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt;-------&lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt;   959&lt;/span&gt;
-&lt;span class=&quot;go&quot;&gt;(1 ligne)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;span class=&quot;go&quot;&gt;(1 ligne)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;Obvisouly, regular expression are not magic and this will never be as strict as
 the engine itself. But at least it helps while waiting for 9.2 in production!&lt;/p&gt;
@@ -1741,6 +1689,91 @@ the engine itself. But at least it helps while waiting for 9.2 in production!&lt
       <pubDate>Mon, 06 Aug 2012 19:53:00 +0200</pubDate>
       <link>http://blog.ioguix.net/postgresql/2012/08/06/Normalizing-queries-for-pg_stat_statements.html</link>
       <guid isPermaLink="true">http://blog.ioguix.net/postgresql/2012/08/06/Normalizing-queries-for-pg_stat_statements.html</guid>
+    </item>
+    
+    <item>
+      <title>Using pgBagder and logsaw for scheduled reports</title>
+      <description>&lt;p&gt;Hey,&lt;/p&gt;
+
+&lt;p&gt;While waiting for next version of pgBadger, here is a tip to create scheduled
+pgBadger report.  For this demo, I’ll suppose:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;we have PostgreSQL’s log files in &lt;code&gt;/var/log/pgsql&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;we want to produce a weekly report using pgBadger with the “postgres” system
+user… &lt;/li&gt;
+  &lt;li&gt;…so we keep at least 8 days of log&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;You will need &lt;a href=&quot;https://github.com/dalibo/pgbadger/downloads&quot;&gt;pgbadger&lt;/a&gt; and
+&lt;a href=&quot;https://github.com/dalibo/logsaw/downloads&quot;&gt;logsaw&lt;/a&gt;.  Both tools are under BSD
+license and pure perl script with no dependencies.&lt;/p&gt;
+
+&lt;p&gt;“logsaw” is a tool aimed to parse log files, looking for some regexp-matching
+lines, printing them to standard output and remembering where it stop last
+time.  At start, it searches for the last line it parsed during its last call,
+and starts working from there.  Yes, for those familiar with “tail_n_mail”, it
+does the same thing, but without the mail and report processing part.
+Moreover, it supports rotation and compression of log files (not sure about
+tail_n_mail).  Thanks to this tool, we’ll be able to create new reports from
+where the last one finished!&lt;/p&gt;
+
+&lt;p&gt;We need to create a simple configuration file for logsaw:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-console&quot; data-lang=&quot;console&quot;&gt;&lt;span class=&quot;gp&quot;&gt;$&lt;/span&gt; cat &amp;lt;&amp;lt;EOF &amp;gt; ~postgres/.logsaw
+&lt;span class=&quot;go&quot;&gt;LOGDIR=/var/log/pgsql/&lt;/span&gt;
+&lt;span class=&quot;go&quot;&gt;EOF&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;There’s three more optional parameters in this configuration file you might
+want to know:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;if you want to process some particular files, you can use the
+&lt;code&gt;LOGFILES&lt;/code&gt; parameter, a regular expression to filter files in the
+&lt;code&gt;LOGDIR&lt;/code&gt; folder. When not defined, the default empty string means:
+«take all files in the folder».&lt;/li&gt;
+  &lt;li&gt;if your log files are compressed, you can use the &lt;code&gt;PAGER&lt;/code&gt; parameter which
+should be a command that uncompress your log files to standard output, eg.
+&lt;code&gt;PAGER=zcat -f&lt;/code&gt;. Note that if available, logsaw will use silently
+IO::Zlib to read your compressed files.&lt;/li&gt;
+  &lt;li&gt;you can filter extracted lines from log files using the &lt;code&gt;REGEX&lt;/code&gt; parameters.
+You can add as many &lt;code&gt;REGEX&lt;/code&gt; parameter than needed, each of them must be a
+regular expression. When not defined, the default empty &lt;code&gt;REGEX&lt;/code&gt; array means:
+«match all the lines».&lt;/li&gt;
+  &lt;li&gt;each time you call logsaw, it saves its states to your configuration file,
+adding parameters &lt;code&gt;FILEID&lt;/code&gt; and &lt;code&gt;OFFSET&lt;/code&gt;. &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;That’s it for logsaw. See its README files for more details, options and sample
+configuration file. &lt;/p&gt;
+
+&lt;p&gt;Now, the command line to create the report using pgbadger:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-console&quot; data-lang=&quot;console&quot;&gt;&lt;span class=&quot;gp&quot;&gt;$&lt;/span&gt; logsaw &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; pgbadger -g -o /path/to/report-&lt;span class=&quot;k&quot;&gt;$(&lt;/span&gt;date +%Y%m%d&lt;span class=&quot;k&quot;&gt;)&lt;/span&gt;.html -&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;You might want to add the &lt;code&gt;-f&lt;/code&gt; option to pgbadger if it doesn’t
+guess the log format itself (stderr or syslog or csv).&lt;/p&gt;
+
+&lt;p&gt;About creating reports on a weekly basis, let’s say every sunday at 2:10am,
+using crontab:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;m&quot;&gt;10&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;2&lt;/span&gt; 1-7 * &lt;span class=&quot;m&quot;&gt;7&lt;/span&gt;  logsaw &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; pgbadger -g -o /path/to/report-&lt;span class=&quot;k&quot;&gt;$(&lt;/span&gt;date +&lt;span class=&quot;se&quot;&gt;\%&lt;/span&gt;Y&lt;span class=&quot;se&quot;&gt;\%&lt;/span&gt;m&lt;span class=&quot;se&quot;&gt;\%&lt;/span&gt;d&lt;span class=&quot;k&quot;&gt;)&lt;/span&gt;.html -&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Here you go, enjoy :)&lt;/p&gt;
+
+&lt;p&gt;That’s why I like UNIX style and spirit commands: simple single-task but
+powerful and complementary tools.&lt;/p&gt;
+
+&lt;p&gt;Wait or help for more nice features in pgBadger !&lt;/p&gt;
+
+&lt;p&gt;Cheers !&lt;/p&gt;
+
+&lt;p&gt;PS: There’s another tool to deal with log files and reports you might be
+interested in: “logwatch”&lt;/p&gt;
+</description>
+      <pubDate>Mon, 06 Aug 2012 15:37:00 +0200</pubDate>
+      <link>http://blog.ioguix.net/postgresql/2012/08/06/Using-pgBagder-and-logsaw-for-scheduled-reports.html</link>
+      <guid isPermaLink="true">http://blog.ioguix.net/postgresql/2012/08/06/Using-pgBagder-and-logsaw-for-scheduled-reports.html</guid>
     </item>
     
   </channel>

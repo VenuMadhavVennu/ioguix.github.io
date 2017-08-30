@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
 <head>
   <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-  <title>Btree bloat query changelog - part 3</title>
+  <title>PAF 2.2 rc1 released</title>
   <meta name="author" content="Jehan-Guillaume (ioguix) de Rorthais" />
   <link href="http://blog.ioguix.net/feed.xml" rel="alternate" title="Jehan-Guillaume (ioguix) de Rorthais" type="application/atom+xml" >
   <link rel="stylesheet" href="/css/screen.css" type="text/css" media="screen, projection" />
@@ -23,7 +23,7 @@
   <hr />
   
   <div id="content_infos">
-    09 September 2014
+    30 August 2017
     
     <ul class="inline-list">
     
@@ -35,11 +35,15 @@
     <ul class="inline-list">
     
       <li>
-        <a href="/tag/bloat/">bloat</a>, 
+        <a href="/tag/postgresql/">postgresql</a>, 
       </li>
     
       <li>
-        <a href="/tag/postgresql/">postgresql</a>
+        <a href="/tag/ha/">ha</a>, 
+      </li>
+    
+      <li>
+        <a href="/tag/pacemaker/">pacemaker</a>
       </li>
     
       <li><i class="fa fa-tags"></i></li>
@@ -50,45 +54,58 @@
      <i class="fa fa-comment"></i>
   </div>
 
-  <h1>Btree bloat query changelog - part 3</h1>
+  <h1>PAF 2.2 rc1 released</h1>
 
   <br style="clear: both" />
 
-  <h2 id="changelog">Changelog</h2>
+  <p>The first release candidate of the PAF resource agent for Pacemaker has been
+released yesterday.</p>
 
-<p>Here are some fresh news about my previous work (see
-<a href="/postgresql/2014/03/28/Playing-with-indexes-and-better-bloat-estimate.html">part 1</a>
-and <a href="/postgresql/2014/06/24/More-work-on-index-bloat-estimation-query.html">part 2</a>)
-on a better Btree bloat query:</p>
+<p>The changelog since 2.1 includes:</p>
 
 <ul>
-  <li>add field <code>is_na</code> to filter out indexes we can not estimate the bloat with
-“accuracy” (currently only indexes referencing a fields using the <code>name</code> type).</li>
-  <li>better estimation for variable length types (<code>varchar</code>, <code>text</code>, <code>bytea</code>, …).
-Thequery now try to consider their header part</li>
-  <li>Three different queries depending on the PostgreSQL version:
-    <ul>
-      <li>from 7.4 to 8.1: <a href="">https://gist.github.com/ioguix/5f60e24a77828078ff5f</a></li>
-      <li>for 8.2: <a href="">https://gist.github.com/ioguix/0675875e2780b362ef28</a></li>
-      <li>for 8.3 and more: <a href="">https://gist.github.com/ioguix/c29d5790b8b93bf81c27</a></li>
-    </ul>
-  </li>
-  <li>ignore non-valid indexes for 8.2 and more</li>
+  <li>new: support PostgreSQL 10</li>
+  <li>new: add the maxlag parameter to exclude lagging slaves from promotion, 
+Thomas Reiss</li>
+  <li>new: support for multiple pgsqlms resources in the same cluster</li>
+  <li>new: provide comprehensive error messages to crm_mon</li>
+  <li>fix: follow the resource agent man page naming policy and section</li>
+  <li>fix: add documentation to the pgsqlms man page</li>
+  <li>fix: do not rely on crm_failcount, suggested on the clusterlabs lists</li>
+  <li>misc: improve the RPM packaging</li>
+  <li>misc: check Pacemaker compatibility and resource setup</li>
+  <li>misc: improve the election process by including timelines comparison</li>
+  <li>misc: various code cleanup, factorization and module improvement</li>
 </ul>
 
-<h2 id="known-issue">Known issue</h2>
+<p>But I have some other great news as well. First, various documentation pages
+has been updated:</p>
+<ul>
+  <li>the Debian cookbook catched up with the CentOS one</li>
+  <li>quick starts has been updated and improved</li>
+  <li>a new quick start for Debian 9 has been added (spoiler: crmsh is much better
+supported under Debian)</li>
+</ul>
 
-<p>While working on table bloat (I will blog about that very soon), I found a
-large deviation on statistics on array types. I’m not sure how to handle
-correctly these animals’ header yet.</p>
+<p>See <a href="">http://dalibo.github.io/PAF/documentation.html</a>.</p>
 
-<p>Cheers and happy monitoring!</p>
+<p>Second, PAF packages are now available in the yum PGDG repository thanks to
+Devrim! It currently delivers 2.1 or 1.1 depending on your distro, but will
+delivers 2.2 as soon as it is officially released.</p>
+
+<p>Moreover, 2.2 is currently in the pgdg-testing repositories of
+<a href="">http://apt.postgresql.org</a>. It will hit the stable ones after its official
+release as well. Thank you Adrian Vondendriesch for your help and patches!</p>
+
+<p>Of course, any kind of feedback or contribution is welcomed.</p>
+
+<p>Cheers!</p>
 
 
   
 <div id="comments">
   <hr />
-  <a class="comments" name="comments">Comments</a>&nbsp;Leave a comment <a href="mailto:ioguix+blog@gmail.com?subject=Post:%20Btree%20bloat%20query%20changelog%20-%20part%203">by email</a> or <a href="#disqus_thread">Disqus</a>
+  <a class="comments" name="comments">Comments</a>&nbsp;Leave a comment <a href="mailto:ioguix+blog@gmail.com?subject=Post:%20PAF%202.2%20rc1%20released">by email</a> or <a href="#disqus_thread">Disqus</a>
   <p>Note: I only publish your name/pseudo, mail subject and content. I will NOT publish your email address.</p>
 
   <p>No comments yet.</p>
@@ -100,7 +117,7 @@ correctly these animals’ header yet.</p>
 <script type="text/javascript">
     /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
     var disqus_shortname  = 'ioguix';
-    var disqus_identifier = "2014-09-09-Btree-bloat-query-changelog-part-3";
+    var disqus_identifier = "2017-08-30-PAF-2-2-rc1-released";
 
     /* * * DON'T EDIT BELOW THIS LINE * * */
     (function() {
