@@ -73,7 +73,7 @@ BTree indexes:
   <li>for 8.2 and more: <a href="">https://gist.github.com/ioguix/c29d5790b8b93bf81c27</a></li>
 </ul>
 
-<h2 id="columns-has-been-ignored">Columns has been ignored</h2>
+<p>##Columns has been ignored</p>
 
 <p>In two different situations, some index fields were just ignored by the query:</p>
 
@@ -92,7 +92,7 @@ seems to me there’s no solution for 7.4.</p>
 ignored in both cases, s the bloat sounds much bigger with the old version of
 the query. Here is a demo with an index on expression:</p>
 
-<div class="highlight"><pre><code class="language-psql" data-lang="psql"><span class="gp">postgres@pagila=#</span> <span class="k">create</span> <span class="k">index</span> <span class="n">test_expression</span> <span class="k">on</span> <span class="n">test</span> <span class="p">(</span><span class="n">rental_id</span><span class="p">,</span> <span class="n">md5</span><span class="p">(</span><span class="n">rental_id</span><span class="o">::</span><span class="nb">text</span><span class="p">));</span>
+<figure class="highlight"><pre><code class="language-psql" data-lang="psql"><span></span><span class="gp">postgres@pagila=#</span> <span class="k">create</span> <span class="k">index</span> <span class="n">test_expression</span> <span class="k">on</span> <span class="n">test</span> <span class="p">(</span><span class="n">rental_id</span><span class="p">,</span> <span class="n">md5</span><span class="p">(</span><span class="n">rental_id</span><span class="o">::</span><span class="nb">text</span><span class="p">));</span>
 <span class="go">CREATE INDEX</span>
 
 <span class="gp">postgres@pagila=#</span> <span class="k">analyze</span> <span class="p">;</span>
@@ -101,14 +101,14 @@ the query. Here is a demo with an index on expression:</p>
 <span class="gp">postgres@pagila=#</span> <span class="kp">\i</span> <span class="ss">old/btree_bloat.sql-20141022</span>
 <span class="go"> current_database | schemaname | tblname |     idxname     | real_size | estimated_size | bloat_size |        bloat_ratio         | is_na </span>
 <span class="go">------------------+------------+---------+-----------------+-----------+----------------+------------+----------------------------+-------</span>
-<span class="go"> pagila           | public     | test    | test_expression |    974848 |         335872 |     638976 |        65.5462184873949580 | f</span></code></pre></div>
+<span class="go"> pagila           | public     | test    | test_expression |    974848 |         335872 |     638976 |        65.5462184873949580 | f</span></code></pre></figure>
 
 <p>Most of this 65% bloat estimation are actually the data of the missing field.
 The result is much more coherent with the latest version of the query for a
 freshly created index, supposed to have around 10% of bloat as showed in the
 2nd query:</p>
 
-<div class="highlight"><pre><code class="language-psql" data-lang="psql"><span class="gp">postgres@pagila=#</span> <span class="kp">\i</span> <span class="ss">sql/btree_bloat.sql</span>
+<figure class="highlight"><pre><code class="language-psql" data-lang="psql"><span></span><span class="gp">postgres@pagila=#</span> <span class="kp">\i</span> <span class="ss">sql/btree_bloat.sql</span>
 <span class="go"> current_database | schemaname | tblname |     idxname     | real_size | estimated_size | bloat_size |   bloat_ratio    | is_na </span>
 <span class="go">------------------+------------+---------+-----------------+-----------+----------------+------------+------------------+-------</span>
 <span class="go"> pagila           | public     | test    | test_expression |    974848 |         851968 |     122880 | 12.6050420168067 | f</span>
@@ -117,15 +117,15 @@ freshly created index, supposed to have around 10% of bloat as showed in the
 <span class="k">FROM</span> <span class="n">pg_class</span> <span class="k">WHERE</span> <span class="n">relname</span> <span class="o">=</span> <span class="s1">&#39;test_expression&#39;</span><span class="p">;</span>
 <span class="go">     relname     | bloat_ratio </span>
 <span class="go">-----------------+-------------</span>
-<span class="go"> test_expression |       10.33</span></code></pre></div>
+<span class="go"> test_expression |       10.33</span></code></pre></figure>
 
-<h2 id="wrong-estimation-for-varlena-types">Wrong estimation for varlena types</h2>
+<p>##Wrong estimation for varlena types</p>
 
 <p>After fixing the query for indexes on expression, I noticed some negative bloat
 estimation for the biggest ones: the real index was smaller than the estimated
 one!</p>
 
-<div class="highlight"><pre><code class="language-psql" data-lang="psql"><span class="gp">postgres@pagila=#</span> <span class="k">create</span> <span class="k">table</span> <span class="n">test3</span> <span class="k">as</span> <span class="k">select</span> <span class="n">i</span> <span class="k">from</span> <span class="n">generate_series</span><span class="p">(</span><span class="mf">1</span><span class="p">,</span><span class="mf">10000000</span><span class="p">)</span> <span class="n">i</span><span class="p">;</span>
+<figure class="highlight"><pre><code class="language-psql" data-lang="psql"><span></span><span class="gp">postgres@pagila=#</span> <span class="k">create</span> <span class="k">table</span> <span class="n">test3</span> <span class="k">as</span> <span class="k">select</span> <span class="n">i</span> <span class="k">from</span> <span class="n">generate_series</span><span class="p">(</span><span class="mf">1</span><span class="p">,</span><span class="mf">10000000</span><span class="p">)</span> <span class="n">i</span><span class="p">;</span>
 <span class="go">SELECT 10000000</span>
 
 <span class="gp">postgres@pagila=#</span> <span class="k">create</span> <span class="k">index</span> <span class="k">on</span> <span class="n">test3</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">md5</span><span class="p">(</span><span class="n">i</span><span class="o">::</span><span class="nb">text</span><span class="p">));</span>
@@ -134,7 +134,7 @@ one!</p>
 <span class="gp">postgres@pagila=#</span> <span class="kp">\i</span> <span class="ss">~/sql/old/btree_bloat.sql-20141027</span>
 <span class="go"> current_database | schemaname | tblname |     idxname     | real_size | estimated_size | bloat_size |     bloat_ratio     | is_na </span>
 <span class="go">------------------+------------+---------+-----------------+-----------+----------------+------------+---------------------+-------</span>
-<span class="go"> pagila           | public     | test3   | test3_i_md5_idx | 590536704 |      601776128 |  -11239424 | -1.9032557881448805 | f</span></code></pre></div>
+<span class="go"> pagila           | public     | test3   | test3_i_md5_idx | 590536704 |      601776128 |  -11239424 | -1.9032557881448805 | f</span></code></pre></figure>
 
 <p>In this version of the query, I am computing and adding the headers length of
 varlena types (text, bytea, etc) to the statistics(see
@@ -149,7 +149,7 @@ bytes long. In the following results, we can see the average length from
 <code>pg_stats</code> is <code>32+1</code> for one md5, and <code>4*32+4</code> for a string of 4 concatenated
 md5, supposed to be 128 byte long:</p>
 
-<div class="highlight"><pre><code class="language-psql" data-lang="psql"><span class="gp">postgres@pagila=#</span> <span class="k">create</span> <span class="k">table</span> <span class="n">test2</span> <span class="k">as</span> <span class="k">select</span> <span class="n">i</span><span class="p">,</span> <span class="n">md5</span><span class="p">(</span><span class="n">i</span><span class="o">::</span><span class="nb">text</span><span class="p">),</span> <span class="n">repeat</span><span class="p">(</span><span class="n">md5</span><span class="p">(</span><span class="n">i</span><span class="o">::</span><span class="nb">text</span><span class="p">),</span> <span class="mf">4</span><span class="p">)</span> <span class="k">from</span> <span class="n">generate_series</span><span class="p">(</span><span class="mf">1</span><span class="p">,</span><span class="mf">5</span><span class="p">)</span> <span class="n">i</span><span class="p">;</span>
+<figure class="highlight"><pre><code class="language-psql" data-lang="psql"><span></span><span class="gp">postgres@pagila=#</span> <span class="k">create</span> <span class="k">table</span> <span class="n">test2</span> <span class="k">as</span> <span class="k">select</span> <span class="n">i</span><span class="p">,</span> <span class="n">md5</span><span class="p">(</span><span class="n">i</span><span class="o">::</span><span class="nb">text</span><span class="p">),</span> <span class="n">repeat</span><span class="p">(</span><span class="n">md5</span><span class="p">(</span><span class="n">i</span><span class="o">::</span><span class="nb">text</span><span class="p">),</span> <span class="mf">4</span><span class="p">)</span> <span class="k">from</span> <span class="n">generate_series</span><span class="p">(</span><span class="mf">1</span><span class="p">,</span><span class="mf">5</span><span class="p">)</span> <span class="n">i</span><span class="p">;</span>
 <span class="go">SELECT 5</span>
 
 <span class="gp">postgres@pagila=#</span> <span class="k">analyze</span> <span class="n">test2</span><span class="p">;</span>
@@ -160,11 +160,11 @@ md5, supposed to be 128 byte long:</p>
 <span class="go">-----------+---------+-----------</span>
 <span class="go"> test2     | i       |         4</span>
 <span class="go"> test2     | md5     |        33</span>
-<span class="go"> test2     | repeat  |       132</span></code></pre></div>
+<span class="go"> test2     | repeat  |       132</span></code></pre></figure>
 
 <p>After removing this part of the query, stats for <code>test3_i_md5_idx</code> are much better:</p>
 
-<div class="highlight"><pre><code class="language-psql" data-lang="psql"><span class="gp">postgres@pagila=#</span> <span class="k">SELECT</span> <span class="n">relname</span><span class="p">,</span>
+<figure class="highlight"><pre><code class="language-psql" data-lang="psql"><span></span><span class="gp">postgres@pagila=#</span> <span class="k">SELECT</span> <span class="n">relname</span><span class="p">,</span>
   <span class="mf">100</span><span class="o">-</span><span class="p">(</span><span class="n">stattuple</span><span class="mf">.</span><span class="n">pgstatindex</span><span class="p">(</span><span class="n">relname</span><span class="p">))</span><span class="mf">.</span><span class="n">avg_leaf_density</span> <span class="k">AS</span> <span class="n">bloat_ratio</span>
 <span class="k">FROM</span> <span class="n">pg_class</span> <span class="k">WHERE</span> <span class="n">relname</span> <span class="o">=</span> <span class="s1">&#39;test3_i_md5_idx&#39;</span><span class="p">;</span>
 <span class="go">     relname     | bloat_ratio </span>
@@ -174,11 +174,11 @@ md5, supposed to be 128 byte long:</p>
 <span class="gp">postgres@pagila=#</span> <span class="kp">\i</span> <span class="ss">~/sql/old/btree_bloat.sql-20141028</span>
 <span class="go"> current_database | schemaname | tblname |     idxname     | real_size | estimated_size | bloat_size |     bloat_ratio     | is_na </span>
 <span class="go">------------------+------------+---------+-----------------+-----------+----------------+------------+---------------------+-------</span>
-<span class="go"> pagila           | public     | test3   | test3_i_md5_idx | 590536704 |      521535488 |   69001216 | 11.6844923495221052 | f</span></code></pre></div>
+<span class="go"> pagila           | public     | test3   | test3_i_md5_idx | 590536704 |      521535488 |   69001216 | 11.6844923495221052 | f</span></code></pre></figure>
 
 <p>This is a nice bug fix AND one complexity out of the query. Code simplification is always a good news :)</p>
 
-<h2 id="adding-a-bit-of-opaque-data">Adding a bit of Opaque Data</h2>
+<p>##Adding a bit of Opaque Data</p>
 
 <p>When studying the Btree layout, I forgot about one small non-data area in index
 pages: the “Special space”, aka. “Opaque Data” in code sources. The previous
@@ -197,7 +197,7 @@ definitely help the bloat estimation accuracy. Using the previous demo on
 <code>test3_i_md5_idx</code>, here is the comparison of real bloat, estimation without
 considering the special space and estimation considering it:</p>
 
-<div class="highlight"><pre><code class="language-psql" data-lang="psql"><span class="gp">postgres@pagila=#</span> <span class="k">SELECT</span> <span class="n">relname</span><span class="p">,</span>
+<figure class="highlight"><pre><code class="language-psql" data-lang="psql"><span></span><span class="gp">postgres@pagila=#</span> <span class="k">SELECT</span> <span class="n">relname</span><span class="p">,</span>
   <span class="mf">100</span><span class="o">-</span><span class="p">(</span><span class="n">stattuple</span><span class="mf">.</span><span class="n">pgstatindex</span><span class="p">(</span><span class="n">relname</span><span class="p">))</span><span class="mf">.</span><span class="n">avg_leaf_density</span> <span class="k">AS</span> <span class="n">bloat_ratio</span>
 <span class="k">FROM</span> <span class="n">pg_class</span> <span class="k">WHERE</span> <span class="n">relname</span> <span class="o">=</span> <span class="s1">&#39;test3_i_md5_idx&#39;</span><span class="p">;</span>
 <span class="go">     relname     | bloat_ratio </span>
@@ -212,11 +212,11 @@ considering the special space and estimation considering it:</p>
 <span class="gp">postgres@pagila=#</span> <span class="kp">\i</span> <span class="ss">~/sql/btree_bloat.sql</span>
 <span class="go"> current_database | schemaname | tblname |     idxname     | real_size | estimated_size | bloat_size |   bloat_ratio    | is_na </span>
 <span class="go">------------------+------------+---------+-----------------+-----------+----------------+------------+------------------+-------</span>
-<span class="go"> pagila           | public     | test3   | test3_i_md5_idx | 590536704 |      525139968 |   65396736 | 11.0741187731491 | f</span></code></pre></div>
+<span class="go"> pagila           | public     | test3   | test3_i_md5_idx | 590536704 |      525139968 |   65396736 | 11.0741187731491 | f</span></code></pre></figure>
 
 <p>This is only an approximative 5% difference for the estimated size of this particular index.</p>
 
-<h2 id="conclusion">Conclusion</h2>
+<p>##Conclusion</p>
 
 <p>I never mentioned it before, but these queries are used in
 <a href="https://github.com/OPMDG/check_pgactivity">check_pgactivity</a> (a nagios plugin
