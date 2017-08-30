@@ -24,7 +24,7 @@ You'll find the queries here:
 * from PostgreSQL 8.2 to 8.4: [https://gist.github.com/ioguix/74769c8fe5edc582a61b]()
 * for PostgreSQL 9.0 and after: [https://gist.github.com/ioguix/4f95917f90c9e26df1b2]()
 
-##Tests
+## Tests
 
 I created the file `sql/bloat_tables.sql` with the 9.0 and more query version.
 I edited the query to add the bloat reported by `pgstattuple` (free_percent +
@@ -112,7 +112,7 @@ postgres@pagila=# \i sql/bloat_tables.sql
 Good, good, good. What next?
 
 
-##The alignment deviation
+## The alignment deviation
 
 You might have noticed I did not mentioned this table with a large deviation
 between the statistical bloat and the real one, called `rental`:
@@ -236,7 +236,7 @@ will live with that. By the way, this alignment overhead might be a nice
 subject for a script measuring it per tables.
 
 
-##Known issues
+## Known issues
 
 The same than for the Btree statistical bloat query: I'm pretty sure the query
 will have a pretty bad estimation with array types. I'll investigate about that

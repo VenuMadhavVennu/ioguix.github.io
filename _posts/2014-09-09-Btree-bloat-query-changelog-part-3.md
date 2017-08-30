@@ -7,7 +7,7 @@ tags: [bloat, postgresql]
 category: postgresql
 ---
 
-##Changelog
+## Changelog
 
 Here are some fresh news about my previous work (see
 [part 1]({%post_url 2014-03-28-Playing-with-indexes-and-better-bloat-estimate%})
@@ -24,7 +24,7 @@ on a better Btree bloat query:
   * for 8.3 and more: [https://gist.github.com/ioguix/c29d5790b8b93bf81c27]()
 * ignore non-valid indexes for 8.2 and more
 
-##Known issue
+## Known issue
 
 While working on table bloat (I will blog about that very soon), I found a
 large deviation on statistics on array types. I'm not sure how to handle

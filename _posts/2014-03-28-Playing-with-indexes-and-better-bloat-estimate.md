@@ -20,7 +20,7 @@ supposed to `REINDEX`.  While writing a detailed answer with examples, I had
 quite a surprise seeing an estimated index size ratio of 0.7 for a simple
 table!  I realized I never payed much attention to this part of the result...
 
-##The problem
+## The problem
 
 Here is a test table, a copy table <code>rental</code> from
 [pagila](http://pgfoundry.org/frs/download.php/1719/pagila-0.10.1.zip) project:
@@ -78,7 +78,7 @@ references *ALL* the table fields.  It's quite rare to find a btree index on
 all fields of a table, and obviously there's no point having multiple indexes
 on a table, all of them referencing all fields of the table.
 
-##A look at the real bloat
+## A look at the real bloat
 
 First, let see how the indexes are really bloated:
 
@@ -141,7 +141,7 @@ WHERE relname ~ 'test' AND relkind = 'i';
  test_rental_date_inventory_id_customer_id_idx |     524288 |       10.73
 {% endhighlight %}
 
-##A better query to estimate index bloat?
+## A better query to estimate index bloat?
 
 > Wait, you just showed us you can have the real bloat on indexes, why would I
 > want a loose estimate from a query relying on stats?!
@@ -342,7 +342,7 @@ pagila=# \i ~/tmp/bloat_index.sql
 
 Well, better again.
 
-##Conclusion
+## Conclusion
 
 This new query performs much better for indexes than the usual one everyone
 knew for a long time.  But it isn't perfect, showing sometimes some quite wrong

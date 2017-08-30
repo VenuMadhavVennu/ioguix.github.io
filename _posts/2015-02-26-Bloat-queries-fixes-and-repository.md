@@ -7,7 +7,7 @@ tags: [bloat, postgresql]
 category: postgresql
 ---
 
-##New repository
+## New repository
 
 It's been almost a year now that I wrote the first version of the btree bloat
 estimation query.  Then, came the first fixes, the bloat estimation queries for
@@ -27,7 +27,7 @@ by opening [issues](https://github.com/ioguix/pgsql-bloat-estimation/issues).
 This can lead to bug fixes or the creation of a FAQ.
 
 
-##Changelog
+## Changelog
 
 Here is a quick changelog since my
 [last post about bloat]( {% post_url 2014-11-03-Btree-bloat-query-part-4 %}):

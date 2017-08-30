@@ -36,7 +36,7 @@ inspiration and feedback.
 
 {{ post.excerpt }}
 
-##Study case
+## Study case
 
 I chose to illustrate this article with a table partitioned by date range. This
 is a fairly frequent practice and adapting this article to another partitioning
@@ -116,7 +116,7 @@ that I do not create the trigger on INSERT and UPDATE on the master table. This
 is out of the scope of this article, will not be needed and add no challenge to
 the subject.
 
-##The naive solution
+## The naive solution
 
 Of course, the whole trick revolves around triggers. We have to check the
 uniqueness of a PK value across all partitions after any INSERT or UPDATE on
@@ -247,7 +247,7 @@ after the related statement. The opposite `DEFERRED` behavior fire the trigger
 at the very end of the transaction unless the user decide to `SET CONSTRAINTS {
 ALL | name [, ...] } IMMEDIATE` somewhere during the transaction.
 
-##Defering the trigger to avoid the race condition ?
+## Defering the trigger to avoid the race condition ?
 
 Now, if you step back a second to look at what we have, you might wonder if
 forcing our constraints triggers to be `DEFERRABLE INITIALLY DEFERRED` would
@@ -311,7 +311,7 @@ scenario. Note that on 500 inserts, only 209 survived in total. That makes 291
 exceptions raised out of 324 expected, counting the duplicated keys that were
 not caught.
 
-##Isolation level?
+## Isolation level?
 
 Well, last chance. If this many transactions were committed in the exact same
 time, maybe we can force them to serialize with isolation level `SERIALIZABLE`?
@@ -342,7 +342,7 @@ DEFERRED triggers: as a simple user can change its isolation level, any bug in
 the application or not informed user can lead to scenarios with silent
 duplications. Fortunately, another simpler and safer solution exist.
 
-##Real solution: adding locks
+## Real solution: adding locks
 
 The `SERIALIZABLE` solution works because to emulate serial transaction
 execution for all transactions, it takes __predicate locks__ behind the scene
@@ -440,7 +440,7 @@ on a normal table as well, right?
 Wow, at last, finished. What? No? I can hear you thinking it only applies on
 integers. OK, bonus.
 
-##Supporting other types
+## Supporting other types
 
 Supporting unique constraint on integers was straightforward using advisory
 locks. But how can this applies to other types? Like text for instance ? Easy:
@@ -530,7 +530,7 @@ intense-colliding scenario. And we only find unique values across all
 partitions, as expected. Aaaaand grep-ing from the log file, I can find 64,117
 rejected rows...
 
-##Conclusion
+## Conclusion
 
 Such a long way already. Thank you for reading so far. At first I thought I
 could write about unique and foreign keys in the same article, but look at what

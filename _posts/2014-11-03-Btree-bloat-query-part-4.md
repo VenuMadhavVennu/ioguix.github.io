@@ -24,7 +24,7 @@ For people in a hurry, here are the links to the queries:
 * for 8.0 and 8.1: [https://gist.github.com/ioguix/5f60e24a77828078ff5f]()
 * for 8.2 and more: [https://gist.github.com/ioguix/c29d5790b8b93bf81c27]()
 
-##Columns has been ignored
+## Columns has been ignored
 
 In two different situations, some index fields were just ignored by the query:
 
@@ -72,7 +72,7 @@ FROM pg_class WHERE relname = 'test_expression';
  test_expression |       10.33
 {% endhighlight %}
 
-##Wrong estimation for varlena types
+## Wrong estimation for varlena types
 
 After fixing the query for indexes on expression, I noticed some negative bloat
 estimation for the biggest ones: the real index was smaller than the estimated
@@ -137,7 +137,7 @@ postgres@pagila=# \i ~/sql/old/btree_bloat.sql-20141028
 
 This is a nice bug fix AND one complexity out of the query. Code simplification is always a good news :)
 
-##Adding a bit of Opaque Data
+## Adding a bit of Opaque Data
 
 When studying the Btree layout, I forgot about one small non-data area in index
 pages: the "Special space", aka. "Opaque Data" in code sources. The previous
@@ -177,7 +177,7 @@ postgres@pagila=# \i ~/sql/btree_bloat.sql
 
 This is only an approximative 5% difference for the estimated size of this particular index.
 
-##Conclusion
+## Conclusion
 
 I never mentioned it before, but these queries are used in
 [check_pgactivity](https://github.com/OPMDG/check_pgactivity) (a nagios plugin

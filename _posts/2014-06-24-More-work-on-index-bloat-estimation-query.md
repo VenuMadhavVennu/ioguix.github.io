@@ -18,7 +18,7 @@ times to fix some drawbacks:
 This last one is actually far from perfect.  Very bad estimation could arise if
 the query is wrong about this size of pointers.
 
-##New version
+## New version
 
 Here is the gist of the new version of this query if you want to comment/patch:
 [https://gist.github.com/ioguix/c29d5790b8b93bf81c27](https://gist.github.com/ioguix/c29d5790b8b93bf81c27)
@@ -103,7 +103,7 @@ updated the query and added a warning on top of the query. The query does not
 require to be superuser anymore, but you have to make sure the role you are
 using is able to access all your precious tables and indexes!
 
-##Known bug
+## Known bug
 
 While testing the query, I found a weird bug where negative bloats show up on
 some system indexes.  As instance:
