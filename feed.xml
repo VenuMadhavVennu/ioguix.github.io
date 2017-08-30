@@ -11,6 +11,9 @@
       <description>&lt;p&gt;The first release candidate of the PAF resource agent for Pacemaker has been
 released yesterday.&lt;/p&gt;
 
+&lt;p&gt;You’ll find the tarball, packages and details there:
+&lt;a href=&quot;&quot;&gt;https://github.com/dalibo/PAF/releases/tag/v2.2_rc1&lt;/a&gt;&lt;/p&gt;
+
 &lt;p&gt;The changelog since 2.1 includes:&lt;/p&gt;
 
 &lt;ul&gt;

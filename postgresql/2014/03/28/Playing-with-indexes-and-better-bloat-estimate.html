@@ -70,12 +70,12 @@ supposed to <code>REINDEX</code>.  While writing a detailed answer with examples
 quite a surprise seeing an estimated index size ratio of 0.7 for a simple
 table!  I realized I never payed much attention to this part of the result…</p>
 
-<h2 id="the-problem">The problem</h2>
+<p>##The problem</p>
 
 <p>Here is a test table, a copy table <code>rental</code> from
 <a href="http://pgfoundry.org/frs/download.php/1719/pagila-0.10.1.zip">pagila</a> project:</p>
 
-<div class="highlight"><pre><code class="language-psql" data-lang="psql"><span class="gp">pagila=#</span> <span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">test</span> <span class="p">(</span><span class="k">LIKE</span> <span class="n">rental</span> <span class="k">INCLUDING</span> <span class="k">DEFAULTS</span> <span class="k">INCLUDING</span> <span class="k">CONSTRAINTS</span> <span class="k">INCLUDING</span> <span class="k">INDEXES</span> <span class="p">);</span>
+<figure class="highlight"><pre><code class="language-psql" data-lang="psql"><span></span><span class="gp">pagila=#</span> <span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">test</span> <span class="p">(</span><span class="k">LIKE</span> <span class="n">rental</span> <span class="k">INCLUDING</span> <span class="k">DEFAULTS</span> <span class="k">INCLUDING</span> <span class="k">CONSTRAINTS</span> <span class="k">INCLUDING</span> <span class="k">INDEXES</span> <span class="p">);</span>
 <span class="gp">pagila=#</span> <span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">test</span> <span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">rental</span><span class="p">;</span>
 <span class="gp">pagila=#</span> <span class="k">ANALYZE</span><span class="p">;</span>
 <span class="gp">pagila=#</span> <span class="kp">\d</span> <span class="ss">test</span>
@@ -92,18 +92,18 @@ table!  I realized I never payed much attention to this part of the result…</p
 <span class="go">Indexes:</span>
 <span class="go">    &quot;test_pkey&quot; PRIMARY KEY, btree (rental_id)</span>
 <span class="go">    &quot;test_rental_date_inventory_id_customer_id_idx&quot; UNIQUE, btree (rental_date, inventory_id, customer_id)</span>
-<span class="go">    &quot;test_inventory_id_idx&quot; btree (inventory_id)</span></code></pre></div>
+<span class="go">    &quot;test_inventory_id_idx&quot; btree (inventory_id)</span></code></pre></figure>
 
 <p>I copy pasted the bloat query in file <code>~/tmp/bloat_original.sql</code>, here is its output for this table:</p>
 
-<div class="highlight"><pre><code class="language-psql" data-lang="psql"><span class="gp">postgres@pagila=#</span> <span class="kp">\i</span> <span class="ss">~/tmp/bloat_original.sql</span>
+<figure class="highlight"><pre><code class="language-psql" data-lang="psql"><span></span><span class="gp">postgres@pagila=#</span> <span class="kp">\i</span> <span class="ss">~/tmp/bloat_original.sql</span>
 <span class="go"> current_database | schemaname |    tablename     | tbloat | wastedbytes |                        iname                        | ibloat | wastedibytes </span>
 <span class="go">------------------+------------+------------------+--------+-------------+-----------------------------------------------------+--------+--------------</span>
 <span class="go">...</span>
 <span class="go"> pagila           | public     | test             |    1.2 |      188416 | test_pkey                                           |    0.5 |            0</span>
 <span class="go"> pagila           | public     | test             |    1.2 |      188416 | test_rental_date_inventory_id_customer_id_idx       |    0.8 |            0</span>
 <span class="go"> pagila           | public     | test             |    1.2 |      188416 | test_inventory_id_idx                               |    0.7 |            0</span>
-<span class="go">...</span></code></pre></div>
+<span class="go">...</span></code></pre></figure>
 
 <p>A B-tree index is filled at 90% per default, see storage parameter
 <a href="http://www.postgresql.org/docs/9.3/static/sql-createindex.html#SQL-CREATEINDEX-STORAGE-PARAMETERS">FILL FACTOR</a>.
@@ -116,18 +116,18 @@ smaller than it is supposed to be ?</p>
 <p>I hadn’t to dive deap in the query, after a closer look at the query code and
 comments, we find:</p>
 
-<div class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="n">COALESCE</span><span class="p">(</span><span class="n">CEIL</span><span class="p">((</span><span class="n">c2</span><span class="p">.</span><span class="n">reltuples</span><span class="o">*</span><span class="p">(</span><span class="n">datahdr</span><span class="o">-</span><span class="mi">12</span><span class="p">))</span><span class="o">/</span><span class="p">(</span><span class="n">bs</span><span class="o">-</span><span class="mi">20</span><span class="p">::</span><span class="nb">float</span><span class="p">)),</span><span class="mi">0</span><span class="p">)</span> <span class="k">AS</span> <span class="n">iotta</span> <span class="c1">-- very rough approximation, assumes all cols</span></code></pre></div>
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span></span><span class="n">COALESCE</span><span class="p">(</span><span class="n">CEIL</span><span class="p">((</span><span class="n">c2</span><span class="p">.</span><span class="n">reltuples</span><span class="o">*</span><span class="p">(</span><span class="n">datahdr</span><span class="o">-</span><span class="mi">12</span><span class="p">))</span><span class="o">/</span><span class="p">(</span><span class="n">bs</span><span class="o">-</span><span class="mi">20</span><span class="p">::</span><span class="nb">float</span><span class="p">)),</span><span class="mi">0</span><span class="p">)</span> <span class="k">AS</span> <span class="n">iotta</span> <span class="c1">-- very rough approximation, assumes all cols</span></code></pre></figure>
 
 <p>Oh, ok. The query estimates the ideal size of each index considering it
 references <em>ALL</em> the table fields.  It’s quite rare to find a btree index on
 all fields of a table, and obviously there’s no point having multiple indexes
 on a table, all of them referencing all fields of the table.</p>
 
-<h2 id="a-look-at-the-real-bloat">A look at the real bloat</h2>
+<p>##A look at the real bloat</p>
 
 <p>First, let see how the indexes are really bloated:</p>
 
-<div class="highlight"><pre><code class="language-psql" data-lang="psql"><span class="gp">pagila=#</span> <span class="k">create</span> <span class="k">schema</span> <span class="n">stattuple</span><span class="p">;</span>
+<figure class="highlight"><pre><code class="language-psql" data-lang="psql"><span></span><span class="gp">pagila=#</span> <span class="k">create</span> <span class="k">schema</span> <span class="n">stattuple</span><span class="p">;</span>
 <span class="gp">pagila=#</span> <span class="k">create</span> <span class="k">extension</span> <span class="n">pgstattuple</span> <span class="k">with</span> <span class="k">schema</span> <span class="n">stattuple</span><span class="p">;</span>
 <span class="gp">pagila=#</span> <span class="k">SELECT</span> <span class="n">relname</span><span class="p">,</span> <span class="n">pg_table_size</span><span class="p">(</span><span class="n">oid</span><span class="p">)</span> <span class="k">as</span> <span class="n">index_size</span><span class="p">,</span>
   <span class="mf">100</span><span class="o">-</span><span class="p">(</span><span class="n">stattuple</span><span class="mf">.</span><span class="n">pgstatindex</span><span class="p">(</span><span class="n">relname</span><span class="p">))</span><span class="mf">.</span><span class="n">avg_leaf_density</span> <span class="k">AS</span> <span class="n">bloat_ratio</span>
@@ -138,14 +138,14 @@ on a table, all of them referencing all fields of the table.</p>
 <span class="go">-----------------------------------------------+------------+-------------</span>
 <span class="go"> test_pkey                                     |     376832 |       10.25</span>
 <span class="go"> test_inventory_id_idx                         |     507904 |       34.11</span>
-<span class="go"> test_rental_date_inventory_id_customer_id_idx |     630784 |       26.14</span></code></pre></div>
+<span class="go"> test_rental_date_inventory_id_customer_id_idx |     630784 |       26.14</span></code></pre></figure>
 
 <p>First point, the bloat on indexes is not 10% everywhere, only for the PK. This
 is because indexes were created <em>BEFORE</em> inserting data.  So it looks like data
 were naturally order on the PK on table “rental” when scanning it sequentially.
 What if we load data sorting on “inventory_id” field ?</p>
 
-<div class="highlight"><pre><code class="language-psql" data-lang="psql"><span class="gp">pagila=#</span> <span class="k">TRUNCATE</span> <span class="n">test</span><span class="p">;</span>
+<figure class="highlight"><pre><code class="language-psql" data-lang="psql"><span></span><span class="gp">pagila=#</span> <span class="k">TRUNCATE</span> <span class="n">test</span><span class="p">;</span>
 <span class="gp">pagila=#</span> <span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">test</span> <span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">rental</span> <span class="k">ORDER</span> <span class="k">BY</span> <span class="n">inventory_id</span> <span class="p">;</span>
 <span class="gp">pagila=#</span> <span class="k">SELECT</span> <span class="n">relname</span><span class="p">,</span> <span class="n">pg_table_size</span><span class="p">(</span><span class="n">oid</span><span class="p">)</span> <span class="k">as</span> <span class="n">index_size</span><span class="p">,</span>
   <span class="mf">100</span><span class="o">-</span><span class="p">(</span><span class="n">stattuple</span><span class="mf">.</span><span class="n">pgstatindex</span><span class="p">(</span><span class="n">relname</span><span class="p">))</span><span class="mf">.</span><span class="n">avg_leaf_density</span> <span class="k">AS</span> <span class="n">bloat_ratio</span>
@@ -156,13 +156,13 @@ What if we load data sorting on “inventory_id” field ?</p>
 <span class="go">-----------------------------------------------+------------+-------------</span>
 <span class="go"> test_pkey                                     |     524288 |       36.22</span>
 <span class="go"> test_inventory_id_idx                         |     376832 |       10.25</span>
-<span class="go"> test_rental_date_inventory_id_customer_id_idx |     647168 |       28.04</span></code></pre></div>
+<span class="go"> test_rental_date_inventory_id_customer_id_idx |     647168 |       28.04</span></code></pre></figure>
 
 <p>Ok, it totally makes sense there: index <code>test_inventory_id_idx</code> is now 10%
 bloated.  First lesson: Do not create your indexes before loading your datas!
 Demo:</p>
 
-<div class="highlight"><pre><code class="language-psql" data-lang="psql"><span class="gp">pagila=#</span> <span class="k">DROP</span> <span class="k">TABLE</span> <span class="n">test</span><span class="p">;</span>
+<figure class="highlight"><pre><code class="language-psql" data-lang="psql"><span></span><span class="gp">pagila=#</span> <span class="k">DROP</span> <span class="k">TABLE</span> <span class="n">test</span><span class="p">;</span>
 <span class="gp">pagila=#</span> <span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">test</span> <span class="p">(</span><span class="k">LIKE</span> <span class="n">rental</span> <span class="k">INCLUDING</span> <span class="k">DEFAULTS</span> <span class="k">INCLUDING</span> <span class="k">CONSTRAINTS</span><span class="p">);</span>
 <span class="gp">pagila=#</span> <span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">test</span> <span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">rental</span><span class="p">;</span>
 <span class="gp">pagila=#</span> <span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">test</span> <span class="k">ADD</span> <span class="k">CONSTRAINT</span> <span class="n">test_pkey</span> <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="n">rental_id</span><span class="p">);</span> 
@@ -178,9 +178,9 @@ Demo:</p>
 <span class="go">-----------------------------------------------+------------+-------------</span>
 <span class="go"> test_pkey                                     |     376832 |       10.25</span>
 <span class="go"> test_inventory_id_idx                         |     376832 |       10.25</span>
-<span class="go"> test_rental_date_inventory_id_customer_id_idx |     524288 |       10.73</span></code></pre></div>
+<span class="go"> test_rental_date_inventory_id_customer_id_idx |     524288 |       10.73</span></code></pre></figure>
 
-<h2 id="a-better-query-to-estimate-index-bloat">A better query to estimate index bloat?</h2>
+<p>##A better query to estimate index bloat?</p>
 
 <blockquote>
   <p>Wait, you just showed us you can have the real bloat on indexes, why would I
@@ -195,7 +195,7 @@ And anyway, I want to dig into this for education :-)</p>
 indexes.  I picked some parts of the original bloat query, but rewrote mostly
 everything.  Here is the result:</p>
 
-<div class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="c1">-- change to the max number of field per index if not default.</span>
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span></span><span class="c1">-- change to the max number of field per index if not default.</span>
 <span class="err">\</span><span class="k">set</span> <span class="n">index_max_keys</span> <span class="mi">32</span>
 <span class="c1">-- (readonly) IndexTupleData size</span>
 <span class="err">\</span><span class="k">set</span> <span class="n">index_tuple_hdr</span> <span class="mi">2</span>
@@ -260,12 +260,12 @@ everything.  Here is the result:</p>
     <span class="k">LEFT</span> <span class="k">JOIN</span> <span class="n">pg_am</span> <span class="n">am</span> <span class="k">ON</span> <span class="n">s2</span><span class="p">.</span><span class="n">relam</span> <span class="o">=</span> <span class="n">am</span><span class="p">.</span><span class="n">oid</span>
 <span class="p">)</span> <span class="k">as</span> <span class="n">sub</span>
 <span class="k">JOIN</span> <span class="n">pg_class</span> <span class="k">c</span> <span class="k">ON</span> <span class="k">c</span><span class="p">.</span><span class="n">oid</span><span class="o">=</span><span class="n">sub</span><span class="p">.</span><span class="n">table_oid</span>
-<span class="k">ORDER</span> <span class="k">BY</span> <span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span></code></pre></div>
+<span class="k">ORDER</span> <span class="k">BY</span> <span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span></code></pre></figure>
 
 <p>How does it perform compared to the actual values? Let’s go back to a bloated
-situation: </p>
+situation:</p>
 
-<div class="highlight"><pre><code class="language-psql" data-lang="psql"><span class="gp">pagila=#</span> <span class="k">TRUNCATE</span> <span class="n">test</span> <span class="p">;</span>
+<figure class="highlight"><pre><code class="language-psql" data-lang="psql"><span></span><span class="gp">pagila=#</span> <span class="k">TRUNCATE</span> <span class="n">test</span> <span class="p">;</span>
 <span class="gp">pagila=#</span> <span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">test</span> <span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">rental</span><span class="p">;</span>
 <span class="gp">pagila=#</span> <span class="k">SELECT</span> <span class="n">relname</span><span class="p">,</span> <span class="n">pg_table_size</span><span class="p">(</span><span class="n">oid</span><span class="p">)</span> <span class="k">as</span> <span class="n">index_size</span><span class="p">,</span>
   <span class="mf">100</span><span class="o">-</span><span class="p">(</span><span class="n">stattuple</span><span class="mf">.</span><span class="n">pgstatindex</span><span class="p">(</span><span class="n">relname</span><span class="p">))</span><span class="mf">.</span><span class="n">avg_leaf_density</span> <span class="k">AS</span> <span class="n">bloat_ratio</span>
@@ -278,23 +278,23 @@ situation: </p>
 <span class="go">-----------------------------------------------+------------+-------------</span>
 <span class="go"> test_inventory_id_idx                         |     507904 |       34.11</span>
 <span class="go"> test_pkey                                     |     376832 |       10.25</span>
-<span class="go"> test_rental_date_inventory_id_customer_id_idx |     630784 |       26.14</span></code></pre></div>
+<span class="go"> test_rental_date_inventory_id_customer_id_idx |     630784 |       26.14</span></code></pre></figure>
 
 <p>I created the file “~/tmp/bloat_index.sql” with this estimated indexes bloat
 query filtering on table <code>test</code>, here is its result:</p>
 
-<div class="highlight"><pre><code class="language-psql" data-lang="psql"><span class="gp">pagila=#</span> <span class="kp">\i</span> <span class="ss">~/tmp/bloat_index.sql</span> 
+<figure class="highlight"><pre><code class="language-psql" data-lang="psql"><span></span><span class="gp">pagila=#</span> <span class="kp">\i</span> <span class="ss">~/tmp/bloat_index.sql</span> 
 <span class="go"> current_database | nspname | table_name |                  index_name                   | totalbytes | wastedbytes |      realbloat      </span>
 <span class="go">------------------+---------+------------+-----------------------------------------------+------------+-------------+---------------------</span>
 <span class="go"> pagila           | public  | test       | test_inventory_id_idx                         |     507904 |      172032 | 33.8709677419354839</span>
 <span class="go"> pagila           | public  | test       | test_pkey                                     |     376832 |       40960 | 10.8695652173913043</span>
-<span class="go"> pagila           | public  | test       | test_rental_date_inventory_id_customer_id_idx |     630784 |      172032 | 27.2727272727272727</span></code></pre></div>
+<span class="go"> pagila           | public  | test       | test_rental_date_inventory_id_customer_id_idx |     630784 |      172032 | 27.2727272727272727</span></code></pre></figure>
 
 <p>Well, pretty close :-)</p>
 
 <p>Let’s REINDEX:</p>
 
-<div class="highlight"><pre><code class="language-psql" data-lang="psql"><span class="gp">pagila=#</span> <span class="k">REINDEX</span> <span class="k">TABLE</span> <span class="n">test</span><span class="p">;</span>
+<figure class="highlight"><pre><code class="language-psql" data-lang="psql"><span></span><span class="gp">pagila=#</span> <span class="k">REINDEX</span> <span class="k">TABLE</span> <span class="n">test</span><span class="p">;</span>
 <span class="gp">pagila=#</span> <span class="k">ANALYZE</span> <span class="n">test</span><span class="p">;</span>
 <span class="gp">pagila=#</span> <span class="k">SELECT</span> <span class="n">relname</span><span class="p">,</span> <span class="n">pg_table_size</span><span class="p">(</span><span class="n">oid</span><span class="p">)</span> <span class="k">as</span> <span class="n">index_size</span><span class="p">,</span>
   <span class="mf">100</span><span class="o">-</span><span class="p">(</span><span class="n">stattuple</span><span class="mf">.</span><span class="n">pgstatindex</span><span class="p">(</span><span class="n">relname</span><span class="p">))</span><span class="mf">.</span><span class="n">avg_leaf_density</span> <span class="k">AS</span> <span class="n">bloat_ratio</span>
@@ -313,14 +313,14 @@ query filtering on table <code>test</code>, here is its result:</p>
 <span class="go">------------------+---------+------------+-----------------------------------------------+------------+-------------+---------------------</span>
 <span class="go"> pagila           | public  | test       | test_inventory_id_idx                         |     376832 |       40960 | 10.8695652173913043</span>
 <span class="go"> pagila           | public  | test       | test_pkey                                     |     376832 |       40960 | 10.8695652173913043</span>
-<span class="go"> pagila           | public  | test       | test_rental_date_inventory_id_customer_id_idx |     524288 |       65536 | 12.5000000000000000</span></code></pre></div>
+<span class="go"> pagila           | public  | test       | test_rental_date_inventory_id_customer_id_idx |     524288 |       65536 | 12.5000000000000000</span></code></pre></figure>
 
-<p>Not bad. </p>
+<p>Not bad.</p>
 
 <p>Let’s create some bloat. The table is approx. 160,000 rows, so the following
 query updates ~10% of the table:</p>
 
-<div class="highlight"><pre><code class="language-psql" data-lang="psql"><span class="gp">pagila=#</span> <span class="k">UPDATE</span> <span class="n">test</span> <span class="k">SET</span> <span class="n">rental_date</span> <span class="o">=</span> <span class="k">current_timestamp</span> <span class="k">WHERE</span> <span class="n">rental_id</span> <span class="o">&lt;</span> <span class="mf">3200</span> <span class="k">AND</span> <span class="n">rental_id</span><span class="o">%</span><span class="mf">2</span> <span class="o">=</span> <span class="mf">0</span><span class="p">;</span>
+<figure class="highlight"><pre><code class="language-psql" data-lang="psql"><span></span><span class="gp">pagila=#</span> <span class="k">UPDATE</span> <span class="n">test</span> <span class="k">SET</span> <span class="n">rental_date</span> <span class="o">=</span> <span class="k">current_timestamp</span> <span class="k">WHERE</span> <span class="n">rental_id</span> <span class="o">&lt;</span> <span class="mf">3200</span> <span class="k">AND</span> <span class="n">rental_id</span><span class="o">%</span><span class="mf">2</span> <span class="o">=</span> <span class="mf">0</span><span class="p">;</span>
 <span class="gp">pagila=#</span> <span class="k">ANALYZE</span> <span class="n">test</span> <span class="p">;</span>
 
 <span class="gp">pagila=#</span> <span class="k">SELECT</span> <span class="n">relname</span><span class="p">,</span> <span class="n">pg_table_size</span><span class="p">(</span><span class="n">oid</span><span class="p">)</span> <span class="k">as</span> <span class="n">index_size</span><span class="p">,</span>
@@ -342,11 +342,11 @@ query updates ~10% of the table:</p>
 <span class="go"> pagila           | public  | test       | test_inventory_id_idx                         |     475136 |      139264 | 29.3103448275862069</span>
 <span class="go"> pagila           | public  | test       | test_pkey                                     |     450560 |      114688 | 25.4545454545454545</span>
 <span class="go"> pagila           | public  | test       | test_rental_date_inventory_id_customer_id_idx |     598016 |      139264 | 23.2876712328767123</span>
-<span class="go">(3 rows)</span></code></pre></div>
+<span class="go">(3 rows)</span></code></pre></figure>
 
 <p>Erk, not so good. Moar bloat?</p>
 
-<div class="highlight"><pre><code class="language-psql" data-lang="psql"><span class="gp">pagila=#</span> <span class="k">UPDATE</span> <span class="n">test</span> <span class="k">SET</span> <span class="n">rental_date</span> <span class="o">=</span> <span class="k">current_timestamp</span> <span class="k">WHERE</span> <span class="n">rental_id</span><span class="o">%</span><span class="mf">2</span> <span class="o">=</span> <span class="mf">0</span><span class="p">;</span>
+<figure class="highlight"><pre><code class="language-psql" data-lang="psql"><span></span><span class="gp">pagila=#</span> <span class="k">UPDATE</span> <span class="n">test</span> <span class="k">SET</span> <span class="n">rental_date</span> <span class="o">=</span> <span class="k">current_timestamp</span> <span class="k">WHERE</span> <span class="n">rental_id</span><span class="o">%</span><span class="mf">2</span> <span class="o">=</span> <span class="mf">0</span><span class="p">;</span>
 <span class="gp">pagila=#</span> <span class="k">ANALYZE</span> <span class="n">test</span> <span class="p">;</span>
 <span class="gp">pagila=#</span> <span class="k">SELECT</span> <span class="n">relname</span><span class="p">,</span> <span class="n">pg_table_size</span><span class="p">(</span><span class="n">oid</span><span class="p">)</span> <span class="k">as</span> <span class="n">index_size</span><span class="p">,</span>
   <span class="mf">100</span><span class="o">-</span><span class="p">(</span><span class="n">stattuple</span><span class="mf">.</span><span class="n">pgstatindex</span><span class="p">(</span><span class="n">relname</span><span class="p">))</span><span class="mf">.</span><span class="n">avg_leaf_density</span> <span class="k">AS</span> <span class="n">bloat_ratio</span>
@@ -367,11 +367,11 @@ query updates ~10% of the table:</p>
 <span class="go"> pagila           | public  | test       | test_inventory_id_idx                         |     745472 |      409600 | 54.9450549450549451</span>
 <span class="go"> pagila           | public  | test       | test_pkey                                     |     737280 |      401408 | 54.4444444444444444</span>
 <span class="go"> pagila           | public  | test       | test_rental_date_inventory_id_customer_id_idx |     925696 |      466944 | 50.4424778761061947</span>
-<span class="go">(3 rows)</span></code></pre></div>
+<span class="go">(3 rows)</span></code></pre></figure>
 
 <p>Well, better again.</p>
 
-<h2 id="conclusion">Conclusion</h2>
+<p>##Conclusion</p>
 
 <p>This new query performs much better for indexes than the usual one everyone
 knew for a long time.  But it isn’t perfect, showing sometimes some quite wrong
@@ -391,16 +391,18 @@ indexes and pages guts.</p>
 
 <p>As a side note, I had been surprised to see that padding to <code>MAXALIGN</code> was
 applied on both tuple header AND tuple data.  My understanding is that for each
-row in an index leave page, we have:
-* the item_pointer at the beginning of the page,
-* the tuple header + data at the end of the page that must be aligned on
-  <code>MAXALIGN</code>.</p>
+row in an index leave page, we have:</p>
+<ul>
+  <li>the item_pointer at the beginning of the page,</li>
+  <li>the tuple header + data at the end of the page that must be aligned on
+<code>MAXALIGN</code>.</li>
+</ul>
 
 <p>Why ain’t they padded <em>together</em> to <code>MAXALIGN</code>? Wouldn’t this save
-some space? </p>
+some space?</p>
 
 <p>Thank you for reading till the end! Cheers, see you maybe in another post about
-table bloat next time ;-) </p>
+table bloat next time ;-)</p>
 
 
   

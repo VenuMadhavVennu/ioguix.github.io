@@ -68,14 +68,14 @@ times to fix some drawbacks:</p>
 <p>This last one is actually far from perfect.  Very bad estimation could arise if
 the query is wrong about this size of pointers.</p>
 
-<h2 id="new-version">New version</h2>
+<p>##New version</p>
 
 <p>Here is the gist of the new version of this query if you want to comment/patch:
 <a href="https://gist.github.com/ioguix/c29d5790b8b93bf81c27">https://gist.github.com/ioguix/c29d5790b8b93bf81c27</a></p>
 
 <p>And the code itself:</p>
 
-<div class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="c1">-- WARNING: executed with a non-superuser role, the query inspect only index on tables you are granted to read.</span>
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span></span><span class="c1">-- WARNING: executed with a non-superuser role, the query inspect only index on tables you are granted to read.</span>
 <span class="k">SELECT</span> <span class="n">current_database</span><span class="p">(),</span> <span class="n">nspname</span> <span class="k">AS</span> <span class="n">schemaname</span><span class="p">,</span> <span class="k">c</span><span class="p">.</span><span class="n">relname</span> <span class="k">AS</span> <span class="n">tablename</span><span class="p">,</span> <span class="n">indexname</span><span class="p">,</span> <span class="n">bs</span><span class="o">*</span><span class="p">(</span><span class="n">sub</span><span class="p">.</span><span class="n">relpages</span><span class="p">)::</span><span class="nb">bigint</span> <span class="k">AS</span> <span class="n">real_size</span><span class="p">,</span>
   <span class="n">bs</span><span class="o">*</span><span class="n">otta</span><span class="p">::</span><span class="nb">bigint</span> <span class="k">as</span> <span class="n">estimated_size</span><span class="p">,</span>
   <span class="n">bs</span><span class="o">*</span><span class="p">(</span><span class="n">sub</span><span class="p">.</span><span class="n">relpages</span><span class="o">-</span><span class="n">otta</span><span class="p">)::</span><span class="nb">bigint</span>                                     <span class="k">AS</span> <span class="n">bloat_size</span><span class="p">,</span>
@@ -142,7 +142,7 @@ the query is wrong about this size of pointers.</p>
 <span class="p">)</span> <span class="k">as</span> <span class="n">sub</span>
 <span class="k">JOIN</span> <span class="n">pg_class</span> <span class="k">c</span> <span class="k">ON</span> <span class="k">c</span><span class="p">.</span><span class="n">oid</span><span class="o">=</span><span class="n">sub</span><span class="p">.</span><span class="n">table_oid</span>
 <span class="k">WHERE</span> <span class="n">sub</span><span class="p">.</span><span class="n">relpages</span> <span class="o">&gt;</span> <span class="mi">2</span>
-<span class="k">ORDER</span> <span class="k">BY</span> <span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">;</span></code></pre></div>
+<span class="k">ORDER</span> <span class="k">BY</span> <span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">;</span></code></pre></figure>
 
 <p>I left commented some debug code to help diagnosing bad estimations.</p>
 
@@ -151,12 +151,12 @@ updated the query and added a warning on top of the query. The query does not
 require to be superuser anymore, but you have to make sure the role you are
 using is able to access all your precious tables and indexes!</p>
 
-<h2 id="known-bug">Known bug</h2>
+<p>##Known bug</p>
 
 <p>While testing the query, I found a weird bug where negative bloats show up on
 some system indexes.  As instance:</p>
 
-<div class="highlight"><pre><code class="language-psql" data-lang="psql"><span class="gp">postgres@pagila=#</span> <span class="kp">\i</span> <span class="ss">btree_bloat.sql</span>
+<figure class="highlight"><pre><code class="language-psql" data-lang="psql"><span></span><span class="gp">postgres@pagila=#</span> <span class="kp">\i</span> <span class="ss">btree_bloat.sql</span>
 <span class="go">...</span>
 <span class="go">-[ RECORD 4 ]----+----------------------------------------------------</span>
 <span class="go">current_database | pagila</span>
@@ -167,14 +167,14 @@ some system indexes.  As instance:</p>
 <span class="go">estimated_size   | 262144</span>
 <span class="go">bloat_size       | -139264</span>
 <span class="go">bloat_ratio      | -113.3333333333333333</span>
-<span class="go">...</span></code></pre></div>
+<span class="go">...</span></code></pre></figure>
 
 <p>After hunting for some time on this, I found that this was related to the
 <code>name</code> type.  This type has a fixed size of 64 bytes in stats, but
 they become a simple cstring in index with a variable length depending on real
 string values!</p>
 
-<div class="highlight"><pre><code class="language-psql" data-lang="psql"><span class="gp">postgres@pagila=#</span> <span class="kp">\d</span> <span class="ss">pg_attribute_relid_attnam_index</span>
+<figure class="highlight"><pre><code class="language-psql" data-lang="psql"><span></span><span class="gp">postgres@pagila=#</span> <span class="kp">\d</span> <span class="ss">pg_attribute_relid_attnam_index</span>
 <span class="go">Index &quot;pg_catalog.pg_attribute_relid_attnam_index&quot;</span>
 <span class="go">  Column  |  Type   | Definition </span>
 <span class="go">----------+---------+------------</span>
@@ -197,7 +197,7 @@ string values!</p>
 <span class="gp">postgres@pagila=#</span> <span class="k">SELECT</span> <span class="n">pg_column_size</span><span class="p">(</span><span class="n">attname</span><span class="p">),</span> <span class="n">avg</span><span class="p">(</span><span class="n">length</span><span class="p">(</span><span class="n">attname</span><span class="p">))</span> <span class="k">FROM</span> <span class="n">pg_catalog</span><span class="mf">.</span><span class="n">pg_attribute</span> <span class="k">GROUP</span> <span class="k">BY</span> <span class="mf">1</span><span class="p">;</span>
 <span class="go"> pg_column_size |        avg         </span>
 <span class="go">----------------+--------------------</span>
-<span class="go">             64 | 9.5131713992473486</span></code></pre></div>
+<span class="go">             64 | 9.5131713992473486</span></code></pre></figure>
 
 <p>As the query rely on theses stats to compute the estimated size of the index
 depending on indexed fields and number of lines in the table, this difference
@@ -306,7 +306,7 @@ fixed length type…</p>
 
          <p>Re: name being a fixed length type</p>
 
-<p>See the bottom of this page: <a href="">http://www.postgresql.org/docs/9.3/static/datatype-character.html</a> </p>
+<p>See the bottom of this page: <a href="">http://www.postgresql.org/docs/9.3/static/datatype-character.html</a></p>
 
 <p>I think ‘name’ being fixed length is a tradeoff of space vs. time in the system catalogs.  It gives predictable row layouts in the critical catalogs, for initialization, recovery, etc.</p>
  
@@ -355,7 +355,7 @@ fixed length type…</p>
 
 <p>That’s true. However, note that using @pg_stats@, you must make sure you are using a supervision role that is always granted to read all tables. If supervision role can not read some of the tables, the query just ignore them.</p>
 
-<p>I updated my query (here and on github) based on your diff and just added a comment about that. See: <a href="">https://gist.github.com/ioguix/c29d5790b8b93bf81c27/revisions</a> </p>
+<p>I updated my query (here and on github) based on your diff and just added a comment about that. See: <a href="">https://gist.github.com/ioguix/c29d5790b8b93bf81c27/revisions</a></p>
 
 <p>Thanks,</p>
  

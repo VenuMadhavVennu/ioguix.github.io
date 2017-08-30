@@ -67,7 +67,7 @@ importing pgBadger normalization code in SQL.  Next pieces of code are tested
 under PostgreSQL 9.1 but should be easy to port to previous versions.  So here
 is the function to create (I tried my best to keep it readable :-)):</p>
 
-<div class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">CREATE</span> <span class="k">OR</span> <span class="k">REPLACE</span> <span class="k">FUNCTION</span> <span class="n">normalize_query</span><span class="p">(</span><span class="k">IN</span> <span class="nb">TEXT</span><span class="p">,</span> <span class="k">OUT</span> <span class="nb">TEXT</span><span class="p">)</span> <span class="k">AS</span> <span class="err">$</span><span class="n">body$</span>
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span></span><span class="k">CREATE</span> <span class="k">OR</span> <span class="k">REPLACE</span> <span class="k">FUNCTION</span> <span class="n">normalize_query</span><span class="p">(</span><span class="k">IN</span> <span class="nb">TEXT</span><span class="p">,</span> <span class="k">OUT</span> <span class="nb">TEXT</span><span class="p">)</span> <span class="k">AS</span> <span class="err">$</span><span class="n">body$</span>
   <span class="k">SELECT</span>
     <span class="n">regexp_replace</span><span class="p">(</span><span class="n">regexp_replace</span><span class="p">(</span><span class="n">regexp_replace</span><span class="p">(</span><span class="n">regexp_replace</span><span class="p">(</span>
     <span class="n">regexp_replace</span><span class="p">(</span><span class="n">regexp_replace</span><span class="p">(</span><span class="n">regexp_replace</span><span class="p">(</span><span class="n">regexp_replace</span><span class="p">(</span>
@@ -95,7 +95,7 @@ is the function to create (I tried my best to keep it readable :-)):</p>
     <span class="s1">&#39;in\s*\([&#39;&#39;0x,\s]*\)&#39;</span><span class="p">,</span>          <span class="s1">&#39;in (...)&#39;</span><span class="p">,</span>    <span class="s1">&#39;g&#39;</span>   <span class="p">)</span>
   <span class="p">;</span>
 <span class="err">$</span><span class="n">body$</span>
-<span class="k">LANGUAGE</span> <span class="k">SQL</span><span class="p">;</span></code></pre></div>
+<span class="k">LANGUAGE</span> <span class="k">SQL</span><span class="p">;</span></code></pre></figure>
 
 <p>Keep in mind that I extracted these regular expressions straight from pgbadger.
 Any comment about how to make it quicker/better/simpler/whatever is
@@ -104,7 +104,7 @@ appreciated!</p>
 <p>Here the associated view to group everything according to the normalized
 queries:</p>
 
-<div class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">CREATE</span> <span class="k">OR</span> <span class="k">REPLACE</span> <span class="k">VIEW</span> <span class="n">pg_stat_statements_normalized</span> <span class="k">AS</span>
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span></span><span class="k">CREATE</span> <span class="k">OR</span> <span class="k">REPLACE</span> <span class="k">VIEW</span> <span class="n">pg_stat_statements_normalized</span> <span class="k">AS</span>
 <span class="k">SELECT</span> <span class="n">userid</span><span class="p">,</span> <span class="n">dbid</span><span class="p">,</span> <span class="n">normalize_query</span><span class="p">(</span><span class="n">query</span><span class="p">)</span> <span class="k">AS</span> <span class="n">query</span><span class="p">,</span> <span class="k">sum</span><span class="p">(</span><span class="n">calls</span><span class="p">)</span> <span class="k">AS</span> <span class="n">calls</span><span class="p">,</span>
   <span class="k">sum</span><span class="p">(</span><span class="n">total_time</span><span class="p">)</span> <span class="k">AS</span> <span class="n">total_time</span><span class="p">,</span> <span class="k">sum</span><span class="p">(</span><span class="k">rows</span><span class="p">)</span> <span class="k">as</span> <span class="k">rows</span><span class="p">,</span>
   <span class="k">sum</span><span class="p">(</span><span class="n">shared_blks_hit</span><span class="p">)</span> <span class="k">AS</span> <span class="n">shared_blks_hit</span><span class="p">,</span>
@@ -116,11 +116,11 @@ queries:</p>
   <span class="k">sum</span><span class="p">(</span><span class="n">temp_blks_read</span><span class="p">)</span> <span class="k">AS</span> <span class="n">temp_blks_read</span><span class="p">,</span>
   <span class="k">sum</span><span class="p">(</span><span class="n">temp_blks_written</span><span class="p">)</span> <span class="k">AS</span> <span class="n">temp_blks_written</span>
 <span class="k">FROM</span> <span class="n">pg_stat_statements</span>
-<span class="k">GROUP</span> <span class="k">BY</span> <span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">;</span></code></pre></div>
+<span class="k">GROUP</span> <span class="k">BY</span> <span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">;</span></code></pre></figure>
 
 <p>Using this function and the view, a small <code>pgbench -t 30 -c 10</code>, gives:</p>
 
-<div class="highlight"><pre><code class="language-psql" data-lang="psql"><span class="gp">pgbench=&gt;</span> <span class="k">SELECT</span> <span class="n">round</span><span class="p">(</span><span class="n">total_time</span><span class="o">::</span><span class="nb">numeric</span><span class="o">/</span><span class="n">calls</span><span class="p">,</span> <span class="mf">2</span><span class="p">)</span> <span class="k">AS</span> <span class="n">avg_time</span><span class="p">,</span> <span class="n">calls</span><span class="p">,</span> 
+<figure class="highlight"><pre><code class="language-psql" data-lang="psql"><span></span><span class="gp">pgbench=&gt;</span> <span class="k">SELECT</span> <span class="n">round</span><span class="p">(</span><span class="n">total_time</span><span class="o">::</span><span class="nb">numeric</span><span class="o">/</span><span class="n">calls</span><span class="p">,</span> <span class="mf">2</span><span class="p">)</span> <span class="k">AS</span> <span class="n">avg_time</span><span class="p">,</span> <span class="n">calls</span><span class="p">,</span> 
   <span class="n">round</span><span class="p">(</span><span class="n">total_time</span><span class="o">::</span><span class="nb">numeric</span><span class="p">,</span> <span class="mf">2</span><span class="p">)</span> <span class="k">AS</span> <span class="n">total_time</span><span class="p">,</span> <span class="k">rows</span><span class="p">,</span> <span class="n">query</span> 
 <span class="k">FROM</span> <span class="n">pg_stat_statements_normalized</span> 
 <span class="k">ORDER</span> <span class="k">BY</span> <span class="mf">1</span> <span class="k">DESC</span><span class="p">,</span> <span class="mf">2</span> <span class="k">DESC</span><span class="p">;</span>
@@ -134,16 +134,16 @@ queries:</p>
 <span class="go">     0.00 |   196 |       0.00 |  196 | insert into pgbench_history (tid, bid, aid, delta, mtime) values (0, 0, 0, 0, current_timestamp);</span>
 <span class="go">     0.00 |   193 |       0.00 |  193 | select abalance from pgbench_accounts where aid = 0;</span>
 <span class="go">     0.00 |   183 |       0.26 |  183 | update pgbench_tellers set tbalance = tbalance + 0 where tid = 0;</span>
-<span class="go">     0.00 |     1 |       0.00 |    0 | truncate pgbench_history</span></code></pre></div>
+<span class="go">     0.00 |     1 |       0.00 |    0 | truncate pgbench_history</span></code></pre></figure>
 
 <p>For information, the real non-normalized <code>pg_stat_statement</code> view is 959 lines:</p>
 
-<div class="highlight"><pre><code class="language-psql" data-lang="psql"><span class="gp">pgbench=&gt;</span> <span class="k">SELECT</span> <span class="n">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="k">FROM</span> <span class="n">pg_stat_statements</span><span class="p">;</span>
+<figure class="highlight"><pre><code class="language-psql" data-lang="psql"><span></span><span class="gp">pgbench=&gt;</span> <span class="k">SELECT</span> <span class="n">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="k">FROM</span> <span class="n">pg_stat_statements</span><span class="p">;</span>
 
 <span class="go"> count </span>
 <span class="go">-------</span>
 <span class="go">   959</span>
-<span class="go">(1 ligne)</span></code></pre></div>
+<span class="go">(1 ligne)</span></code></pre></figure>
 
 <p>Obvisouly, regular expression are not magic and this will never be as strict as
 the engine itself. But at least it helps while waiting for 9.2 in production!</p>
