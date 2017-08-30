@@ -82,7 +82,7 @@ documentation: &lt;a href=&quot;http://dalibo.github.io/PAF/Quick_Start-CentOS-7
     
     <item>
       <title>New repository for bloat estimation queries</title>
-      <description>&lt;p&gt;##New repository&lt;/p&gt;
+      <description>&lt;h2 id=&quot;new-repository&quot;&gt;New repository&lt;/h2&gt;
 
 &lt;p&gt;It’s been almost a year now that I wrote the first version of the btree bloat
 estimation query.  Then, came the first fixes, the bloat estimation queries for
@@ -99,7 +99,7 @@ pull requests.  Another way to help is to discuss your results or report bugs
 by opening &lt;a href=&quot;https://github.com/ioguix/pgsql-bloat-estimation/issues&quot;&gt;issues&lt;/a&gt;.
 This can lead to bug fixes or the creation of a FAQ.&lt;/p&gt;
 
-&lt;p&gt;##Changelog&lt;/p&gt;
+&lt;h2 id=&quot;changelog&quot;&gt;Changelog&lt;/h2&gt;
 
 &lt;p&gt;Here is a quick changelog since my
 &lt;a href=&quot;/postgresql/2014/11/03/Btree-bloat-query-part-4.html&quot;&gt;last post about bloat&lt;/a&gt;:&lt;/p&gt;
@@ -153,7 +153,7 @@ constraint across all partitions of a table. Next one covers how to reference a
 partitioned table. And maybe some other depending on the motivation,
 inspiration and feedback.&lt;/p&gt;
 
-&lt;p&gt;##Study case&lt;/p&gt;
+&lt;h2 id=&quot;study-case&quot;&gt;Study case&lt;/h2&gt;
 
 &lt;p&gt;I chose to illustrate this article with a table partitioned by date range. This
 is a fairly frequent practice and adapting this article to another partitioning
@@ -231,7 +231,7 @@ that I do not create the trigger on INSERT and UPDATE on the master table. This
 is out of the scope of this article, will not be needed and add no challenge to
 the subject.&lt;/p&gt;
 
-&lt;p&gt;##The naive solution&lt;/p&gt;
+&lt;h2 id=&quot;the-naive-solution&quot;&gt;The naive solution&lt;/h2&gt;
 
 &lt;p&gt;Of course, the whole trick revolves around triggers. We have to check the
 uniqueness of a PK value across all partitions after any INSERT or UPDATE on
@@ -354,7 +354,7 @@ after the related statement. The opposite &lt;code&gt;DEFERRED&lt;/code&gt; beha
 at the very end of the transaction unless the user decide to &lt;code&gt;SET CONSTRAINTS {
 ALL | name [, ...] } IMMEDIATE&lt;/code&gt; somewhere during the transaction.&lt;/p&gt;
 
-&lt;p&gt;##Defering the trigger to avoid the race condition ?&lt;/p&gt;
+&lt;h2 id=&quot;defering-the-trigger-to-avoid-the-race-condition-&quot;&gt;Defering the trigger to avoid the race condition ?&lt;/h2&gt;
 
 &lt;p&gt;Now, if you step back a second to look at what we have, you might wonder if
 forcing our constraints triggers to be &lt;code&gt;DEFERRABLE INITIALLY DEFERRED&lt;/code&gt; would
@@ -416,7 +416,7 @@ scenario. Note that on 500 inserts, only 209 survived in total. That makes 291
 exceptions raised out of 324 expected, counting the duplicated keys that were
 not caught.&lt;/p&gt;
 
-&lt;p&gt;##Isolation level?&lt;/p&gt;
+&lt;h2 id=&quot;isolation-level&quot;&gt;Isolation level?&lt;/h2&gt;
 
 &lt;p&gt;Well, last chance. If this many transactions were committed in the exact same
 time, maybe we can force them to serialize with isolation level &lt;code&gt;SERIALIZABLE&lt;/code&gt;?&lt;/p&gt;
@@ -443,7 +443,7 @@ DEFERRED triggers: as a simple user can change its isolation level, any bug in
 the application or not informed user can lead to scenarios with silent
 duplications. Fortunately, another simpler and safer solution exist.&lt;/p&gt;
 
-&lt;p&gt;##Real solution: adding locks&lt;/p&gt;
+&lt;h2 id=&quot;real-solution-adding-locks&quot;&gt;Real solution: adding locks&lt;/h2&gt;
 
 &lt;p&gt;The &lt;code&gt;SERIALIZABLE&lt;/code&gt; solution works because to emulate serial transaction
 execution for all transactions, it takes &lt;strong&gt;predicate locks&lt;/strong&gt; behind the scene
@@ -535,7 +535,7 @@ on a normal table as well, right?&lt;/p&gt;
 &lt;p&gt;Wow, at last, finished. What? No? I can hear you thinking it only applies on
 integers. OK, bonus.&lt;/p&gt;
 
-&lt;p&gt;##Supporting other types&lt;/p&gt;
+&lt;h2 id=&quot;supporting-other-types&quot;&gt;Supporting other types&lt;/h2&gt;
 
 &lt;p&gt;Supporting unique constraint on integers was straightforward using advisory
 locks. But how can this applies to other types? Like text for instance ? Easy:
@@ -621,7 +621,7 @@ intense-colliding scenario. And we only find unique values across all
 partitions, as expected. Aaaaand grep-ing from the log file, I can find 64,117
 rejected rows…&lt;/p&gt;
 
-&lt;p&gt;##Conclusion&lt;/p&gt;
+&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h2&gt;
 
 &lt;p&gt;Such a long way already. Thank you for reading so far. At first I thought I
 could write about unique and foreign keys in the same article, but look at what
@@ -677,7 +677,7 @@ BTree indexes:
   &lt;li&gt;for 8.2 and more: &lt;a href=&quot;&quot;&gt;https://gist.github.com/ioguix/c29d5790b8b93bf81c27&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;##Columns has been ignored&lt;/p&gt;
+&lt;h2 id=&quot;columns-has-been-ignored&quot;&gt;Columns has been ignored&lt;/h2&gt;
 
 &lt;p&gt;In two different situations, some index fields were just ignored by the query:&lt;/p&gt;
 
@@ -723,7 +723,7 @@ freshly created index, supposed to have around 10% of bloat as showed in the
 &lt;span class=&quot;go&quot;&gt;-----------------+-------------&lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt; test_expression |       10.33&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
-&lt;p&gt;##Wrong estimation for varlena types&lt;/p&gt;
+&lt;h2 id=&quot;wrong-estimation-for-varlena-types&quot;&gt;Wrong estimation for varlena types&lt;/h2&gt;
 
 &lt;p&gt;After fixing the query for indexes on expression, I noticed some negative bloat
 estimation for the biggest ones: the real index was smaller than the estimated
@@ -782,7 +782,7 @@ md5, supposed to be 128 byte long:&lt;/p&gt;
 
 &lt;p&gt;This is a nice bug fix AND one complexity out of the query. Code simplification is always a good news :)&lt;/p&gt;
 
-&lt;p&gt;##Adding a bit of Opaque Data&lt;/p&gt;
+&lt;h2 id=&quot;adding-a-bit-of-opaque-data&quot;&gt;Adding a bit of Opaque Data&lt;/h2&gt;
 
 &lt;p&gt;When studying the Btree layout, I forgot about one small non-data area in index
 pages: the “Special space”, aka. “Opaque Data” in code sources. The previous
@@ -820,7 +820,7 @@ considering the special space and estimation considering it:&lt;/p&gt;
 
 &lt;p&gt;This is only an approximative 5% difference for the estimated size of this particular index.&lt;/p&gt;
 
-&lt;p&gt;##Conclusion&lt;/p&gt;
+&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h2&gt;
 
 &lt;p&gt;I never mentioned it before, but these queries are used in
 &lt;a href=&quot;https://github.com/OPMDG/check_pgactivity&quot;&gt;check_pgactivity&lt;/a&gt; (a nagios plugin
@@ -874,7 +874,7 @@ bloat query, this query pay attention to:&lt;/p&gt;
   &lt;li&gt;for PostgreSQL 9.0 and after: &lt;a href=&quot;&quot;&gt;https://gist.github.com/ioguix/4f95917f90c9e26df1b2&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;##Tests&lt;/p&gt;
+&lt;h2 id=&quot;tests&quot;&gt;Tests&lt;/h2&gt;
 
 &lt;p&gt;I created the file &lt;code&gt;sql/bloat_tables.sql&lt;/code&gt; with the 9.0 and more query version.
 I edited the query to add the bloat reported by &lt;code&gt;pgstattuple&lt;/code&gt; (free_percent +
@@ -953,7 +953,7 @@ bloat:&lt;/p&gt;
 
 &lt;p&gt;Good, good, good. What next?&lt;/p&gt;
 
-&lt;p&gt;##The alignment deviation&lt;/p&gt;
+&lt;h2 id=&quot;the-alignment-deviation&quot;&gt;The alignment deviation&lt;/h2&gt;
 
 &lt;p&gt;You might have noticed I did not mentioned this table with a large deviation
 between the statistical bloat and the real one, called &lt;code&gt;rental&lt;/code&gt;:&lt;/p&gt;
@@ -1068,7 +1068,7 @@ query, we have now:&lt;/p&gt;
 will live with that. By the way, this alignment overhead might be a nice
 subject for a script measuring it per tables.&lt;/p&gt;
 
-&lt;p&gt;##Known issues&lt;/p&gt;
+&lt;h2 id=&quot;known-issues&quot;&gt;Known issues&lt;/h2&gt;
 
 &lt;p&gt;The same than for the Btree statistical bloat query: I’m pretty sure the query
 will have a pretty bad estimation with array types. I’ll investigate about that
@@ -1083,7 +1083,7 @@ later.&lt;/p&gt;
     
     <item>
       <title>Btree bloat query changelog - part 3</title>
-      <description>&lt;p&gt;##Changelog&lt;/p&gt;
+      <description>&lt;h2 id=&quot;changelog&quot;&gt;Changelog&lt;/h2&gt;
 
 &lt;p&gt;Here are some fresh news about my previous work (see
 &lt;a href=&quot;/postgresql/2014/03/28/Playing-with-indexes-and-better-bloat-estimate.html&quot;&gt;part 1&lt;/a&gt;
@@ -1105,7 +1105,7 @@ Thequery now try to consider their header part&lt;/li&gt;
   &lt;li&gt;ignore non-valid indexes for 8.2 and more&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;##Known issue&lt;/p&gt;
+&lt;h2 id=&quot;known-issue&quot;&gt;Known issue&lt;/h2&gt;
 
 &lt;p&gt;While working on table bloat (I will blog about that very soon), I found a
 large deviation on statistics on array types. I’m not sure how to handle
@@ -1134,7 +1134,7 @@ times to fix some drawbacks:&lt;/p&gt;
 &lt;p&gt;This last one is actually far from perfect.  Very bad estimation could arise if
 the query is wrong about this size of pointers.&lt;/p&gt;
 
-&lt;p&gt;##New version&lt;/p&gt;
+&lt;h2 id=&quot;new-version&quot;&gt;New version&lt;/h2&gt;
 
 &lt;p&gt;Here is the gist of the new version of this query if you want to comment/patch:
 &lt;a href=&quot;https://gist.github.com/ioguix/c29d5790b8b93bf81c27&quot;&gt;https://gist.github.com/ioguix/c29d5790b8b93bf81c27&lt;/a&gt;&lt;/p&gt;
@@ -1217,7 +1217,7 @@ updated the query and added a warning on top of the query. The query does not
 require to be superuser anymore, but you have to make sure the role you are
 using is able to access all your precious tables and indexes!&lt;/p&gt;
 
-&lt;p&gt;##Known bug&lt;/p&gt;
+&lt;h2 id=&quot;known-bug&quot;&gt;Known bug&lt;/h2&gt;
 
 &lt;p&gt;While testing the query, I found a weird bug where negative bloats show up on
 some system indexes.  As instance:&lt;/p&gt;
@@ -1298,7 +1298,7 @@ supposed to &lt;code&gt;REINDEX&lt;/code&gt;.  While writing a detailed answer w
 quite a surprise seeing an estimated index size ratio of 0.7 for a simple
 table!  I realized I never payed much attention to this part of the result…&lt;/p&gt;
 
-&lt;p&gt;##The problem&lt;/p&gt;
+&lt;h2 id=&quot;the-problem&quot;&gt;The problem&lt;/h2&gt;
 
 &lt;p&gt;Here is a test table, a copy table &lt;code&gt;rental&lt;/code&gt; from
 &lt;a href=&quot;http://pgfoundry.org/frs/download.php/1719/pagila-0.10.1.zip&quot;&gt;pagila&lt;/a&gt; project:&lt;/p&gt;
@@ -1351,7 +1351,7 @@ references &lt;em&gt;ALL&lt;/em&gt; the table fields.  It’s quite rare to find
 all fields of a table, and obviously there’s no point having multiple indexes
 on a table, all of them referencing all fields of the table.&lt;/p&gt;
 
-&lt;p&gt;##A look at the real bloat&lt;/p&gt;
+&lt;h2 id=&quot;a-look-at-the-real-bloat&quot;&gt;A look at the real bloat&lt;/h2&gt;
 
 &lt;p&gt;First, let see how the indexes are really bloated:&lt;/p&gt;
 
@@ -1408,7 +1408,7 @@ Demo:&lt;/p&gt;
 &lt;span class=&quot;go&quot;&gt; test_inventory_id_idx                         |     376832 |       10.25&lt;/span&gt;
 &lt;span class=&quot;go&quot;&gt; test_rental_date_inventory_id_customer_id_idx |     524288 |       10.73&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
-&lt;p&gt;##A better query to estimate index bloat?&lt;/p&gt;
+&lt;h2 id=&quot;a-better-query-to-estimate-index-bloat&quot;&gt;A better query to estimate index bloat?&lt;/h2&gt;
 
 &lt;blockquote&gt;
   &lt;p&gt;Wait, you just showed us you can have the real bloat on indexes, why would I
@@ -1599,7 +1599,7 @@ query updates ~10% of the table:&lt;/p&gt;
 
 &lt;p&gt;Well, better again.&lt;/p&gt;
 
-&lt;p&gt;##Conclusion&lt;/p&gt;
+&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h2&gt;
 
 &lt;p&gt;This new query performs much better for indexes than the usual one everyone
 knew for a long time.  But it isn’t perfect, showing sometimes some quite wrong

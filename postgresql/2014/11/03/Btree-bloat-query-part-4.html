@@ -73,7 +73,7 @@ BTree indexes:
   <li>for 8.2 and more: <a href="">https://gist.github.com/ioguix/c29d5790b8b93bf81c27</a></li>
 </ul>
 
-<p>##Columns has been ignored</p>
+<h2 id="columns-has-been-ignored">Columns has been ignored</h2>
 
 <p>In two different situations, some index fields were just ignored by the query:</p>
 
@@ -119,7 +119,7 @@ freshly created index, supposed to have around 10% of bloat as showed in the
 <span class="go">-----------------+-------------</span>
 <span class="go"> test_expression |       10.33</span></code></pre></figure>
 
-<p>##Wrong estimation for varlena types</p>
+<h2 id="wrong-estimation-for-varlena-types">Wrong estimation for varlena types</h2>
 
 <p>After fixing the query for indexes on expression, I noticed some negative bloat
 estimation for the biggest ones: the real index was smaller than the estimated
@@ -178,7 +178,7 @@ md5, supposed to be 128 byte long:</p>
 
 <p>This is a nice bug fix AND one complexity out of the query. Code simplification is always a good news :)</p>
 
-<p>##Adding a bit of Opaque Data</p>
+<h2 id="adding-a-bit-of-opaque-data">Adding a bit of Opaque Data</h2>
 
 <p>When studying the Btree layout, I forgot about one small non-data area in index
 pages: the “Special space”, aka. “Opaque Data” in code sources. The previous
@@ -216,7 +216,7 @@ considering the special space and estimation considering it:</p>
 
 <p>This is only an approximative 5% difference for the estimated size of this particular index.</p>
 
-<p>##Conclusion</p>
+<h2 id="conclusion">Conclusion</h2>
 
 <p>I never mentioned it before, but these queries are used in
 <a href="https://github.com/OPMDG/check_pgactivity">check_pgactivity</a> (a nagios plugin

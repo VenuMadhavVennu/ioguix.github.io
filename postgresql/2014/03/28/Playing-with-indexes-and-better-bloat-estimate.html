@@ -70,7 +70,7 @@ supposed to <code>REINDEX</code>.  While writing a detailed answer with examples
 quite a surprise seeing an estimated index size ratio of 0.7 for a simple
 table!  I realized I never payed much attention to this part of the result…</p>
 
-<p>##The problem</p>
+<h2 id="the-problem">The problem</h2>
 
 <p>Here is a test table, a copy table <code>rental</code> from
 <a href="http://pgfoundry.org/frs/download.php/1719/pagila-0.10.1.zip">pagila</a> project:</p>
@@ -123,7 +123,7 @@ references <em>ALL</em> the table fields.  It’s quite rare to find a btree ind
 all fields of a table, and obviously there’s no point having multiple indexes
 on a table, all of them referencing all fields of the table.</p>
 
-<p>##A look at the real bloat</p>
+<h2 id="a-look-at-the-real-bloat">A look at the real bloat</h2>
 
 <p>First, let see how the indexes are really bloated:</p>
 
@@ -180,7 +180,7 @@ Demo:</p>
 <span class="go"> test_inventory_id_idx                         |     376832 |       10.25</span>
 <span class="go"> test_rental_date_inventory_id_customer_id_idx |     524288 |       10.73</span></code></pre></figure>
 
-<p>##A better query to estimate index bloat?</p>
+<h2 id="a-better-query-to-estimate-index-bloat">A better query to estimate index bloat?</h2>
 
 <blockquote>
   <p>Wait, you just showed us you can have the real bloat on indexes, why would I
@@ -371,7 +371,7 @@ query updates ~10% of the table:</p>
 
 <p>Well, better again.</p>
 
-<p>##Conclusion</p>
+<h2 id="conclusion">Conclusion</h2>
 
 <p>This new query performs much better for indexes than the usual one everyone
 knew for a long time.  But it isn’t perfect, showing sometimes some quite wrong

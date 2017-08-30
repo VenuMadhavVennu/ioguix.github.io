@@ -75,7 +75,7 @@ bloat query, this query pay attention to:</p>
   <li>for PostgreSQL 9.0 and after: <a href="">https://gist.github.com/ioguix/4f95917f90c9e26df1b2</a></li>
 </ul>
 
-<p>##Tests</p>
+<h2 id="tests">Tests</h2>
 
 <p>I created the file <code>sql/bloat_tables.sql</code> with the 9.0 and more query version.
 I edited the query to add the bloat reported by <code>pgstattuple</code> (free_percent +
@@ -154,7 +154,7 @@ bloat:</p>
 
 <p>Good, good, good. What next?</p>
 
-<p>##The alignment deviation</p>
+<h2 id="the-alignment-deviation">The alignment deviation</h2>
 
 <p>You might have noticed I did not mentioned this table with a large deviation
 between the statistical bloat and the real one, called <code>rental</code>:</p>
@@ -269,7 +269,7 @@ query, we have now:</p>
 will live with that. By the way, this alignment overhead might be a nice
 subject for a script measuring it per tables.</p>
 
-<p>##Known issues</p>
+<h2 id="known-issues">Known issues</h2>
 
 <p>The same than for the Btree statistical bloat query: I’m pretty sure the query
 will have a pretty bad estimation with array types. I’ll investigate about that
