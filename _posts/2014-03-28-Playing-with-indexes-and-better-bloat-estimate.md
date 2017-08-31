@@ -6,7 +6,7 @@ date: 2014-03-28 07:05:00 +0100
 tags: [bloat, postgresql]
 category: postgresql
 ---
-Most of the PostgreSQL DBAs might know about [this large bloat estimate query][http://wiki.postgresql.org/wiki/Show_database_bloat]
+Most of the PostgreSQL DBAs might know about [this large bloat estimate query](http://wiki.postgresql.org/wiki/Show_database_bloat)
 integrated in [check_postgres](http://bucardo.org/wiki/Check_postgres).  It is
 supposed to compute a rough estimate of the bloat for tables and indexes in a
 database.  As the PostgreSQL wiki page says:
