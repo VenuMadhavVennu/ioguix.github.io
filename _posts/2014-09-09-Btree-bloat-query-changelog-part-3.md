@@ -7,12 +7,12 @@ tags: [bloat, postgresql]
 category: postgresql
 ---
 
-## Changelog
-
 Here are some fresh news about my previous work (see
 [part 1]({%post_url 2014-03-28-Playing-with-indexes-and-better-bloat-estimate%})
 and [part 2]({%post_url 2014-06-24-More-work-on-index-bloat-estimation-query%}))
-on a better Btree bloat query:
+on a better Btree bloat query.
+
+## Changelog
 
 * add field `is_na` to filter out indexes we can not estimate the bloat with
   "accuracy" (currently only indexes referencing a fields using the `name` type).

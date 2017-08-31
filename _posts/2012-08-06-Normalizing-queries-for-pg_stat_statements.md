@@ -6,7 +6,6 @@ date: 2012-08-06 19:53:00 +0200
 tags: [postgresql]
 category: postgresql
 ---
-Hey,
 
 If you follow PostgreSQL's development or
 [Depesz' blog](http://www.depesz.com/2012/03/30/waiting-for-9-2-pg_stat_statements-improvements/),

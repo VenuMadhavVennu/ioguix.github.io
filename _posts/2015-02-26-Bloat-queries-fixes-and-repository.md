@@ -7,19 +7,18 @@ tags: [bloat, postgresql]
 category: postgresql
 ---
 
-## New repository
-
 It's been almost a year now that I wrote the first version of the btree bloat
 estimation query.  Then, came the first fixes, the bloat estimation queries for
 tables, more fixes, and so on.  Maintaining these queries as gists on github
 was quite difficult and lack some features: no documented history, multiple
 links, no doc, impossible to fork, etc.
 
-So I decided to move everything to a git repository you can fork right away:
-[http://github.com/ioguix/pgsql-bloat-estimation].
-There's already 10 commits for improvements and bug fixes.
 
-{{ post.excerpt }}
+## New repository
+
+I decided to move everything to a git repository you can fork right away:
+[http://github.com/ioguix/pgsql-bloat-estimation]().
+There's already 10 commits for improvements and bug fixes.
 
 Do not hesitate to fork this repo, play with the queries, test them or make
 pull requests.  Another way to help is to discuss your results or report bugs
