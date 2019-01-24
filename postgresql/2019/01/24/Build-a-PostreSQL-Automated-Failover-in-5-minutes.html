@@ -67,8 +67,8 @@ test cluster for <a href="https://clusterlabs.github.io/PAF/">PAF</a> developmen
 cluster to a stable situation.</p>
 
 <p>I thought the result might be useful for people that want to challenge such a
-cluster, without all the burden to building it and setting everything it up. Vagrantfile
-and related files has been pushed to the official PAF repository, just
+cluster, without all the burden to building it and setting everything up. The
+<code>Vagrantfile</code> and related files has been pushed to the official PAF repository. Just
 look at the <code>test/README.md</code> file there for complete instructions:
 <a href="https://github.com/ClusterLabs/PAF">https://github.com/ClusterLabs/PAF</a>.</p>
 
@@ -76,19 +76,21 @@ look at the <code>test/README.md</code> file there for complete instructions:
 cluster with one command and a cup of coffee. It takes about 4 minutes on my laptop to
 complete, from creating four new empty VMs to watching at the full cluster status.</p>
 
-<p>And for the busiest of you that want to see it in action, here is a screencast (about 4
-minutes, 7’30” in real speed). It starts on a virgin fedora 29, all prerequisites and
+<p>And for the busiest of you that want to see it in action, here is a screencast<sup id="fnref:1"><a href="#fn:1" class="footnote">1</a></sup> (about
+4 minutes, 7’30” in real speed). It starts on a virgin fedora 29, all prerequisites and
 setup are covered, from scratch to a running virtualized demo cluster:</p>
 
 <asciinema-player src="/casts/building-paf-with-vagrant.cast" speed="2" poster="npt:0:1" theme="solarized-dark" cols="99" rows="24" font-size="medium" preload="true"></asciinema-player>
 
-<p>And if you want some examples about how to exercise the cluster look at this
-other screencast (5’32, normal speed):</p>
+<p>Once you have a running cluster, you can connect to the virtual machines using
+<code>vagrant ssh &lt;nodename&gt;</code>. By default, nodes are <code>srv1</code>, <code>srv2</code>, <code>svr3</code> and <code>log-sink</code>.
+This last node collect all logs from the cluster nodes and report them in
+<code>/var/log/messages</code> and <code>/var/log/&lt;nodename&gt;/</code>.</p>
+
+<p>And if you want some examples about how to exercise the cluster look at this other
+screencast (5’32, normal speed):</p>
 
 <asciinema-player src="/casts/testing-paf.cast" poster="npt:0:1" theme="solarized-dark" cols="99" rows="24" font-size="medium" preload="true"></asciinema-player>
-
-<p>Note that all log from cluster nodes are collected on <code>log-sink</code> in <code>/var/log/messages</code> and
-<code>/var/log/&lt;nodename&gt;</code>.</p>
 
 <p>If you want to go deeper with PAF, do not forget to read
 <a href="https://clusterlabs.github.io/PAF/documentation.html">our documentation</a> with attention.
@@ -97,6 +99,16 @@ documentation crawling and lot of tests. HINT: write docs and procedures, lots o
 and keep them up to date!</p>
 
 <p>Cheers,</p>
+
+<div class="footnotes">
+  <ol>
+    <li id="fn:1">
+
+      <p>I use <a href="https://github.com/asciinema/">asciinema</a>. For keyboard shortcuts, see
+ <a href="https://github.com/asciinema/asciinema-player#keyboard-shortcuts">https://github.com/asciinema/asciinema-player#keyboard-shortcuts</a> <a href="#fnref:1" class="reversefootnote">&#8617;</a></p>
+    </li>
+  </ol>
+</div>
 
 
   
