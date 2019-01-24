@@ -63,10 +63,10 @@
 
   <p>I’ve been working with <a href="https://www.vagrantup.com/">Vagrant</a> to quickly build a fresh
 test cluster for <a href="https://clusterlabs.github.io/PAF/">PAF</a> development. Combined with
-<code>virsh</code> snapshot related commands, I save a lot of time when quickly rollbacking the
-whole cluster to a stable situation.</p>
+<code>virsh</code> snapshot related commands, I save a lot of time during my tons of tests by
+quickly rollbacking the whole cluster to the initial state.</p>
 
-<p>I thought the result might be useful for people that want to challenge such a
+<p>I thought the result might be useful for people who want to challenge such a
 cluster, without all the burden of building it and setting everything up. The
 <code>Vagrantfile</code> and related files has been pushed to the official PAF repository. Just
 look at the <code>test/README.md</code> file there for complete instructions:
@@ -87,7 +87,7 @@ setup are covered, from scratch to a running virtualized demo cluster:</p>
 This last node collect all logs from the cluster nodes and report them in
 <code>/var/log/messages</code> and <code>/var/log/&lt;nodename&gt;/</code>.</p>
 
-<p>And if you want some examples about how to exercise the cluster look at this other
+<p>And if you want some examples about how to exercise the cluster, look at this other
 screencast (5’32, normal speed):</p>
 
 <asciinema-player src="/casts/testing-paf.cast" poster="npt:0:1" theme="solarized-dark" cols="99" rows="24" font-size="medium" preload="true"></asciinema-player>

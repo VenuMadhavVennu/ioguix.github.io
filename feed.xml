@@ -7,6 +7,21 @@
     <atom:link href="http://blog.ioguix.net/feed.xml" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>Build a PostreSQL Automated Failover in 5 minutes</title>
+      <description>&lt;p&gt;I’ve been working with &lt;a href=&quot;https://www.vagrantup.com/&quot;&gt;Vagrant&lt;/a&gt; to quickly build a fresh
+test cluster for &lt;a href=&quot;https://clusterlabs.github.io/PAF/&quot;&gt;PAF&lt;/a&gt; development. Combined with
+&lt;code&gt;virsh&lt;/code&gt; snapshot related commands, I save a lot of time during my tons of tests by
+quickly rollbacking the whole cluster to the initial state.&lt;/p&gt;
+
+
+      &lt;a href="http://blog.ioguix.net/postgresql/2019/01/24/Build-a-PostreSQL-Automated-Failover-in-5-minutes.html"&gt;Continue Reading »&lt;/a&gt;
+      </description>
+      <pubDate>Thu, 24 Jan 2019 22:20:00 +0100</pubDate>
+      <link>http://blog.ioguix.net/postgresql/2019/01/24/Build-a-PostreSQL-Automated-Failover-in-5-minutes.html</link>
+      <guid isPermaLink="true">http://blog.ioguix.net/postgresql/2019/01/24/Build-a-PostreSQL-Automated-Failover-in-5-minutes.html</guid>
+    </item>
+    
+    <item>
       <title>PAF 2.2 rc1 released</title>
       <description>&lt;p&gt;The first release candidate of the PAF resource agent for Pacemaker has been
 released yesterday.&lt;/p&gt;
@@ -133,24 +148,6 @@ database.  As the PostgreSQL wiki page says:&lt;/p&gt;
       <pubDate>Fri, 28 Mar 2014 07:05:00 +0100</pubDate>
       <link>http://blog.ioguix.net/postgresql/2014/03/28/Playing-with-indexes-and-better-bloat-estimate.html</link>
       <guid isPermaLink="true">http://blog.ioguix.net/postgresql/2014/03/28/Playing-with-indexes-and-better-bloat-estimate.html</guid>
-    </item>
-    
-    <item>
-      <title>Normalizing queries for pg_stat_statements &lt; 9.2</title>
-      <description>&lt;p&gt;If you follow PostgreSQL’s development or
-&lt;a href=&quot;http://www.depesz.com/2012/03/30/waiting-for-9-2-pg_stat_statements-improvements/&quot;&gt;Depesz’ blog&lt;/a&gt;,
-you might know that
-&lt;a href=&quot;http://www.postgresql.org/docs/9.1/static/pgstatstatements.html&quot;&gt;pg_stat_statement&lt;/a&gt;
-extension is getting a lot of improvement in 9.2 and especially is able to
-«lump “similar” queries together».  I will not re-phrase here what Despsz
-already explain on his blog.&lt;/p&gt;
-
-
-      &lt;a href="http://blog.ioguix.net/postgresql/2012/08/06/Normalizing-queries-for-pg_stat_statements.html"&gt;Continue Reading »&lt;/a&gt;
-      </description>
-      <pubDate>Mon, 06 Aug 2012 19:53:00 +0200</pubDate>
-      <link>http://blog.ioguix.net/postgresql/2012/08/06/Normalizing-queries-for-pg_stat_statements.html</link>
-      <guid isPermaLink="true">http://blog.ioguix.net/postgresql/2012/08/06/Normalizing-queries-for-pg_stat_statements.html</guid>
     </item>
     
   </channel>
